@@ -16,7 +16,7 @@ Do the steps in this order. You need **Global Administrator** (or Application Ad
 
 ## Step 0 — Try it first (demo mode)
 
-Open `index.html` from a local web server, or publish to GitHub (Step 3) with `config.js` left empty. The portal runs in **demo mode**: simulated sign-in, sample data, data kept in the browser. A yellow bar at the bottom shows this. Use it to review the screens.
+Publish to GitHub (Step 3) with `tenantId`/`clientId` left empty in `config.js`. The portal runs in **demo mode**: simulated sign-in, sample data, data kept in the browser. A yellow bar at the bottom shows this. Use it to review the screens.
 
 ---
 
@@ -107,8 +107,8 @@ Open `index.html` from a local web server, or publish to GitHub (Step 3) with `c
 3.1 Create a GitHub account or organization for the hospital (e.g. `kuwaithospital`) and a **new repository** `alnukhba-portal`.
    - **Public** is fine on the free plan: the repository contains only the web page code and these IDs, which are not secrets. **No patient data is ever stored on GitHub.**
 
-3.2 **Add file → Upload files** → drag in **everything** from this folder (`index.html`, `config.js`, `SETUP.md`, `.nojekyll`, `assets/`, `vendor/`) → **Commit changes**.
-   - `.nojekyll` is a hidden file; if your computer hides it, create it on GitHub: **Add file → Create new file** → name `.nojekyll` → commit (empty).
+3.2 On the repository's **Code** tab, click **uploading an existing file** (or **Add file → Upload files**) → **choose your files** → select **all 11 files** in the unzipped folder (Ctrl + A) → **Open** → wait for the list to finish → **Commit changes**.
+   The package has no sub-folders, so a normal file selection uploads everything.
 
 3.3 Repository **Settings → Pages** → Source: **Deploy from a branch** → Branch **main**, folder **/ (root)** → **Save**.
    After ~1 minute the address appears, e.g. `https://kuwaithospital.github.io/alnukhba-portal/`.
@@ -176,5 +176,5 @@ Send from a shared mailbox if you prefer (action: *Send an email from a shared m
 - **Removing access**: remove the person's role assignment (Enterprise app) and list permission; for guests, delete the guest user.
 - **Known limitation**: a GlobeMed guest can technically edit fields of an item *they created* (SharePoint "edit own items"), including Status, using tools outside the portal. Version history (Step 1.5) shows who changed what; IT verifies every record before upload to Apex.
 - **Updating the portal**: edit files on GitHub and commit; GitHub Pages republishes automatically within a minute or two.
-- **Libraries**: `vendor/msal-browser.min.js` (Microsoft Authentication Library v4.30.0) and `vendor/xlsx.full.min.js` (SheetJS 0.18.5) are included so the portal does not depend on outside script sites.
+- **Libraries**: `msal-browser.min.js` (Microsoft Authentication Library v4.30.0) and `xlsx.full.min.js` (SheetJS 0.18.5) are included so the portal does not depend on outside script sites.
 - **Data location / privacy**: Civil IDs and card numbers are stored only in your Microsoft 365 tenant (SharePoint). Confirm with your compliance team that this meets hospital policy.
