@@ -566,7 +566,7 @@ body.success-mode #vStaff{padding-top:76px}
     </div>
     <div class="field" data-f="cardNumber">
       <label class="lbl" for="cardNumber"><span><span class="n">05</span>GlobeMed Card Number<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">رقم بطاقة غلوب ميد</span></label>
-      <div class="row"><input type="tel" id="cardNumber" class="num" data-kind="digits" maxlength="16" inputmode="numeric" style="max-width:300px"><span class="counter" data-for="cardNumber">0/14</span></div>
+      <div class="row"><input type="tel" id="cardNumber" class="num" data-kind="digits" maxlength="16" inputmode="numeric" style="max-width:320px"><span class="counter" data-for="cardNumber">0/16</span></div>
       <div class="msg"></div>
     </div>
     <div class="field" data-f="mobile">
@@ -824,7 +824,7 @@ body.success-mode #vStaff{padding-top:76px}
     if (!/^[A-Z]$/.test(v.middleInitial)) e.middleInitial = 'Please enter your middle initial.';
     if (!/^[A-Za-z][A-Za-z '\-]*$/.test(v.lastName)) e.lastName = 'Please enter your last name.';
     if (!/^[23]\d{11}$/.test(v.civilId)) e.civilId = 'Civil ID must be 12 digits and begin with 2 or 3.';
-    if (!/^8\d{13}$/.test(v.cardNumber)) e.cardNumber = 'Card number must be exactly 16 digits and start with 8.';
+    if (!/^8\d{15}$/.test(v.cardNumber)) e.cardNumber = 'Card number must be exactly 16 digits and start with 8.';
     if (!/^\d{8}$/.test(v.mobile)) e.mobile = 'Mobile number must be 8 digits.';
     if (!/[A-Za-z]/.test(v.company)) e.company = 'Please enter your company name.';
     if (!v.visited) e.visited = 'Please choose Yes or No.';
