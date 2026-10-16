@@ -445,6 +445,12 @@ body.has-demo .toast{bottom:calc(56px + env(safe-area-inset-bottom,0px))}
 .loadrow td{color:var(--muted);text-align:center!important;padding:28px!important;cursor:default}
 .errrow td{color:var(--err);text-align:center!important;padding:24px!important;cursor:default;white-space:normal!important}
 
+/* --- success mode: only the success screen + slim logo bar --- */
+body.success-mode #mast, body.success-mode #vStaff .sessbar, body.success-mode #status{display:none!important}
+body.success-mode .topnav{transform:none!important;visibility:visible!important;box-shadow:0 8px 24px -12px rgba(7,26,39,.6)!important}
+body.success-mode #vStaff{padding-top:76px}
+#done{scroll-margin-top:84px}
+
 @media (max-width:480px){form,.panel,.done{padding-left:16px;padding-right:16px}.mast{padding:22px 18px}.prog{margin:0 -16px;padding-left:16px;padding-right:16px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.tick circle,.tick path{stroke-dashoffset:0}}
 </style>
@@ -1110,6 +1116,7 @@ body.has-demo .toast{bottom:calc(56px + env(safe-area-inset-bottom,0px))}
   // ---------------- Views / routing ----------------
   const VIEWS = ['vStart','vNoAccess','vStaff','vIT'];
   function show(id){
+    if (id !== 'vStaff') exitSuccessMode();
     VIEWS.forEach(v => { $(v).hidden = v !== id; });
     document.body.classList.toggle('is-land', id === 'vStart' || id === 'vNoAccess');
     if (id !== 'vStaff') { try { setNav(false); } catch(_){} }
@@ -1149,6 +1156,11 @@ body.has-demo .toast{bottom:calc(56px + env(safe-area-inset-bottom,0px))}
     if (ev.target.closest('[data-signout]')) signOut();
   });
 
+  // ---------------- Success mode: hide the big header, keep the slim logo bar ----------------
+  function enterSuccessMode(){ document.body.classList.add('success-mode'); window.scrollTo(0, 0); }
+  function exitSuccessMode(){ document.body.classList.remove('success-mode'); }
+  $('againBtn').addEventListener('click', () => { exitSuccessMode(); window.scrollTo(0, 0); });
+
   // ---------------- Registration submit ----------------
   const mode = $('saveMode');
   mode.className = 'savemode on';
@@ -1174,6 +1186,7 @@ body.has-demo .toast{bottom:calc(56px + env(safe-area-inset-bottom,0px))}
       const reference = 'NK-' + Date.now().toString(36).toUpperCase().slice(-6);
       await Data.add(v, reference);
       showSuccess(v, reference, new Date().toISOString());
+      enterSuccessMode();
     } catch(err){
       if (err && err.duplicate){
         showStatus('err', '<strong>This Civil ID or GlobeMed card number is already registered.</strong><span>Please check the details. Contact Kuwait Hospital IT if you think this is a mistake.</span>');
