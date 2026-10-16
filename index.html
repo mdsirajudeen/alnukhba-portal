@@ -723,7 +723,7 @@ body.has-demo .toast{bottom:calc(56px + env(safe-area-inset-bottom,0px))}
 
 <script src="xlsx.full.min.js"></script>
 <script src="msal-browser.min.js"></script>
-<script src="config.js"></script>
+<script>document.write('<script src="config.js?v=' + Date.now() + '"><\/script>');</script>
 <script>
 (function(){
   const $ = id => document.getElementById(id);
@@ -991,6 +991,8 @@ body.has-demo .toast{bottom:calc(56px + env(safe-area-inset-bottom,0px))}
     return res && res.state ? res.state : null;   // where the user was heading before sign-in
   }
   const hasRole = r => roles.includes(r === 'it' ? ROLE_IT : ROLE_STAFF);
+  // IT can also open the registration form (testing / entering on someone's behalf)
+  const canEnter = area => area === 'it' ? hasRole('it') : (hasRole('staff') || hasRole('it'));
   function signIn(target){
     if (DEMO){
       const r = target === 'it' ? [ROLE_IT] : [ROLE_STAFF];
@@ -1028,7 +1030,20 @@ body.has-demo .toast{bottom:calc(56px + env(safe-area-inset-bottom,0px))}
     return r.status === 204 ? null : r.json();
   }
   async function ensureList(){
-    if (!siteId){ const s = await g(`/sites/${CFG.siteHostname}:${CFG.sitePath}`); siteId = s.id; }
+    if (!siteId){
+      let host = (CFG.siteHostname || '').trim();
+      try {
+        if (!host) throw Object.assign(new Error('no host'), { status: 400 });
+        siteId = (await g(`/sites/${host}:${CFG.sitePath}`)).id;
+      } catch(e){
+        if (e.status !== 400 && e.status !== 404) throw e;
+        // Ask Microsoft for this tenant's real SharePoint address, then retry
+        const root = await g('/sites/root?$select=siteCollection,webUrl');
+        const realHost = (root.siteCollection && root.siteCollection.hostname) || new URL(root.webUrl).hostname;
+        try { siteId = (await g(`/sites/${realHost}:${CFG.sitePath}`)).id; }
+        catch(e2){ throw new Error(`SharePoint site ${CFG.sitePath} was not found on ${realHost} (settings had "${host}"). ${e2.message}`); }
+      }
+    }
     if (!listId){
       const ls = await g(`/sites/${siteId}/lists?$select=id,name,displayName&$top=500`);
       const hit = (ls.value || []).find(l => l.displayName === CFG.listName || l.name === CFG.listName);
@@ -1110,7 +1125,7 @@ body.has-demo .toast{bottom:calc(56px + env(safe-area-inset-bottom,0px))}
     const h = location.hash.slice(1) || 'start';
     if (h === 'form'){
       if (!account) return go('start');
-      if (!(hasRole('staff') || hasRole('it'))) return noAccess('staff');
+      if (!canEnter('staff')) return noAccess('staff');
       $('staffWho').textContent = account.username; show('vStaff'); return;
     }
     if (h === 'it'){
@@ -1126,7 +1141,7 @@ body.has-demo .toast{bottom:calc(56px + env(safe-area-inset-bottom,0px))}
     const e = ev.target.closest('[data-enter]');
     if (e){
       const target = e.dataset.enter;
-      if (account && hasRole(target)) return go(target === 'it' ? 'it' : 'form');
+      if (account && canEnter(target)) return go(target === 'it' ? 'it' : 'form');
       if (account && !DEMO) return noAccess(target);
       return signIn(target);
     }
