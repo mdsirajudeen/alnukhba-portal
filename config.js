@@ -28,9 +28,15 @@ window.NUKHBA_CONFIG = {
   listId: "",              // e.g. "3333-...."
 
   // Used only if siteId / listId above are empty:
-  siteHostname: "kuwaithospital.sharepoint.com",
+  siteHostname: "kwh.sharepoint.com",
   sitePath: "/sites/AlNukhba",
   listName: "AlNukhba Registrations",
+  photoLibrary: "CardPhotos",       // document library for GlobeMed card photos
+
+  // --- Public registration form (QR code, no sign-in) ----------------
+  // Turn on only after the Power Automate flow is set up (FLOW-SETUP.md).
+  publicForm: false,       // true = anyone can open the form and submit
+  submitUrl: "",           // the flow's "HTTP POST URL"
 
   // --- Optional ------------------------------------------------------
   supportText: "",         // e.g. "Need help? Contact Kuwait Hospital IT."
