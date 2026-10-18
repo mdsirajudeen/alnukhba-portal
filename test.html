@@ -1,0 +1,1643 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Al-Nukhba Card registration portal for GlobeMed cardholders, Kuwait Hospital.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="kuwait-hospital.png">
+<title>Al-Nukhba Card Portal (test)</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500&family=IBM+Plex+Mono:wght@400;500&family=Aref+Ruqaa:wght@700&family=Barlow+Semi+Condensed:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a single centred form column with a membership-card masthead; staff panel follows below. */
+:root{
+  --bg:#F3F5F7; --surface:#FFFFFF; --ink:#13232F; --muted:#5B6B78; --line:#D6DEE5;
+  --navy:#0E2F44; --gold:#B8913A; --gold-soft:#F4ECDA; --focus:#2F6F94;
+  --err:#B3261E; --err-bg:#FCEDEC; --ok:#1F7A4D; --ok-bg:#E7F4EC;
+  --display:"Fraunces", Georgia, serif;
+  --body:"IBM Plex Sans","IBM Plex Sans Arabic",system-ui,sans-serif;
+  --ar:"IBM Plex Sans Arabic","IBM Plex Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0D161D; --surface:#14212B; --ink:#E6ECF1; --muted:#9AAAB7; --line:#2A3A46;
+  --navy:#0A2232; --gold:#D4AE5A; --gold-soft:#2C2616; --focus:#6FB0D6;
+  --err:#F2A49E; --err-bg:#3A1A18; --ok:#7FD1A4; --ok-bg:#14301F; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D161D; --surface:#14212B; --ink:#E6ECF1; --muted:#9AAAB7; --line:#2A3A46;
+  --navy:#0A2232; --gold:#D4AE5A; --gold-soft:#2C2616; --focus:#6FB0D6;
+  --err:#F2A49E; --err-bg:#3A1A18; --ok:#7FD1A4; --ok-bg:#14301F; color-scheme:dark}
+
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 56px}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+
+/* masthead */
+.mast{background:var(--navy);color:#F5F1E6;border-radius:14px;padding:30px 26px 26px;position:relative;overflow:hidden;display:grid;gap:14px;justify-items:center;text-align:center}
+.mast > *{position:relative;z-index:1}
+.mast::after{content:"";position:absolute;z-index:0;inset:auto -40px -60px auto;width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,rgba(212,174,90,.35),rgba(212,174,90,0) 70%)}
+.mast .eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#D4AE5A;font-weight:600}
+.mast h1{font-family:var(--display);font-weight:600;font-size:clamp(24px,5vw,32px);line-height:1.15;margin:0;text-wrap:balance}
+.mast h1 .ar{display:block;font-family:var(--ar);font-weight:500;font-size:.72em;margin-top:6px;color:#E8DDC4}
+.mast p{margin:0 auto;font-size:14px;color:#D9E1E7;max-width:60ch;text-align:center}
+.mast p[dir="rtl"]{font-family:var(--ar)}
+.chip{justify-self:center;display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(212,174,90,.6);color:#E9D6A6;border-radius:999px;padding:4px 12px;font-size:12px;position:relative;z-index:1}
+
+.logos{display:flex;align-items:center;justify-content:center;gap:22px;background:#FFFFFF;border-radius:12px;padding:12px 22px;box-shadow:0 6px 18px -10px rgba(0,0,0,.5)}
+.logos img{height:64px;width:auto;max-width:100%;display:block}
+.logos .sep{width:1px;align-self:stretch;background:#D6DEE5}
+@media (max-width:480px){.logos{gap:14px;padding:10px 14px}.logos img{height:48px}}
+/* form */
+form{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:0 24px 24px}
+.field{display:grid;gap:6px;padding:16px 0;border-bottom:1px solid var(--line)}
+.field:last-of-type{border-bottom:none}
+.lbl{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;font-weight:600;font-size:14px}
+.lbl .n{color:var(--gold);font-family:var(--mono);font-weight:500;margin-right:6px}
+.lbl .ar{font-family:var(--ar);font-weight:500;color:var(--muted)}
+.req{color:var(--err);margin-left:2px}
+.opt{font-weight:400;color:var(--muted);font-size:12.5px}
+.consent{display:flex;gap:12px;align-items:flex-start;font-size:13.5px;line-height:1.5;cursor:pointer}
+.consent input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--gold);flex:none}
+.consent .ar{display:block;font-family:var(--ar);color:var(--muted);margin-top:4px;text-align:right}
+.field.bad .consent input{outline:2px solid var(--err);outline-offset:2px}
+.hpf{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.hint{font-size:12px;color:var(--muted)}
+.cn-row{gap:8px;flex-wrap:nowrap}
+.cn-row input.cn{width:9.6em;max-width:44%;letter-spacing:.14em;text-align:center}
+.cn-sep{color:var(--muted);font-weight:600}
+.photo{border:1.5px dashed var(--line);border-radius:12px;background:var(--bg);padding:14px 16px;transition:border-color .15s, background .15s}
+.photo.drag{border-color:var(--gold);background:var(--gold-soft)}
+.field.bad .photo{border-color:var(--err)}
+.field.good .photo{border-style:solid;border-color:color-mix(in srgb,var(--ok) 45%,var(--line))}
+.ph-empty,.ph-done{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center}
+.ph-empty[hidden],.ph-done[hidden]{display:none}
+.ph-ic{width:48px;height:34px;fill:none;stroke:var(--gold);stroke-width:1.6}
+.ph-txt{display:grid;gap:2px}.ph-txt b{font-size:14px}.ph-txt span{font-size:12.5px;color:var(--muted)}
+.ph-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.pbtn{display:inline-flex;align-items:center;gap:7px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 14px;min-height:42px;font-size:14px;font-weight:600}
+.pbtn:hover{border-color:var(--gold)}
+.pbtn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.pbtn.sm{padding:7px 12px;min-height:36px;font-size:13px}
+.pbtn.danger{color:var(--err)}
+.ph-thumb{width:96px;height:62px;border-radius:7px;overflow:hidden;background:#E9EEF2;display:grid;place-items:center;border:1px solid var(--line)}
+.ph-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.ph-thumb .pdf{font-family:var(--mono);font-weight:700;font-size:13px;color:var(--err)}
+.ph-info{display:grid;gap:2px;min-width:0}.ph-info b{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--ok)}
+.ph-info b svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2}
+.ph-info span{font-size:12.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:560px){
+  .ph-empty{grid-template-columns:auto minmax(0,1fr)}
+  .ph-empty .ph-btns{grid-column:1 / -1;justify-content:stretch}
+  .ph-empty .ph-btns .pbtn{flex:1;justify-content:center}
+  .ph-done{grid-template-columns:auto minmax(0,1fr)}
+  .ph-done .ph-btns{grid-column:1 / -1;justify-content:flex-start}
+  .cn-row input.cn{width:auto;flex:1;min-width:0;max-width:none;letter-spacing:.08em}
+}
+.camdlg{position:fixed;inset:0;z-index:60;background:rgba(7,26,39,.72);display:grid;place-items:center;padding:16px}
+.camdlg[hidden]{display:none}
+.cam-in{background:var(--surface);border-radius:14px;padding:16px;width:min(560px,100%);display:grid;gap:12px}
+.cam-head{display:grid;gap:2px}.cam-head span{font-size:13px;color:var(--muted)}
+.cam-view{position:relative;background:#000;border-radius:10px;overflow:hidden;aspect-ratio:4/3}
+.cam-view video{width:100%;height:100%;object-fit:cover;display:block}
+.cam-frame{position:absolute;inset:16% 10%;border:2px solid rgba(255,255,255,.9);border-radius:12px;box-shadow:0 0 0 999px rgba(0,0,0,.35)}
+.cam-act{display:flex;justify-content:flex-end;gap:10px}
+input[type=text],input[type=email],input[type=tel],input[type=date]{
+  width:100%;box-sizing:border-box;font:inherit;color:var(--ink);background:var(--bg);
+  border:1px solid var(--line);border-radius:8px;padding:11px 12px;min-height:44px;transition:border-color .15s, box-shadow .15s}
+input.num{font-family:var(--mono);letter-spacing:.06em;font-variant-numeric:tabular-nums}
+input:focus-visible{outline:none;border-color:var(--focus);box-shadow:0 0 0 3px color-mix(in srgb,var(--focus) 25%,transparent)}
+.short{max-width:120px}
+.field.bad input{border-color:var(--err)}
+.msg{font-size:13px;color:var(--err);min-height:0}
+.msg:empty{display:none}
+.counter{font-size:12px;color:var(--muted);font-family:var(--mono)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.seg{display:flex;gap:10px;flex-wrap:wrap}
+.seg label{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;padding:10px 16px;cursor:pointer;min-height:44px;box-sizing:border-box;background:var(--bg)}
+.seg label:has(input:checked){border-color:var(--gold);background:var(--gold-soft)}
+.seg input{accent-color:var(--gold);width:18px;height:18px;margin:0}
+.seg .ar{font-family:var(--ar);color:var(--muted)}
+.field.bad .seg label{border-color:var(--err)}
+
+.actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding-top:18px}
+button{font:inherit;font-weight:600;border-radius:8px;padding:12px 22px;min-height:44px;cursor:pointer;border:1px solid transparent}
+button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.primary{background:var(--navy);color:#F5F1E6;border-color:var(--navy)}
+:root[data-theme="dark"] .primary{background:var(--gold);color:#16120A;border-color:var(--gold)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .primary{background:var(--gold);color:#16120A;border-color:var(--gold)}}
+.primary:hover{filter:brightness(1.1)}
+.primary[disabled]{opacity:.55;cursor:progress}
+.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.ghost:hover{border-color:var(--muted)}
+
+.banner{border-radius:10px;padding:14px 16px;font-size:14px;display:grid;gap:4px}
+.banner.ok{background:var(--ok-bg);color:var(--ok)}
+.banner.err{background:var(--err-bg);color:var(--err)}
+.banner.info{background:var(--gold-soft);color:var(--ink)}
+.banner strong{font-weight:600}
+.banner .ar{font-family:var(--ar)}
+.privacy{font-size:12.5px;color:var(--muted);margin:0}
+
+/* staff panel */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 24px;display:grid;gap:14px}
+.panel-head{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:12px;text-align:center}
+.panel h2{margin:0;font-family:var(--display);font-weight:600;font-size:20px}
+.count{font-family:var(--mono);color:var(--muted);font-size:13px}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:560px}
+th,td{text-align:center;padding:9px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--bg)}
+td.m{font-family:var(--mono);font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:none}
+.empty{color:var(--muted);font-size:14px;padding:12px 0;text-align:center}
+#staffMsg{text-align:center}
+[hidden]{display:none!important}
+/* sticky compact header */
+.topnav{position:fixed;left:0;right:0;top:0;z-index:20;background:var(--navy);color:#F5F1E6;
+  padding-top:calc(env(safe-area-inset-top,0px) + 10px);padding-bottom:10px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  box-shadow:0 8px 24px -12px rgba(7,26,39,.6);transform:translateY(-110%);transition:transform .28s cubic-bezier(.2,.8,.2,1)}
+.topnav.show{transform:none}
+.topnav .tn{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:16px;text-align:center}
+.topnav .tn-brand{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#D4AE5A;font-weight:600}
+.topnav .tn-logos{display:flex;align-items:center;gap:10px;background:#FFFFFF;border-radius:8px;padding:5px 10px}
+.topnav .tn-logos img{height:30px;width:auto;display:block}
+.topnav .tn-logos .sep{width:1px;align-self:stretch;background:#D6DEE5}
+.topnav .t{font-family:var(--display);font-weight:600;font-size:17px;line-height:1.2}
+.topnav .t .ar{display:block;font-family:var(--ar);font-size:13px;color:#E8DDC4;font-weight:500}
+@media (max-width:480px){.topnav .tn{gap:10px}.topnav .t{font-size:14px}.topnav .t .ar{font-size:12px}.topnav .tn-logos img{height:24px}.topnav .tn-brand{display:none}}
+
+.savemode{margin:14px 0 0;font-size:13px;display:flex;align-items:center;gap:8px;color:var(--muted)}
+.savemode::before{content:"";flex:none;width:9px;height:9px;border-radius:50%;background:var(--muted)}
+.savemode.on{color:var(--ok)}.savemode.on::before{background:var(--ok)}
+.savemode.off{color:var(--err)}.savemode.off::before{background:var(--err)}
+/* date: type or pick */
+.datebox{position:relative;width:100%;max-width:260px}
+.datebox #expiry{padding-right:52px}
+.calbtn{position:absolute;right:5px;top:50%;transform:translateY(-50%);width:40px;height:34px;border-radius:7px;display:grid;place-items:center;background:var(--gold-soft);border:1px solid var(--line);overflow:hidden}
+.calbtn svg{width:20px;height:20px;fill:none;stroke:var(--ink);stroke-width:1.6;stroke-linecap:round;pointer-events:none}
+.calbtn:hover{border-color:var(--gold)}
+.calbtn:focus-within{outline:3px solid var(--focus);outline-offset:1px}
+#expiryPick{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:0;padding:0;margin:0;font-size:16px}
+#expiryPick::-webkit-calendar-picker-indicator{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;cursor:pointer}
+
+/* progress strip */
+.prog{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--navH,0px));transition:top .28s cubic-bezier(.2,.8,.2,1);z-index:5;background:var(--surface);margin:0 -24px;padding:14px 24px 12px;border-bottom:1px solid var(--line);border-radius:14px 14px 0 0;display:grid;gap:8px}
+.prog-top{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted)}
+.prog-top b{color:var(--ink);font-family:var(--mono);font-weight:500}
+.bar{height:6px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,var(--gold),#E9CF8E);transition:width .35s cubic-bezier(.2,.8,.2,1)}
+.prog.full .bar i{background:linear-gradient(90deg,var(--ok),#5CC28D)}
+.prog.full .prog-top b{color:var(--ok)}
+.field.good .lbl .n{color:var(--ok)}
+.field.good .lbl .n::before{content:"✓ "}
+
+/* submit button states */
+.primary{position:relative;display:inline-flex;align-items:center;gap:10px}
+.spin{width:16px;height:16px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:rot .7s linear infinite;display:none}
+.primary.busy .spin{display:inline-block}
+@keyframes rot{to{transform:rotate(360deg)}}
+.field.shake input,.field.shake .seg{animation:shake .38s ease}
+@keyframes shake{20%{transform:translateX(-6px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
+
+/* success screen */
+.done{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:36px 24px 30px;display:grid;justify-items:center;gap:18px;text-align:center}
+.tick{width:72px;height:72px}
+.tick circle{fill:none;stroke:var(--ok);stroke-width:3;stroke-dasharray:214;stroke-dashoffset:214;animation:draw .6s ease-out forwards}
+.tick path{fill:none;stroke:var(--ok);stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:50;stroke-dashoffset:50;animation:draw .35s .5s ease-out forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.done h2{margin:0;font-family:var(--display);font-weight:600;font-size:clamp(24px,5vw,30px);text-wrap:balance}
+.done .ar-line{font-family:var(--ar);color:var(--muted);margin-top:-10px}
+.done p.lead{margin:0;color:var(--muted);max-width:46ch}
+
+.stage{perspective:1100px;width:100%;display:flex;justify-content:center;padding:6px 0 4px}
+.ncard{width:min(380px,100%);aspect-ratio:1.586;max-width:100%;border-radius:16px;position:relative;overflow:hidden;color:#F6EBD0;text-align:left;
+  background:radial-gradient(120% 140% at 100% 0%,#1F5272 0%,#0E2F44 45%,#071A27 100%);
+  box-shadow:0 24px 48px -18px rgba(7,26,39,.55),inset 0 0 0 1px rgba(212,174,90,.35);
+  transform-style:preserve-3d;transition:transform .2s ease-out;animation:dealIn .9s .25s cubic-bezier(.2,.9,.25,1.15) both}
+@keyframes dealIn{from{opacity:0;transform:translateY(40px) rotateX(55deg) scale(.85)}to{opacity:1;transform:none}}
+.ncard::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(212,174,90,.06) 0 2px,transparent 2px 9px)}
+.ncard::after{content:"";position:absolute;top:-50%;left:-60%;width:40%;height:200%;transform:rotate(20deg);
+  background:linear-gradient(90deg,transparent,rgba(255,240,200,.35),transparent);animation:sheen 2.6s 1.2s ease-in-out infinite}
+@keyframes sheen{0%{left:-60%}45%,100%{left:130%}}
+.ncard .in{position:absolute;inset:0;padding:18px 20px;display:grid;grid-template-rows:auto 1fr auto;z-index:1}
+.ncard .top{display:flex;justify-content:space-between;align-items:flex-start}
+.ncard .brand{font-family:var(--display);font-weight:600;letter-spacing:.18em;font-size:15px;
+  background:linear-gradient(100deg,#B8913A,#F3DE9E 40%,#C99B3F 70%,#F0D58A);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ncard .brand small{display:block;font-family:var(--body);letter-spacing:.12em;font-size:9px;color:#C9B07A;-webkit-text-fill-color:#C9B07A;font-weight:500;margin-top:2px}
+.ncard .ar-brand{font-family:var(--ar);font-size:18px;color:#E9D39A}
+.chipg{width:40px;height:30px;border-radius:6px;align-self:center;background:linear-gradient(135deg,#E9CF8E,#B8913A 55%,#F3DE9E);position:relative}
+.chipg::before{content:"";position:absolute;inset:7px 0;border-top:1px solid rgba(80,60,20,.45);border-bottom:1px solid rgba(80,60,20,.45)}
+.chipg::after{content:"";position:absolute;inset:0 15px;border-left:1px solid rgba(80,60,20,.45);border-right:1px solid rgba(80,60,20,.45)}
+.ncard .num{font-family:var(--mono);letter-spacing:.14em;font-size:clamp(12px,3.6vw,15px);color:#EADFC3}
+.ncard .bot{display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
+.ncard .k{font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:#B9A579}
+.ncard .v{font-size:clamp(12px,3.6vw,15px);font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#F6EBD0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
+
+/* two-sided Al-Nukhba card */
+.cards{display:flex;flex-wrap:wrap;justify-content:center;gap:22px;width:100%;perspective:1200px;padding-top:4px}
+.face{margin:0;width:240px;max-width:100%;display:grid;gap:8px;justify-items:center}
+.face svg{width:100%;height:auto;display:block;border-radius:12px;box-shadow:0 22px 40px -18px rgba(18,20,60,.65),0 0 0 1px rgba(255,255,255,.06);transform-origin:50% 50%}
+.f-front svg{animation:flipIn .9s .25s cubic-bezier(.2,.9,.25,1.1) both}
+.f-back svg{animation:none}
+.flip{cursor:pointer;border-radius:14px;-webkit-tap-highlight-color:transparent}
+.flip:focus-visible{outline:3px solid var(--focus);outline-offset:6px}
+.flip-in{display:grid;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.2,.75,.2,1)}
+.flip-in > .face{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.flip-in > .f-back{transform:rotateY(180deg)}
+.flip .face figcaption{display:none}
+.flip.is-flipped .flip-in{transform:rotateY(180deg)}
+@media (hover:hover){ .flip:hover .flip-in{transform:rotateY(180deg)} }
+.flip-hint{margin:0;font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:6px;justify-content:center}
+.flip-hint::before{content:"\21BB";font-size:15px;color:var(--gold)}
+.flip-hint .h-tap{display:none}
+@media (hover:none){ .flip-hint .h-hover{display:none} .flip-hint .h-tap{display:inline} }
+@media (prefers-reduced-motion:reduce){ .flip-in{transition:none} }
+@keyframes flipIn{from{opacity:0;transform:rotateY(-100deg) translateY(16px)}to{opacity:1;transform:none}}
+.face figcaption{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.card-note{margin:-4px 0 0;font-size:12.5px;color:var(--muted)}
+.face text{fill:#F1F1F6}
+.t-gold{font:700 4.6px "Barlow Semi Condensed",var(--body);fill:#2B2B2B!important}
+.t-gold-ar{font:700 4.4px var(--ar);fill:#2B2B2B!important}
+.t-nukhba{font:700 11px "Aref Ruqaa",var(--ar)}
+.t-elite{font:700 3px "Barlow Semi Condensed",var(--body);letter-spacing:.7px}
+.t-tag-ar{font:500 4.1px var(--ar)}
+.t-tag{font:600 3.55px "Barlow Semi Condensed",var(--body);letter-spacing:.12px}
+.rule{stroke:#E6E6EE;stroke-width:.3}
+.t-num{font:500 6.6px "Barlow Semi Condensed",var(--mono);letter-spacing:1.5px}
+.gold-line{fill:none;stroke:#D8B02F;stroke-width:.45}
+.t-name{font:600 5.3px "Barlow Semi Condensed",var(--body);letter-spacing:.15px}
+.t-civil{font:400 4.3px "Barlow Semi Condensed",var(--body);letter-spacing:.1px}
+.t-plaque{font:500 3.4px var(--ar);fill:#9AAAE0!important;opacity:.7}
+.terms-ar text{font:500 2.75px var(--ar)}
+.terms-en text{font:600 2.75px "Barlow Semi Condensed",var(--body)}
+.t-inq{font:600 2.9px "Barlow Semi Condensed",var(--body)}
+.wm{font:700 15px "Barlow Semi Condensed",var(--body);letter-spacing:2px;fill:#FFFFFF!important;opacity:.07}
+.bp path,.bp rect,.bp line{fill:none;stroke:#7E92DA;stroke-width:.22;opacity:.35}
+
+.facts{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 28px;margin:0}
+.facts div{display:grid;gap:2px}
+.facts dt{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.facts dd{margin:0;font-family:var(--mono);font-size:15px;font-weight:500}
+.done .actions{justify-content:center;padding-top:4px}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:50;width:100%;height:100%}
+
+/* ===== Portal: start, sign-in, IT dashboard ===== */
+:root{--info:#2F6F94;--info-bg:#E6F0F6;--warn:#9A6B00;--warn-bg:#FDF3DC}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--info:#8CC4E6;--info-bg:#132B3A;--warn:#F0C766;--warn-bg:#33290F}}
+:root[data-theme="dark"]{--info:#8CC4E6;--info-bg:#132B3A;--warn:#F0C766;--warn-bg:#33290F}
+.start{max-width:860px;margin:0 auto;display:grid;gap:22px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.tile{all:unset;box-sizing:border-box;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;display:grid;gap:10px;align-content:start;transition:border-color .15s, transform .15s, box-shadow .15s}
+.tile:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 14px 30px -18px rgba(14,47,68,.45)}
+.tile:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.tile .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--gold-soft)}
+.tile .ic svg{width:24px;height:24px;fill:none;stroke:var(--ink);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.tile h2{margin:0;font-family:var(--display);font-weight:600;font-size:20px}
+.tile p{margin:0;color:var(--muted);font-size:14px}
+.tile .ar{font-family:var(--ar);color:var(--muted);font-size:14px}
+.tile .go{font-weight:600;color:var(--ink);font-size:14px;margin-top:4px}
+.proto{font-size:12.5px;color:var(--muted);text-align:center;margin:0}
+
+.login{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;border-radius:16px;overflow:hidden;border:1px solid var(--line);background:var(--surface);box-shadow:0 24px 50px -30px rgba(14,47,68,.5)}
+.login .side{background:var(--navy);color:#F5F1E6;padding:34px 30px;display:grid;align-content:space-between;gap:28px;position:relative;overflow:hidden}
+.login .side::after{content:"";position:absolute;right:-70px;bottom:-70px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(212,174,90,.35),rgba(212,174,90,0) 70%)}
+.login .side > *{position:relative;z-index:1}
+.side-logos{display:flex;gap:14px;align-items:center;background:#fff;border-radius:10px;padding:8px 14px;justify-self:start}
+.side-logos img{height:40px;width:auto;display:block}
+.side-logos .sep{width:1px;align-self:stretch;background:#D6DEE5}
+.login .side h1{margin:0;font-family:var(--display);font-weight:600;font-size:clamp(24px,3.4vw,30px);line-height:1.15;text-wrap:balance}
+.login .side h1 .ar{display:block;font-family:var(--ar);font-weight:500;font-size:.7em;color:#E8DDC4;margin-top:6px}
+.login .side p{margin:0;color:#D9E1E7;font-size:14px;max-width:38ch}
+.role-pill{justify-self:start;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#D4AE5A;font-weight:600;border:1px solid rgba(212,174,90,.6);border-radius:999px;padding:4px 12px}
+.login form.signin{padding:34px 30px;display:grid;gap:16px;align-content:center;background:var(--surface);border:0;border-radius:0}
+.signin h2{margin:0;font-family:var(--display);font-weight:600;font-size:22px}
+.signin .sub{margin:-8px 0 4px;color:var(--muted);font-size:14px}
+.signin label{display:grid;gap:6px;font-weight:600;font-size:14px}
+.signin label .ar{font-family:var(--ar);font-weight:500;color:var(--muted)}
+.signin .lab{display:flex;justify-content:space-between;gap:10px}
+.pw{position:relative;display:block}
+.pw input{padding-right:70px!important}
+.pw button{position:absolute;right:6px;top:50%;transform:translateY(-50%);min-height:32px;padding:4px 10px;font-size:12.5px;font-weight:600;background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:6px}
+.signin input[type=password]{width:100%;box-sizing:border-box;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:11px 12px;min-height:44px}
+.signin input:focus-visible{outline:none;border-color:var(--focus);box-shadow:0 0 0 3px color-mix(in srgb,var(--focus) 25%,transparent)}
+.signin .primary{justify-content:center;width:100%}
+.signin .err{color:var(--err);font-size:13.5px;background:var(--err-bg);border-radius:8px;padding:10px 12px}
+.signin.shake{animation:shake .38s ease}
+.demo{font-size:12.5px;color:var(--muted);background:var(--gold-soft);border-radius:8px;padding:10px 12px;line-height:1.55}
+.demo code{font-family:var(--mono);color:var(--ink);font-size:12.5px}
+.back{all:unset;cursor:pointer;color:var(--muted);font-size:13.5px;justify-self:start}
+.back:hover{color:var(--ink)}
+.back:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:4px}
+@media (max-width:720px){.login{grid-template-columns:1fr}.login .side{padding:24px 20px;gap:18px}.login form.signin{padding:24px 20px}}
+
+.sessbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.sessbar b{color:var(--ink);font-weight:600}
+.linkbtn{all:unset;cursor:pointer;font-weight:600;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:7px 12px;font-size:13px;background:var(--surface)}
+.linkbtn:hover{border-color:var(--muted)}
+.linkbtn:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+/* IT dashboard */
+.it{max-width:1240px;margin:0 auto;display:grid;gap:18px}
+.itbar{background:var(--navy);color:#F5F1E6;border-radius:14px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.itbar .l{display:flex;align-items:center;gap:14px;min-width:0;flex-wrap:wrap}
+.itbar .tn-logos{display:flex;align-items:center;gap:10px;background:#FFFFFF;border-radius:8px;padding:5px 10px}
+.itbar .tn-logos img{height:30px;width:auto;display:block}
+.itbar .tn-logos .sep{width:1px;align-self:stretch;background:#D6DEE5}
+.itbar h1{margin:0;font-family:var(--display);font-weight:600;font-size:20px;line-height:1.15}
+.itbar h1 small{display:block;font-family:var(--body);font-weight:500;font-size:12px;color:#C9D4DC;letter-spacing:.04em}
+.itbar .r{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.who{font-size:13px;color:#D9E1E7}
+.who b{color:#F3DE9E;font-weight:600}
+.itbar .linkbtn{background:transparent;color:#F5F1E6;border-color:rgba(255,255,255,.3)}
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+@media (max-width:900px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:520px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.stat{all:unset;box-sizing:border-box;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:4px;border-top:4px solid var(--c,var(--line))}
+.stat:hover{border-color:var(--muted);border-top-color:var(--c,var(--line))}
+.stat.on{box-shadow:0 0 0 2px var(--c,var(--ink)) inset}
+.stat:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.stat .k{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.04em}
+.stat .v{font-family:var(--mono);font-size:26px;font-weight:500;font-variant-numeric:tabular-nums}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.search{flex:1 1 280px;position:relative}
+.search input{width:100%;box-sizing:border-box;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px 10px 36px;min-height:42px}
+.search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:16px;height:16px;fill:none;stroke:var(--muted);stroke-width:2}
+.toolbar select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 10px;min-height:42px}
+.toolbar .primary{padding:10px 16px;min-height:42px}
+.ghost.sm{padding:10px 14px;min-height:42px}
+.datacard{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.datacard .tbl{border:0;border-radius:0}
+.dt{min-width:1100px}
+.dt th{text-align:left}
+.dt td{text-align:left;vertical-align:middle}
+.dt tbody tr{cursor:pointer}
+.dt tbody tr:hover td,.dt tbody tr:focus-visible td{background:var(--bg)}
+.dt tbody tr:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
+.dt td.m{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:12.5px}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:600;white-space:nowrap}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.s-new{color:var(--info);background:var(--info-bg)}
+.s-missing{color:var(--err);background:var(--err-bg)}
+.s-verified{color:var(--ok);background:var(--ok-bg)}
+.s-apex{color:var(--muted);background:var(--bg)}
+.flag{display:inline-block;font-size:11px;font-weight:600;border-radius:5px;padding:2px 7px;margin-right:4px;color:var(--warn);background:var(--warn-bg)}
+.flag.sample{color:var(--muted);background:var(--bg);border:1px dashed var(--line)}
+.dash-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);padding:10px 14px;border-top:1px solid var(--line)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--navy);color:#F5F1E6;border-radius:10px;padding:10px 16px;font-size:14px;z-index:60;box-shadow:0 14px 30px -14px rgba(0,0,0,.5)}
+
+.scrim{position:fixed;inset:0;background:rgba(7,26,39,.45);z-index:40}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--surface);z-index:41;box-shadow:-20px 0 40px -20px rgba(0,0,0,.4);display:grid;grid-template-rows:auto 1fr auto;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);padding-right:env(safe-area-inset-right,0px);animation:slideIn .22s ease-out}
+@keyframes slideIn{from{transform:translateX(30px);opacity:0}to{transform:none;opacity:1}}
+.drawer header{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.drawer h3{margin:0;font-family:var(--display);font-weight:600;font-size:20px}
+.drawer .refx{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin-top:4px}
+.drawer .body{overflow:auto;padding:16px 20px;display:grid;gap:16px;align-content:start}
+.drawer dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:8px 14px;font-size:14px}
+.drawer dt{color:var(--muted)}
+.drawer dd{margin:0;font-weight:500;overflow-wrap:anywhere}
+.drawer dd.m{font-family:var(--mono)}
+.drawer label{display:grid;gap:6px;font-weight:600;font-size:13.5px}
+.drawer select,.drawer textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.drawer textarea{min-height:96px;resize:vertical}
+.drawer footer{padding:14px 20px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end}
+.xbtn{all:unset;cursor:pointer;width:34px;height:34px;display:grid;place-items:center;border-radius:8px;border:1px solid var(--line);font-size:18px;line-height:1}
+.xbtn:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.flow{display:flex;gap:6px;flex-wrap:wrap;font-size:12px;color:var(--muted);align-items:center}
+.flow span.on{color:var(--ink);font-weight:600;background:var(--gold-soft);border-radius:999px;padding:2px 8px}
+
+/* --- layout tightening (portal) --- */
+body{margin:0;padding-block:10px 32px}
+#vIT{margin-top:-10px}
+.ithead{position:sticky;top:env(safe-area-inset-top,0px);z-index:15;background:var(--bg);display:grid;gap:12px;padding-block:0 12px}
+.ithead .itbar{border-radius:0 0 14px 14px}
+.ithead .stat{padding:10px 14px}
+.ithead .stat .v{font-size:22px}
+#vStart{min-height:calc(100vh - 42px);display:grid;align-content:center}
+.start{gap:14px}
+.start .mast{padding:20px 22px 18px;gap:8px}
+.start .logos{padding:8px 16px}
+.start .logos img{height:clamp(38px,6.5vh,54px)}
+.start .mast h1{font-size:clamp(22px,3.6vw,30px)}
+.start .mast p{font-size:13.5px}
+.start .tile{padding:16px 18px;gap:6px}
+.start .tile .ic{width:38px;height:38px}
+@media (max-height:700px){.start .mast p{display:none}.start .tile p{display:none}}
+
+.topnav:not(.show){box-shadow:none;visibility:hidden}
+
+/* ===== Production portal: landing / sign-in ===== */
+body.is-land{padding:0!important}
+#vStart{min-height:100vh;display:block}
+.land{min-height:100vh;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)}
+.land-hero{position:relative;overflow:hidden;color:#F5F1E6;
+  background:
+    linear-gradient(rgba(126,146,218,.07) 1px,transparent 1px) 0 0/30px 30px,
+    linear-gradient(90deg,rgba(126,146,218,.07) 1px,transparent 1px) 0 0/30px 30px,
+    radial-gradient(120% 90% at 100% 0%,#1F5272 0%,#0E2F44 52%,#071A27 100%)}
+.land-hero::after{content:"";position:absolute;right:-120px;bottom:-140px;width:420px;height:420px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,rgba(212,174,90,.30),rgba(212,174,90,0) 68%);pointer-events:none}
+.land-hero-in{position:relative;z-index:1;min-height:100%;box-sizing:border-box;
+  padding-block:clamp(28px,6vh,60px);padding-left:max(clamp(20px,5vw,64px),env(safe-area-inset-left,0px));padding-right:clamp(20px,5vw,64px);
+  display:grid;align-content:space-between;gap:34px}
+.hero-logos{display:flex;align-items:center;gap:16px;background:#FFFFFF;border-radius:12px;padding:10px 16px;justify-self:start;box-shadow:0 10px 24px -14px rgba(0,0,0,.6)}
+.hero-logos img{height:46px;width:auto;display:block}
+.hero-logos .sep{width:1px;align-self:stretch;background:#D6DEE5}
+.hero-copy .eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#D4AE5A;font-weight:600}
+.hero-copy h1{font-family:var(--display);font-weight:600;font-size:clamp(30px,4.2vw,50px);line-height:1.06;margin:12px 0 0;text-wrap:balance}
+.hero-copy h1 .ar{display:block;font-family:var(--ar);font-size:.52em;font-weight:500;color:#E8DDC4;margin-top:12px}
+.hero-copy p{color:#C9D4DC;max-width:42ch;margin:16px 0 0;font-size:15px;line-height:1.55}
+.steps{list-style:none;margin:0;padding:18px 0 0;display:grid;gap:14px;max-width:440px;border-top:1px solid rgba(255,255,255,.12)}
+.steps li{display:flex;gap:14px;align-items:center}
+.sn{width:30px;height:30px;border-radius:50%;border:1px solid rgba(212,174,90,.7);color:#F3DE9E;display:grid;place-items:center;font-family:var(--mono);font-size:13px;flex:none}
+.steps li b{display:block;font-weight:600;font-size:14.5px;color:#F5F1E6}
+.steps li div span{color:#AFC0CC;font-size:13px}
+
+.land-panel{background:var(--surface);display:grid;grid-template-rows:1fr auto;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.panel-in{align-self:center;justify-self:center;width:100%;max-width:440px;padding-block:40px;display:grid;gap:22px}
+.panel-in h2{font-family:var(--display);font-weight:600;font-size:30px;margin:0;display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.panel-in h2 .ar{font-family:var(--ar);font-size:16px;font-weight:500;color:var(--muted)}
+.lead-s{margin:6px 0 0;color:var(--muted);font-size:14.5px}
+.roles{display:grid;gap:12px}
+.role{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;padding:16px 18px;border:1px solid var(--line);border-radius:12px;background:var(--surface);transition:border-color .15s, box-shadow .15s, transform .15s}
+.role:hover{border-color:var(--gold);box-shadow:0 12px 26px -18px rgba(14,47,68,.55);transform:translateY(-1px)}
+.role:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.role .ic{width:44px;height:44px;border-radius:11px;display:grid;place-items:center;background:var(--gold-soft)}
+.role .ic svg{width:22px;height:22px;fill:none;stroke:var(--ink);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.rt{display:grid;gap:2px;min-width:0}
+.rt b{font-size:15.5px;font-weight:600}
+.rt .ar{font-family:var(--ar);font-size:13px;color:var(--muted)}
+.rt small{font-size:13px;color:var(--muted)}
+.chev{font-size:28px;color:var(--muted);line-height:1}
+.role.busy{opacity:.55;pointer-events:none}
+.acct{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:13.5px;color:var(--muted);padding:10px 12px;border-radius:10px;background:var(--bg)}
+.acct b{color:var(--ink);font-weight:600;overflow-wrap:anywhere}
+.authmsg{font-size:13.5px;border-radius:10px;padding:10px 12px;background:var(--err-bg);color:var(--err)}
+.fine{margin:0;font-size:12.5px;color:var(--muted);line-height:1.55}
+.land-foot{padding:16px 0 calc(16px + env(safe-area-inset-bottom,0px));text-align:center;font-size:12px;color:var(--muted);border-top:1px solid var(--line)}
+@media (max-width:860px){
+  .land{grid-template-columns:1fr;min-height:0}
+  .land-hero-in{gap:22px}
+  .steps{display:none}
+  .hero-logos img{height:36px}
+  .panel-in{padding-block:28px}
+}
+
+.demobar{position:fixed;left:0;right:0;bottom:0;z-index:35;background:var(--warn-bg);color:var(--warn);font-size:12.5px;text-align:center;
+  padding:7px max(16px,env(safe-area-inset-right,0px)) calc(7px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));border-top:1px solid var(--line)}
+.demobar code{font-family:var(--mono);font-size:12px}
+body.has-demo{padding-bottom:48px}
+body.has-demo .toast{bottom:calc(56px + env(safe-area-inset-bottom,0px))}
+
+.noaccess{max-width:520px;margin:14vh auto 0;text-align:center;display:grid;gap:12px;justify-items:center;padding-inline:16px}
+.na-ic{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:var(--err-bg);color:var(--err);font-weight:700;font-size:26px}
+.noaccess h1{margin:0;font-family:var(--display);font-weight:600;font-size:26px}
+.noaccess p{margin:0;color:var(--muted)}
+.noaccess .actions{justify-content:center}
+.sess-r{display:flex;gap:8px}
+.itbar .r .linkbtn + .linkbtn{margin-left:0}
+.loadrow td{color:var(--muted);text-align:center!important;padding:28px!important;cursor:default}
+.errrow td{color:var(--err);text-align:center!important;padding:24px!important;cursor:default;white-space:normal!important}
+
+/* --- success mode: only the success screen + slim logo bar --- */
+body.success-mode #mast, body.success-mode #vStaff .sessbar, body.success-mode #status{display:none!important}
+body.success-mode .topnav{transform:none!important;visibility:visible!important;box-shadow:0 8px 24px -12px rgba(7,26,39,.6)!important}
+body.success-mode #vStaff{padding-top:76px}
+#done{scroll-margin-top:84px}
+
+/* --- success mode: fit on one screen --- */
+body.success-mode{padding-bottom:10px}
+body.success-mode #vStaff{padding-top:70px}
+body.success-mode #done{padding:22px 26px;gap:12px}
+body.success-mode .tick{width:54px;height:54px}
+body.success-mode #done h2{font-size:clamp(22px,2.6vw,28px)}
+body.success-mode .done .ar-line{margin-top:-6px}
+body.success-mode #done .lead{font-size:14px}
+body.success-mode .card-note{margin:0;font-size:12px}
+body.success-mode .facts dd{font-size:14px}
+body.success-mode .face{width:min(230px, calc((100vh - 70px - 120px) / 1.66))}
+body.success-mode .cards{padding-top:0;gap:16px}
+@media (min-width:900px){
+  body.success-mode .wrap{max-width:1040px}
+  body.success-mode #done{grid-template-columns:minmax(0,1fr) auto;grid-auto-rows:auto;align-items:center;column-gap:36px;row-gap:10px;text-align:left;justify-items:start;padding:26px 32px}
+  body.success-mode #done > *{grid-column:1}
+  body.success-mode #done > .cards{grid-column:2;grid-row:1 / span 8;flex-wrap:nowrap;align-self:center}
+  body.success-mode #done .lead{max-width:40ch}
+  body.success-mode #done .facts{justify-content:flex-start}
+  body.success-mode #done .actions{justify-content:flex-start;padding-top:2px}
+}
+@media (max-width:899px){
+  body.success-mode .cards{flex-wrap:nowrap;gap:10px}
+  body.success-mode .face{width:min(200px, calc((100vh - 400px) / 1.585))}
+  body.success-mode .face svg{border-radius:8px}
+  body.success-mode #done{padding:18px 14px}
+  body.success-mode #done h2{font-size:21px}
+  body.success-mode #done .lead{font-size:13px}
+  body.success-mode .facts{gap:6px 20px}
+}
+body.success-mode .face{width:min(272px, calc((100vh - 70px - 120px) / 1.66))}
+@media (min-width:900px){
+  body.success-mode #vStaff{min-height:calc(100vh - 20px);box-sizing:border-box;align-content:center}
+}
+@media (max-width:899px){
+  body.success-mode .face{width:min(200px, calc((100vh - 400px) / 1.585))}
+  body.success-mode .tick{width:40px;height:40px}
+  body.success-mode #done{gap:8px;padding:14px 12px}
+  body.success-mode #done h2{font-size:19px}
+  body.success-mode .done .ar-line{font-size:12.5px;margin-top:-4px}
+  body.success-mode #done .lead{font-size:12.5px}
+  body.success-mode .card-note{font-size:11px}
+  body.success-mode .face figcaption{font-size:10px}
+  body.success-mode .facts dt{font-size:10px}
+  body.success-mode .facts dd{font-size:13px}
+  body.success-mode #done .actions button{min-height:40px;padding:8px 16px}
+  body.success-mode #vStaff{padding-top:64px}
+}
+
+/* --- single flip card (front shown, back on hover / tap) --- */
+body.success-mode .face{width:min(290px, calc((100vh - 150px) / 1.585))}
+body.success-mode .cards{flex-direction:column;align-items:center;gap:10px}
+body.success-mode .flip-hint{font-size:12px}
+@media (min-width:900px){ body.success-mode #done > .flip-hint{grid-column:2;grid-row:9} body.success-mode #done > .cards{grid-row:1 / span 8} }
+@media (max-width:899px){
+  body.success-mode .face{width:min(190px, 52vw, calc((100vh - 400px) / 1.585))}
+  body.success-mode .flip-hint{font-size:11.5px}
+}
+body.success-mode .flip{width:max-content;max-width:100%}
+@media (max-width:899px){
+  body.success-mode .face{width:min(168px, 46vw, calc((100vh - 420px) / 1.585))}
+}
+
+.plink{color:var(--info, #1F5F8B);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+
+/* --- public form (QR code): no sign-in for registration --- */
+.pub-foot{display:none;text-align:center;font-size:12.5px;color:var(--muted);margin:18px 0 8px}
+.pub-foot a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+body.public-mode .pub-foot{display:block}
+body.public-mode:not(.signed-in) #vStaff .sessbar{display:none}
+body.public-mode:not(.signed-in) #done [data-signout]{display:none}
+body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in needed"}
+
+@media (max-width:480px){form,.panel,.done{padding-left:16px;padding-right:16px}.mast{padding:22px 18px}.prog{margin:0 -16px;padding-left:16px;padding-right:16px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.tick circle,.tick path{stroke-dashoffset:0}}
+</style>
+</head>
+<body>
+
+
+<div class="topnav" id="topnav" aria-hidden="true">
+  <div class="tn">
+    <div class="tn-logos"><img src="kuwait-hospital.png" alt=""><span class="sep"></span><img src="globemed.png" alt=""></div>
+    <div class="t">Al-Nukhba Card Registration<span class="ar" dir="rtl" lang="ar">تسجيل بطاقة النخبة</span></div>
+  </div>
+</div>
+
+<div class="demobar" id="demoBar" hidden><b>Test version</b> — this form is not connected yet. Nothing is sent to Kuwait Hospital; your entry stays on this device only.</div>
+
+<!-- START / SIGN-IN -->
+<div class="view" id="vStart" hidden>
+  <div class="land">
+    <section class="land-hero">
+      <div class="land-hero-in">
+        <div class="hero-logos"><img src="kuwait-hospital.png" alt="Kuwait Hospital"><span class="sep" aria-hidden="true"></span><img src="globemed.png" alt="GlobeMed"></div>
+        <div class="hero-copy">
+          <span class="eyebrow">Kuwait Hospital × GlobeMed</span>
+          <h1>Al-Nukhba Card Portal<span class="ar" dir="rtl" lang="ar">بوابة بطاقة النخبة</span></h1>
+          <p>Free Al-Nukhba Card registration for GlobeMed cardholders, managed by Kuwait Hospital.</p>
+        </div>
+        <ol class="steps" aria-label="How registration works">
+          <li><span class="sn">1</span><div><b>Registration submitted</b><span>by GlobeMed staff</span></div></li>
+          <li><span class="sn">2</span><div><b>Details verified</b><span>by Kuwait Hospital IT</span></div></li>
+          <li><span class="sn">3</span><div><b>Digital card emailed</b><span>within 2–3 business days</span></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="land-panel">
+      <div class="panel-in">
+        <div>
+          <h2>Sign in <span class="ar" dir="rtl" lang="ar">تسجيل الدخول</span></h2>
+          <p class="lead-s">Choose your area. You will sign in with your Microsoft work account.</p>
+        </div>
+        <div class="roles">
+          <button type="button" class="role" data-enter="staff">
+            <span class="ic"><svg viewBox="0 0 24 24"><path d="M9 12h6M9 16h6M8 3h8l4 4v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h3"/><path d="M16 3v4h4"/></svg></span>
+            <span class="rt"><b>GlobeMed Staff</b><span class="ar" dir="rtl" lang="ar">موظفو غلوب ميد</span><small>Submit Al-Nukhba Card registrations</small></span>
+            <span class="chev" aria-hidden="true">›</span>
+          </button>
+          <button type="button" class="role" data-enter="it">
+            <span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 13h3M8 16h6"/></svg></span>
+            <span class="rt"><b>Kuwait Hospital IT</b><span class="ar" dir="rtl" lang="ar">تقنية المعلومات — مستشفى الكويت</span><small>Review registrations and download Excel</small></span>
+            <span class="chev" aria-hidden="true">›</span>
+          </button>
+        </div>
+        <div class="acct" id="acctLine" hidden><span>Signed in as <b id="acctName">—</b></span><button type="button" class="linkbtn" data-signout>Sign out</button></div>
+        <div class="authmsg" id="authMsg" hidden></div>
+        <p class="fine">Access is limited to authorised GlobeMed staff and Kuwait Hospital IT. All information is handled with the highest level of confidentiality.</p>
+        <p class="fine" id="supportLine" hidden></p>
+      </div>
+      <footer class="land-foot">© <span id="yr"></span> Kuwait Hospital · Al-Nukhba Card</footer>
+    </section>
+  </div>
+</div>
+
+<!-- NO ACCESS -->
+<div class="view" id="vNoAccess" hidden>
+  <div class="noaccess">
+    <div class="na-ic" aria-hidden="true">!</div>
+    <h1>No access to this area</h1>
+    <p id="naText">Your account is not authorised for this area.</p>
+    <p class="fine">Ask Kuwait Hospital IT to give your account access to the Al-Nukhba Card Portal.</p>
+    <div class="actions"><button type="button" class="ghost" data-go="start">Back</button><button type="button" class="primary" data-signout>Sign out</button></div>
+  </div>
+</div>
+
+<!-- STAFF: FORM + SUCCESS -->
+<div class="wrap view" id="vStaff" hidden>
+  <div class="sessbar"><span>Signed in as <b id="staffWho">—</b></span><span class="sess-r"><button type="button" class="linkbtn" data-go="start">Home</button><button type="button" class="linkbtn" data-signout>Sign out</button></span></div>
+
+  <header class="mast" id="mast">
+    <div class="logos"><img src="kuwait-hospital.png" alt="Kuwait Hospital"><span class="sep" aria-hidden="true"></span><img src="globemed.png" alt="GlobeMed"></div>
+    <h1>Al-Nukhba Card Patient Registration<span class="ar" dir="rtl" lang="ar">نموذج تسجيل المرضى لبطاقة النخبة</span></h1>
+    <p>Kuwait Hospital is offering the Al-Nukhba Card free of charge and exclusively to GlobeMed cardholders. Please complete the form below to register.</p>
+    <p dir="rtl" lang="ar">يسر مستشفى الكويت تقديم بطاقة النخبة مجانًا وحصريًا لحاملي بطاقة غلوب ميد. يرجى تعبئة النموذج أدناه لإتمام التسجيل.</p>
+    <span class="chip">Free for GlobeMed cardholders</span>
+  </header>
+
+  <div id="status" hidden></div>
+
+  <form id="reg" novalidate autocomplete="off">
+    <div class="prog" id="prog" aria-live="polite">
+      <div class="prog-top"><span>Registration progress</span><b id="progTxt">0 of 10 complete</b></div>
+      <div class="bar"><i id="progBar"></i></div>
+    </div>
+    <div class="field" data-f="firstName">
+      <label class="lbl" for="firstName"><span><span class="n">01</span>First Name<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">الاسم الأول</span></label>
+      <input type="text" id="firstName" data-kind="name" maxlength="40" autocapitalize="words" spellcheck="false">
+      <div class="msg"></div>
+    </div>
+    <div class="field" data-f="middleInitial">
+      <label class="lbl" for="middleInitial"><span><span class="n">02</span>Middle Initial <span class="opt">(optional)</span></span><span class="ar" dir="rtl" lang="ar">الحرف الأول من الاسم الأوسط</span></label>
+      <input type="text" id="middleInitial" class="short" data-kind="initial" maxlength="1" autocapitalize="characters" spellcheck="false">
+      <div class="msg"></div>
+    </div>
+    <div class="field" data-f="lastName">
+      <label class="lbl" for="lastName"><span><span class="n">03</span>Last Name<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">اسم العائلة</span></label>
+      <input type="text" id="lastName" data-kind="name" maxlength="40" autocapitalize="words" spellcheck="false">
+      <div class="msg"></div>
+    </div>
+    <div class="field" data-f="civilId">
+      <label class="lbl" for="civilId"><span><span class="n">04</span>Civil ID<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">الرقم المدني</span></label>
+      <div class="row"><input type="tel" id="civilId" class="num" data-kind="digits" maxlength="12" inputmode="numeric" style="max-width:260px"><span class="counter" data-for="civilId">0/12</span></div>
+      <div class="msg"></div>
+    </div>
+    <div class="field" data-f="cardNumber">
+      <label class="lbl" for="cardNumber"><span><span class="n">05</span>GlobeMed Card Number<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">رقم بطاقة غلوب ميد</span></label>
+      <div class="row cn-row"><input type="tel" id="cardNumber" class="num cn" data-kind="digits" maxlength="8" inputmode="numeric" placeholder="8 _ _ _ _ _ _ _" aria-label="GlobeMed card number, first 8 digits"><span class="cn-sep" aria-hidden="true">–</span><input type="tel" id="cardNumber2" class="num cn" data-kind="digits" maxlength="8" inputmode="numeric" placeholder="_ _ _ _ _ _ _ _" aria-label="GlobeMed card number, last 8 digits"><span class="counter" id="cnCount">0/16</span></div>
+      <div class="hint">First 8 digits, then last 8 digits — the cursor moves to the second box automatically.</div>
+      <div class="msg"></div>
+    </div>
+    <div class="field" data-f="cardPhoto">
+      <span class="lbl" id="photoLbl"><span><span class="n">06</span>GlobeMed Card Photo<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">صورة بطاقة غلوب ميد</span></span>
+      <div class="photo" id="photoBox" aria-labelledby="photoLbl">
+        <div class="ph-empty" id="phEmpty">
+          <svg class="ph-ic" viewBox="0 0 48 34" aria-hidden="true"><rect x="1.5" y="1.5" width="45" height="31" rx="4"/><path d="M1.5 9.5h45"/><rect x="6" y="15" width="10" height="7" rx="1.5"/><path d="M21 17h18M21 22h12"/></svg>
+          <div class="ph-txt"><b>Add a clear photo of the GlobeMed card (front)</b><span>Take it with the camera or attach a file · JPG, PNG or PDF, up to 10 MB</span></div>
+          <div class="ph-btns">
+            <button type="button" class="pbtn" id="camBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg>Take photo</button>
+            <button type="button" class="pbtn" id="fileBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12.5l-7.8 7.8a5 5 0 0 1-7.1-7.1l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7l-8.5 8.5a1.7 1.7 0 0 1-2.4-2.4l7.8-7.8"/></svg>Attach file</button>
+          </div>
+        </div>
+        <div class="ph-done" id="phDone" hidden>
+          <div class="ph-thumb" id="phThumb"></div>
+          <div class="ph-info"><b><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Card photo added</b><span id="phMeta">—</span></div>
+          <div class="ph-btns"><button type="button" class="pbtn sm" id="phChange">Change</button><button type="button" class="pbtn sm danger" id="phRemove">Remove</button></div>
+        </div>
+      </div>
+      <input type="file" id="cardFile" accept="image/*,application/pdf" hidden>
+      <input type="file" id="cardCam" accept="image/*" capture="environment" hidden>
+      <div class="msg"></div>
+    </div>
+    <div class="field" data-f="mobile">
+      <label class="lbl" for="mobile"><span><span class="n">07</span>Mobile Number<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">رقم الهاتف المحمول</span></label>
+      <div class="row"><input type="tel" id="mobile" class="num" data-kind="digits" maxlength="8" inputmode="numeric" style="max-width:220px"><span class="counter" data-for="mobile">0/8</span></div>
+      <div class="msg"></div>
+    </div>
+    <div class="field" data-f="company">
+      <label class="lbl" for="company"><span><span class="n">08</span>Company Name<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">اسم جهة العمل</span></label>
+      <input type="text" id="company" data-kind="company" maxlength="80" spellcheck="false">
+      <div class="msg"></div>
+    </div>
+    <div class="field" data-f="visited">
+      <span class="lbl" id="visitedLbl"><span><span class="n">09</span>Have you previously visited Kuwait Hospital for any medical service?<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">هل سبق لك زيارة مستشفى الكويت من قبل لتلقي أي خدمة طبية؟</span></span>
+      <div class="seg" role="radiogroup" aria-labelledby="visitedLbl">
+        <label><input type="radio" name="visited" id="visitedYes" value="Yes">Yes <span class="ar" lang="ar">نعم</span></label>
+        <label><input type="radio" name="visited" id="visitedNo" value="No">No <span class="ar" lang="ar">لا</span></label>
+      </div>
+      <div class="msg"></div>
+    </div>
+    <div class="field" data-f="email">
+      <label class="lbl" for="email"><span><span class="n">10</span>Email Address<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">البريد الإلكتروني</span></label>
+      <input type="email" id="email" data-kind="email" maxlength="100" spellcheck="false" autocapitalize="off">
+      <div class="msg"></div>
+    </div>
+    <div class="field" data-f="expiry">
+      <label class="lbl" for="expiry"><span><span class="n">11</span>GlobeMed Card Expiration Date<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">تاريخ انتهاء بطاقة غلوب ميد</span></label>
+      <div class="row"><div class="datebox"><input type="text" id="expiry" class="num" inputmode="numeric" placeholder="DD/MM/YYYY" maxlength="10" autocomplete="off"><span class="calbtn" title="Pick from calendar"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><input type="date" id="expiryPick" aria-label="Pick expiration date from calendar" tabindex="0"></span></div><span class="counter">Type or pick</span></div>
+      <div class="msg"></div>
+    </div>
+    <div class="field" data-f="consent">
+      <label class="consent"><input type="checkbox" id="consent"><span>I confirm these details are correct and agree that Kuwait Hospital may use them to issue and manage my Al-Nukhba Card.<span class="req">*</span><span class="ar" dir="rtl" lang="ar">أؤكد صحة هذه البيانات وأوافق على استخدامها من قبل مستشفى الكويت لإصدار وإدارة بطاقة النخبة.</span></span></label>
+      <div class="msg"></div>
+    </div>
+    <div class="hpf" aria-hidden="true"><label>Leave this empty<input type="text" id="website" tabindex="-1" autocomplete="off"></label></div>
+
+    <div class="actions">
+      <button type="button" class="primary" id="submitBtn"><span class="spin" aria-hidden="true"></span><span id="submitTxt">Submit · إرسال</span></button>
+      <button type="button" class="ghost" id="clearBtn">Clear</button>
+    </div>
+    <p class="savemode" id="saveMode" aria-live="polite">Connecting to storage…</p>
+    <p class="privacy" style="padding-top:6px">All information is handled with the highest level of confidentiality and is used only to support your healthcare experience.</p>
+  </form>
+  <div class="camdlg" id="camDlg" hidden role="dialog" aria-modal="true" aria-label="Take a photo of the GlobeMed card">
+    <div class="cam-in">
+      <div class="cam-head"><b>Photo of the GlobeMed card</b><span>Place the card inside the frame</span></div>
+      <div class="cam-view"><video id="camVideo" autoplay playsinline muted></video><div class="cam-frame" aria-hidden="true"></div></div>
+      <div class="cam-act"><button type="button" class="ghost" id="camCancel">Cancel</button><button type="button" class="primary" id="camShot">Capture</button></div>
+    </div>
+  </div>
+
+  <section class="done" id="done" hidden aria-live="polite">
+    <svg class="tick" viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="34"/><path d="M22 37l10 10 19-21"/></svg>
+    <h2 id="doneTitle" tabindex="-1">Welcome to Al-Nukhba</h2>
+    <div class="ar-line" dir="rtl" lang="ar">أهلًا بك في النخبة — تم التسجيل بنجاح</div>
+    <p class="lead" id="doneLead">Your registration has been received.</p>
+    <div class="cards flip" id="flipCard" tabindex="0" role="button" aria-pressed="false" aria-label="Card preview. Press to turn the card over.">
+     <div class="flip-in">
+      <figure class="face f-front">
+        <svg viewBox="0 0 100 158.6" role="img" aria-label="Al-Nukhba Gold card, front">
+          <defs>
+            <linearGradient id="cg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2E3170"/><stop offset=".55" stop-color="#25285F"/><stop offset="1" stop-color="#1B1D4A"/></linearGradient>
+            <clipPath id="cc"><rect width="100" height="158.6" rx="5"/></clipPath>
+          </defs>
+          <g clip-path="url(#cc)">
+            <rect width="100" height="158.6" fill="url(#cg)"/>
+            <g class="bp" data-bp="front"></g>
+            <rect x="-3" y="18" width="40" height="9.5" rx="2.4" fill="#F4D31F"/>
+            <text x="4" y="24.6" class="t-gold">Gold</text>
+            <text x="16.6" y="24.6" class="t-gold" style="font-weight:400">|</text>
+            <text x="30" y="24.8" class="t-gold-ar" text-anchor="middle">ذهبي</text>
+            <text x="80" y="24" class="t-nukhba" text-anchor="middle">النخبة</text>
+            <text x="80" y="30.5" class="t-elite" text-anchor="middle">ELITE</text>
+            <image href="kuwait-hospital-white.png" x="28" y="50" width="44" height="37.3"/>
+            <line x1="22" y1="93" x2="78" y2="93" class="rule"/>
+            <text x="50" y="98.4" class="t-tag-ar" text-anchor="middle">جيل جديد من الرعاية الصحية</text>
+            <text x="50" y="103.2" class="t-tag" text-anchor="middle">NEW GENERATION OF HEALTHCARE</text>
+            <line x1="22" y1="105.6" x2="78" y2="105.6" class="rule"/>
+            <image href="globemed-white.png" x="38.5" y="124" width="23" height="22"/>
+            <text x="50" y="80" class="wm" text-anchor="middle" transform="rotate(-28 50 80)">PREVIEW</text>
+          </g>
+        </svg>
+        <figcaption>Front</figcaption>
+      </figure>
+      <figure class="face f-back">
+        <svg viewBox="0 0 100 158.6" role="img" aria-label="Al-Nukhba Gold card, back">
+          <defs><clipPath id="cc2"><rect width="100" height="158.6" rx="5"/></clipPath></defs>
+          <g clip-path="url(#cc2)">
+            <rect width="100" height="158.6" fill="url(#cg)"/>
+            <g class="bp" data-bp="back"></g>
+            <g class="flag" opacity=".75">
+              <line x1="11" y1="33" x2="11" y2="45" stroke="#8FA4E0" stroke-width=".5"/>
+              <path d="M11 33.5h11.5v6.6H11z" fill="#7F96D6" opacity=".55"/>
+              <path d="M11 35.7h11.5M11 37.9h11.5" stroke="#B9C7EE" stroke-width=".35"/>
+            </g>
+            <g id="cNumRows"></g>
+            <text x="9" y="94" class="t-name" id="cName">NAME</text>
+            <text x="9" y="100.6" class="t-civil" id="cCivil">Civil ID : ••••••••••••</text>
+            <rect x="34" y="106.5" width="32" height="6" rx=".6" fill="none" stroke="#8FA4E0" stroke-width=".25" opacity=".5"/>
+            <text x="50" y="110.9" class="t-plaque" text-anchor="middle">مستشفى الكويت</text>
+            <rect x="9" y="117" width="22" height="22" fill="none" stroke="#F2F2F2" stroke-width=".45" rx=".6"/>
+            <g id="cQr"></g>
+            <g class="terms-ar" text-anchor="end">
+              <text x="92" y="119.6">للمستخدمين المصرح لهم فقط  •</text>
+              <text x="92" y="123">تطبق الشروط والأحكام  •</text>
+              <text x="92" y="126.4">هذه البطاقة ليست بطاقة تأمين  •</text>
+            </g>
+            <g class="terms-en">
+              <text x="36" y="131.6">• For Authorized Users Only</text>
+              <text x="36" y="135">• Terms and Conditions Apply</text>
+              <text x="36" y="138.4">• This Card is Not an Insurance Card</text>
+            </g>
+            <text x="50" y="151" class="t-inq" text-anchor="middle">For Inquiry   2220 7777   للاستفسار</text>
+            <text x="50" y="80" class="wm" text-anchor="middle" transform="rotate(-28 50 80)">PREVIEW</text>
+          </g>
+        </svg>
+        <figcaption>Back</figcaption>
+      </figure>
+     </div>
+    </div>
+    <p class="flip-hint"><span class="h-hover">Move the mouse over the card to see the back</span><span class="h-tap">Tap the card to see the back</span></p>
+    <p class="card-note">Card preview only. Your Al-Nukhba card is issued by Kuwait Hospital.</p>
+    <dl class="facts">
+      <div><dt>Reference</dt><dd id="fRef">NK-000000</dd></div>
+      <div><dt>Submitted</dt><dd id="fTime">—</dd></div>
+    </dl>
+    <div class="actions"><button type="button" class="primary" id="againBtn">Register another</button><button type="button" class="ghost" data-signout>Sign out</button></div>
+  </section>
+
+  <p class="pub-foot">Kuwait Hospital IT? <a href="#start">Sign in to the dashboard</a></p>
+</div>
+
+<!-- IT DASHBOARD -->
+<div class="view" id="vIT" hidden>
+  <div class="it">
+    <div class="ithead">
+    <div class="itbar">
+      <div class="l">
+        <div class="tn-logos"><img src="kuwait-hospital.png" alt=""><span class="sep"></span><img src="globemed.png" alt=""></div>
+        <h1>Al-Nukhba Registrations<small>Kuwait Hospital IT · لوحة التسجيلات</small></h1>
+      </div>
+      <div class="r"><span class="who">Signed in as <b id="itWho">—</b></span><button type="button" class="linkbtn" data-go="start">Home</button><button type="button" class="linkbtn" data-signout>Sign out</button></div>
+    </div>
+    <div class="stats" id="stats"></div>
+    </div>
+    <div class="toolbar">
+      <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input type="search" id="q" placeholder="Search name, Civil ID, card, reference or email" aria-label="Search registrations"></div>
+      <select id="fStatus" aria-label="Filter by status"><option value="">All statuses</option><option>New</option><option>Missing data</option><option>Verified</option><option>Uploaded to Apex</option></select>
+      <button type="button" class="ghost sm" id="refreshBtn">Refresh</button>
+      <button type="button" class="ghost sm" id="xlsFiltered">Download shown (.xlsx)</button>
+      <button type="button" class="primary" id="xlsAll">Download all (.xlsx)</button>
+    </div>
+    <div class="datacard">
+      <div class="tbl"><table class="dt">
+        <thead><tr><th>Reference</th><th>Submitted</th><th>Status</th><th>Name</th><th>Civil ID</th><th>GlobeMed card</th><th>Mobile</th><th>Email</th><th>Company</th><th>Card expiry</th><th>Photo</th><th>Checks</th></tr></thead>
+        <tbody id="itRows"></tbody>
+      </table></div>
+      <p class="empty" id="itEmpty" hidden>No registrations match this search.</p>
+      <div class="dash-foot"><span id="itCount">Loading…</span><span>Workflow: New → Missing data (Call Center) → Verified → Uploaded to Apex. Click a row to update it.</span><button type="button" class="back" id="resetDemo" hidden>Reset demo data</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-labelledby="dName" role="dialog" aria-modal="true">
+  <header><div><h3 id="dName">—</h3><div class="refx" id="dRef">—</div></div><button type="button" class="xbtn" id="dClose" aria-label="Close">×</button></header>
+  <div class="body">
+    <div class="flow" id="dFlow"></div>
+    <dl id="dList"></dl>
+    <label for="dStatus">Status<select id="dStatus"><option>New</option><option>Missing data</option><option>Verified</option><option>Uploaded to Apex</option></select></label>
+    <label for="dNotes">Notes for IT / Call Center<textarea id="dNotes" placeholder="e.g. Mobile number not reachable. Call Center to confirm."></textarea></label>
+  </div>
+  <footer><button type="button" class="ghost" id="dCancel">Cancel</button><button type="button" class="primary" id="dSave">Save changes</button></footer>
+</aside>
+<div class="toast" id="toast" hidden></div>
+
+<script src="xlsx.full.min.js"></script>
+<script src="msal-browser.min.js"></script>
+<script>window.NUKHBA_CONFIG = { tenantId: "", clientId: "", demoMode: true, publicForm: true };</script>
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const AR_DIGITS = {'٠':'0','١':'1','٢':'2','٣':'3','٤':'4','٥':'5','٦':'6','٧':'7','٨':'8','٩':'9',
+                     '۰':'0','۱':'1','۲':'2','۳':'3','۴':'4','۵':'5','۶':'6','۷':'7','۸':'8','۹':'9'};
+  const toLatinDigits = s => s.replace(/[٠-٩۰-۹]/g, d => AR_DIGITS[d]);
+
+  // Silent English-only filters per field kind
+  const FILTERS = {
+    name:    s => s.replace(/[^A-Za-z '\-]/g,'').replace(/\s{2,}/g,' ').replace(/^[\s'\-]+/,''),
+    initial: s => s.replace(/[^A-Za-z]/g,'').slice(0,1).toUpperCase(),
+    digits:  s => toLatinDigits(s).replace(/\D/g,''),
+    company: s => toLatinDigits(s).replace(/[^A-Za-z0-9 &.,()\/'\-]/g,'').replace(/\s{2,}/g,' ').replace(/^\s+/,''),
+    email:   s => s.replace(/[^A-Za-z0-9@._+\-]/g,'')
+  };
+  document.querySelectorAll('input[data-kind]').forEach(inp => {
+    const f = FILTERS[inp.dataset.kind];
+    inp.addEventListener('input', () => {
+      const pos = inp.selectionStart, before = inp.value, after = f(before);
+      if (after !== before){
+        inp.value = after;
+        try{ const p = Math.max(0, (pos ?? after.length) - (before.length - after.length)); inp.setSelectionRange(p,p);}catch(e){}
+      }
+      updateCounter(inp); clearErr(inp.closest('.field'));
+    });
+  });
+  function updateCounter(inp){
+    const c = document.querySelector(`.counter[data-for="${inp.id}"]`);
+    if (c) c.textContent = `${inp.value.length}/${inp.maxLength}`;
+  }
+  document.querySelectorAll('input[name=visited]').forEach(r => r.addEventListener('change', () => clearErr(r.closest('.field'))));
+  $('expiry').addEventListener('input', () => {
+    const el = $('expiry'), d = toLatinDigits(el.value).replace(/\D/g,'').slice(0,8);
+    let out = d.slice(0,2); if (d.length > 2) out += '/' + d.slice(2,4); if (d.length > 4) out += '/' + d.slice(4);
+    if (el.value !== out) el.value = out;
+    clearErr(el.closest('.field'));
+  });
+
+  // ---- GlobeMed card number: two boxes of 8 digits ----
+  const cnA = $('cardNumber'), cnB = $('cardNumber2');
+  const cnCount = () => { $('cnCount').textContent = (cnA.value.length + cnB.value.length) + '/16'; };
+  cnA.addEventListener('input', () => { cnCount(); if (cnA.value.length === 8 && document.activeElement === cnA) { cnB.focus(); cnB.select(); } });
+  cnB.addEventListener('input', cnCount);
+  cnB.addEventListener('keydown', ev => { if (ev.key === 'Backspace' && cnB.selectionStart === 0 && cnB.selectionEnd === 0) { ev.preventDefault(); cnA.focus(); const L = cnA.value.length; cnA.setSelectionRange(L, L); } });
+  [cnA, cnB].forEach((box, idx) => box.addEventListener('paste', ev => {
+    const t = toLatinDigits((ev.clipboardData || window.clipboardData).getData('text') || '').replace(/\D/g, '');
+    if (t.length <= 8 && idx === 1) return;
+    if (t.length <= 8 && cnA.value.length + t.length <= 8) return;
+    ev.preventDefault();
+    const all = (idx === 0 ? t : cnA.value + t).slice(0, 16);
+    cnA.value = all.slice(0, 8); cnB.value = all.slice(8, 16);
+    (cnB.value.length ? cnB : cnA).focus(); cnCount(); clearErr(F('cardNumber')); updateProgress();
+  }));
+
+  // ---- GlobeMed card photo: camera or file ----
+  let cardPhoto = null;
+  const MAXB = 10 * 1024 * 1024;
+  const fmtSize = b => b > 1048576 ? (b / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB';
+  function shrink(blob){
+    return new Promise(resolve => {
+      const url = URL.createObjectURL(blob), img = new Image();
+      img.onload = () => {
+        const k = Math.min(1, 1600 / Math.max(img.naturalWidth, img.naturalHeight));
+        const c = document.createElement('canvas'); c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url);
+        c.toBlob(b => resolve(b || blob), 'image/jpeg', 0.85);
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
+      img.src = url;
+    });
+  }
+  async function setPhoto(file, source){
+    const fld = F('cardPhoto');
+    if (!file) return;
+    const isPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name || '');
+    if (!isPdf && !/^image\//.test(file.type)) { setErr(fld, 'Please use a photo (JPG or PNG) or a PDF.'); return; }
+    if (file.size > MAXB) { setErr(fld, 'This file is larger than 10 MB. Please use a smaller photo.'); return; }
+    let blob = file, ext = isPdf ? 'pdf' : 'jpg';
+    if (!isPdf) { blob = await shrink(file); if (!blob) { setErr(fld, 'This image could not be read. Please try another photo.'); return; } }
+    if (cardPhoto && cardPhoto.preview) URL.revokeObjectURL(cardPhoto.preview);
+    cardPhoto = { blob, ext, type: isPdf ? 'application/pdf' : 'image/jpeg', name: file.name || ('card-photo.' + ext), source, preview: isPdf ? '' : URL.createObjectURL(blob) };
+    $('phThumb').innerHTML = isPdf ? '<span class="pdf">PDF</span>' : `<img src="${cardPhoto.preview}" alt="GlobeMed card photo">`;
+    $('phMeta').textContent = (source === 'camera' ? 'Taken with camera' : cardPhoto.name) + ' · ' + fmtSize(blob.size);
+    $('phEmpty').hidden = true; $('phDone').hidden = false;
+    clearErr(fld); updateProgress();
+  }
+  window.__clearPhoto = () => {
+    if (cardPhoto && cardPhoto.preview) URL.revokeObjectURL(cardPhoto.preview);
+    cardPhoto = null; $('phThumb').innerHTML = ''; $('phEmpty').hidden = false; $('phDone').hidden = true;
+    $('cardFile').value = ''; $('cardCam').value = '';
+  };
+  window.__setPhoto = setPhoto;
+  $('fileBtn').addEventListener('click', () => $('cardFile').click());
+  $('phChange').addEventListener('click', () => $('cardFile').click());
+  $('phRemove').addEventListener('click', () => { window.__clearPhoto(); updateProgress(); $('fileBtn').focus(); });
+  $('cardFile').addEventListener('change', ev => setPhoto(ev.target.files[0], 'file'));
+  $('cardCam').addEventListener('change', ev => setPhoto(ev.target.files[0], 'camera'));
+  const box = $('photoBox');
+  ['dragenter','dragover'].forEach(t => box.addEventListener(t, ev => { ev.preventDefault(); box.classList.add('drag'); }));
+  ['dragleave','drop'].forEach(t => box.addEventListener(t, ev => { ev.preventDefault(); box.classList.remove('drag'); }));
+  box.addEventListener('drop', ev => { const f = ev.dataTransfer && ev.dataTransfer.files[0]; if (f) setPhoto(f, 'file'); });
+
+  // camera: phones open the camera app; computers use the webcam in a small window
+  let camStream = null;
+  const coarse = matchMedia('(pointer: coarse)').matches;
+  function closeCam(){ if (camStream) camStream.getTracks().forEach(t => t.stop()); camStream = null; $('camDlg').hidden = true; }
+  $('camBtn').addEventListener('click', async () => {
+    if (coarse || !(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) { $('cardCam').click(); return; }
+    try {
+      camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1920 } }, audio: false });
+      $('camVideo').srcObject = camStream; $('camDlg').hidden = false; $('camShot').focus();
+    } catch (_) { $('cardCam').click(); }
+  });
+  $('camCancel').addEventListener('click', closeCam);
+  $('camDlg').addEventListener('keydown', ev => { if (ev.key === 'Escape') closeCam(); });
+  $('camShot').addEventListener('click', () => {
+    const vd = $('camVideo'), c = document.createElement('canvas');
+    c.width = vd.videoWidth || 1280; c.height = vd.videoHeight || 960;
+    c.getContext('2d').drawImage(vd, 0, 0, c.width, c.height);
+    c.toBlob(b => { closeCam(); if (b) setPhoto(new File([b], 'card-photo.jpg', { type: 'image/jpeg' }), 'camera'); }, 'image/jpeg', 0.9);
+  });
+
+  const today = new Date(); today.setHours(0,0,0,0);
+  const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+
+  // live progress: a field counts once it passes its rule
+  const FIELD_KEYS = ['firstName','lastName','civilId','cardNumber','cardPhoto','mobile','company','visited','email','expiry'];
+  function updateProgress(){
+    const {e} = collect();
+    let n = 0;
+    FIELD_KEYS.forEach(k => { const ok = !e[k]; F(k).classList.toggle('good', ok); if (ok) n++; });
+    F('middleInitial').classList.toggle('good', !!$('middleInitial').value && !e.middleInitial);
+    $('progBar').style.width = (n*10) + '%';
+    $('progTxt').textContent = n === 10 ? 'All 10 complete — ready to submit' : `${n} of 10 complete`;
+    $('prog').classList.toggle('full', n === 10);
+  }
+  $('reg').addEventListener('input', updateProgress);
+  $('reg').addEventListener('change', updateProgress);
+  $('consent').addEventListener('change', () => clearErr(F('consent')));
+
+  function setErr(fieldEl, text){
+    fieldEl.classList.add('bad'); fieldEl.querySelector('.msg').textContent = text;
+    fieldEl.classList.remove('shake'); void fieldEl.offsetWidth; fieldEl.classList.add('shake');
+  }
+  function clearErr(fieldEl){ fieldEl.classList.remove('bad'); fieldEl.querySelector('.msg').textContent = ''; }
+  const F = name => document.querySelector(`.field[data-f="${name}"]`);
+  const titleCase = s => s.trim().toLowerCase().replace(/(^|[\s'\-])([a-z])/g,(m,a,b)=>a+b.toUpperCase());
+
+  // calendar picker fills the typed box as DD/MM/YYYY
+  const pick = $('expiryPick');
+  pick.min = iso(today);
+  pick.addEventListener('click', () => { try { pick.showPicker && pick.showPicker(); } catch(_){} });
+  pick.addEventListener('change', () => {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(pick.value); if (!m) return;
+    $('expiry').value = `${m[3]}/${m[2]}/${m[1]}`;
+    clearErr($('expiry').closest('.field')); updateProgress();
+  });
+  $('expiry').addEventListener('input', () => {
+    const iv = parseDMY($('expiry').value.trim()); pick.value = (iv && iv !== 'bad') ? iv : '';
+  });
+
+  function parseDMY(s){
+    const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(s); if (!m) return '';
+    const d = +m[1], mo = +m[2], y = +m[3], dt = new Date(y, mo-1, d);
+    if (dt.getFullYear() !== y || dt.getMonth() !== mo-1 || dt.getDate() !== d) return 'bad';
+    return iso(dt);
+  }
+  function collect(){
+    const v = {
+      firstName: titleCase($('firstName').value), middleInitial: $('middleInitial').value.trim().toUpperCase(),
+      lastName: titleCase($('lastName').value), civilId: $('civilId').value.trim(), cardNumber: ($('cardNumber').value + $('cardNumber2').value).trim(),
+      mobile: $('mobile').value.trim(), company: $('company').value.trim(),
+      visited: (document.querySelector('input[name=visited]:checked')||{}).value || '',
+      email: $('email').value.trim().toLowerCase(), expiry: parseDMY($('expiry').value.trim()),
+      photo: cardPhoto, consent: $('consent').checked, hp: $('website').value
+    };
+    const e = {};
+    if (!/^[A-Za-z][A-Za-z '\-]*$/.test(v.firstName)) e.firstName = 'Please enter your first name.';
+    if (v.middleInitial && !/^[A-Z]$/.test(v.middleInitial)) e.middleInitial = 'Middle initial must be one English letter.';
+    if (!/^[A-Za-z][A-Za-z '\-]*$/.test(v.lastName)) e.lastName = 'Please enter your last name.';
+    if (!/^[23]\d{11}$/.test(v.civilId)) e.civilId = 'Civil ID must be 12 digits and begin with 2 or 3.';
+    if (!/^8\d{15}$/.test(v.cardNumber)) e.cardNumber = 'Card number must be exactly 16 digits and start with 8.';
+    if (!v.consent) e.consent = 'Please tick the box to confirm and agree.';
+    if (!v.photo) e.cardPhoto = 'Please add a photo of the GlobeMed card (take a photo or attach a file).';
+    if (!/^\d{8}$/.test(v.mobile)) e.mobile = 'Mobile number must be 8 digits.';
+    if (!/[A-Za-z]/.test(v.company)) e.company = 'Please enter your company name.';
+    if (!v.visited) e.visited = 'Please choose Yes or No.';
+    if (!/^[a-z0-9._+\-]+@[a-z0-9\-]+(\.[a-z0-9\-]+)*\.[a-z]{2,}$/.test(v.email)) e.email = 'Please enter a valid email address.';
+    if (v.expiry === '') e.expiry = 'Please enter the date as DD/MM/YYYY.';
+    else if (v.expiry === 'bad') e.expiry = 'This date does not exist. Please check the day and month.';
+    else if (new Date(v.expiry+'T00:00:00') < today) e.expiry = 'This card has expired. Please use a valid GlobeMed card.';
+    return {v, e};
+  }
+
+  function showStatus(kind, html){
+    const s = $('status'); s.className = 'banner '+kind; s.innerHTML = html; s.hidden = false;
+    s.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto':'smooth', block:'center'});
+  }
+
+  function resetForm(){
+    $('reg').reset();
+    if (window.__clearPhoto) window.__clearPhoto();
+    $('cnCount').textContent = '0/16';
+    document.querySelectorAll('.field').forEach(clearErr);
+    document.querySelectorAll('input[data-kind]').forEach(updateCounter);
+    updateProgress();
+  }
+
+  // ---- sticky header: slides in once the big header scrolls away ----
+  const nav = $('topnav');
+  function setNav(show){
+    nav.classList.toggle('show', show);
+    document.documentElement.style.setProperty('--navH', show ? (nav.offsetHeight - (parseFloat(getComputedStyle(nav).paddingTop) - 10)) + 'px' : '0px');
+  }
+  if ('IntersectionObserver' in window){
+    new IntersectionObserver(([en]) => setNav(!en.isIntersecting && en.boundingClientRect.top < 0), {threshold:0}).observe($('mast'));
+  }
+  addEventListener('resize', () => { if (nav.classList.contains('show')) setNav(true); });
+
+  // ---- success moment ----
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function showSuccess(v, ref, at){
+    $('reg').hidden = true; $('status').hidden = true;
+    $('doneTitle').textContent = `Welcome to Al‑Nukhba, ${v.firstName}`;
+    $('doneLead').textContent = 'Registration received. The digital Al-Nukhba card will be emailed within 2–3 business days after the details are verified.';
+    $('doneLead').style.color = '';
+    document.querySelector('.ar-line').textContent = 'تم استلام التسجيل بنجاح — سيتم إرسال البطاقة الرقمية عبر البريد الإلكتروني';
+    $('cName').textContent = [v.firstName, v.middleInitial, v.lastName].filter(Boolean).join(' ').toUpperCase();
+    $('cCivil').textContent = 'Civil ID : ' + v.civilId;
+    if (window.__resetFlip) window.__resetFlip();
+    // GlobeMed card number in groups of 4 (16 digits: 4 + 4 + 4 + 4), with the gold lines
+    const NS = 'http://www.w3.org/2000/svg';
+    const rows = v.cardNumber.match(/.{1,4}/g) || [];
+    const g = $('cNumRows'); g.textContent = '';
+    rows.forEach((txt, i) => {
+      const y = 27 + i*8.4;
+      const t = document.createElementNS(NS,'text'); t.setAttribute('x','43'); t.setAttribute('y', y - 1.6);
+      t.setAttribute('class','t-num'); t.textContent = txt; g.appendChild(t);
+      const p = document.createElementNS(NS,'polyline'); p.setAttribute('class','gold-line');
+      p.setAttribute('points', `42,${y} 69,${y} 76,${y-6.6} 101,${y-6.6}`); g.appendChild(p);
+    });
+    drawQr(v.civilId + v.cardNumber);
+    $('fRef').textContent = ref;
+    $('fTime').textContent = fmtDT(at);
+    const d = $('done'); d.hidden = false;
+    // replay entrance animations
+    d.querySelectorAll('.tick circle,.tick path,.face svg').forEach(el => { el.style.animation='none'; void el.offsetWidth; el.style.animation=''; });
+    try { $('done').scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'start'}); } catch(_){ window.scrollTo(0,0); }
+    $('doneTitle').focus({preventScroll:true});
+    if (!reduce) setTimeout(confetti, 450);
+  }
+  $('againBtn').addEventListener('click', () => {
+    $('done').hidden = true; $('reg').hidden = false; resetForm(); $('firstName').focus();
+  });
+
+  // decorative QR-style block (not scannable; the real code is on the issued card)
+  function drawQr(seed){
+    const NS = 'http://www.w3.org/2000/svg', g = $('cQr'); g.textContent = '';
+    let h = 2166136261; for (const ch of seed){ h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); }
+    const rnd = () => ((h = Math.imul(h ^ (h >>> 15), 2246822507) ^ Math.imul(h ^ (h >>> 13), 3266489909)) >>> 0) / 4294967296;
+    const N = 21, s = 18/N, ox = 11, oy = 119;
+    const finder = (r,c) => (r<7&&c<7)||(r<7&&c>=N-7)||(r>=N-7&&c<7);
+    const box = (x,y,w,fill) => { const r = document.createElementNS(NS,'rect'); r.setAttribute('x',x); r.setAttribute('y',y); r.setAttribute('width',w); r.setAttribute('height',w); r.setAttribute('fill',fill); g.appendChild(r); };
+    for (let r=0;r<N;r++) for (let c=0;c<N;c++) if (!finder(r,c) && rnd() > .52) box(ox+c*s, oy+r*s, s+.02, '#F1F1F6');
+    [[0,0],[0,N-7],[N-7,0]].forEach(([r,c]) => { box(ox+c*s,oy+r*s,7*s,'#F1F1F6'); box(ox+(c+1)*s,oy+(r+1)*s,5*s,'#25285F'); box(ox+(c+2)*s,oy+(r+2)*s,3*s,'#F1F1F6'); });
+  }
+
+  // blueprint building lines behind both faces
+  (function drawBlueprint(){
+    const NS = 'http://www.w3.org/2000/svg';
+    const add = (g, tag, attrs) => { const el = document.createElementNS(NS, tag); for (const k in attrs) el.setAttribute(k, attrs[k]); g.appendChild(el); };
+    document.querySelectorAll('.bp').forEach(g => {
+      const back = g.dataset.bp === 'back';
+      const blocks = back ? [[8,40,14,72],[22,46,72,66],[62,36,30,76]] : [[6,58,20,60],[24,48,30,72],[54,52,24,68],[76,44,20,76]];
+      blocks.forEach(([x,y,w,h]) => {
+        add(g,'rect',{x,y,width:w,height:h});
+        for (let yy=y+5; yy<y+h; yy+=5) add(g,'line',{x1:x,y1:yy,x2:x+w,y2:yy});
+        for (let xx=x+4; xx<x+w; xx+=4) add(g,'line',{x1:xx,y1:y,x2:xx,y2:y+h});
+      });
+      if (!back){ add(g,'path',{d:'M4 112 L40 104 L96 108 L96 120 L40 116 L4 124 Z'}); add(g,'path',{d:'M30 132 q10 -8 22 0 v14 h-22 Z'}); }
+    });
+  })();
+
+  // flip card: hover (CSS) on mouse devices, tap / Enter / Space everywhere else
+  const flip = document.getElementById('flipCard');
+  if (flip){
+    const canHover = matchMedia('(hover: hover)').matches;
+    const setFlip = on => { flip.classList.toggle('is-flipped', on); flip.setAttribute('aria-pressed', on ? 'true' : 'false'); };
+    flip.addEventListener('click', () => { if (!canHover) setFlip(!flip.classList.contains('is-flipped')); });
+    flip.addEventListener('keydown', ev => { if (ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); setFlip(!flip.classList.contains('is-flipped')); } });
+    flip.addEventListener('mouseleave', () => setFlip(false));
+    window.__resetFlip = () => setFlip(false);
+  }
+
+  function confetti(){
+    const c = document.createElement('canvas'); c.id = 'confetti'; document.body.appendChild(c);
+    const ctx = c.getContext('2d'), dpr = Math.min(2, window.devicePixelRatio||1);
+    const W = c.width = innerWidth*dpr, H = c.height = innerHeight*dpr;
+    const cols = ['#D4AE5A','#F3DE9E','#B8913A','#0E2F44','#2F6F94','#FFFFFF'];
+    const ps = Array.from({length:160}, (_,i) => {
+      const left = i % 2 === 0;
+      return { x: left ? W*0.08 : W*0.92, y: H*0.55,
+        vx: (left?1:-1)*(4+Math.random()*9)*dpr, vy: -(10+Math.random()*12)*dpr,
+        w:(5+Math.random()*6)*dpr, h:(8+Math.random()*8)*dpr, r:Math.random()*6, vr:(Math.random()-.5)*.4,
+        col: cols[i % cols.length] };
+    });
+    const t0 = performance.now();
+    (function tick(t){
+      const age = t - t0; ctx.clearRect(0,0,W,H);
+      ps.forEach(p => {
+        p.vy += .35*dpr; p.vx *= .985; p.vy *= .985; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+        ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r);
+        ctx.globalAlpha = Math.max(0, 1 - age/2600);
+        ctx.fillStyle = p.col; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h*Math.abs(Math.cos(p.r*2))); ctx.restore();
+      });
+      if (age < 2600) requestAnimationFrame(tick); else c.remove();
+    })(t0);
+  }
+  $('clearBtn').addEventListener('click', () => { resetForm(); $('status').hidden = true; $('firstName').focus(); });
+
+  // ================= AL-NUKHBA PORTAL: sign-in (Microsoft Entra ID) + data (SharePoint via Microsoft Graph) =================
+  const CFG = window.NUKHBA_CONFIG || {};
+  const DEMO = !CFG.clientId || !CFG.tenantId || CFG.demoMode === true;
+  // Public form: anyone can submit (QR code) when publicForm is on and a submit endpoint is set (or in demo)
+  const PUBLIC = CFG.publicForm === true && (!!(CFG.submitUrl || '').trim() || DEMO);
+  document.body.classList.toggle('public-mode', PUBLIC);
+  const ROLE_STAFF = (CFG.roles && CFG.roles.staff) || 'Portal.GlobeMed';
+  const ROLE_IT = (CFG.roles && CFG.roles.it) || 'Portal.IT';
+  const SCOPES = ['User.Read', 'Sites.ReadWrite.All'];
+  const STATUSES = ['New', 'Missing data', 'Verified', 'Uploaded to Apex'];
+  const STATUS_CLASS = {'New':'s-new','Missing data':'s-missing','Verified':'s-verified','Uploaded to Apex':'s-apex'};
+
+  const fmtDT = s => { const d = new Date(s); return isNaN(d) ? '' : d.toLocaleString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}); };
+  const fmtD = s => s ? String(s).slice(0,10).split('-').reverse().join('/') : '';
+  function esc(s){ const d = document.createElement('span'); d.textContent = s ?? ''; return d.innerHTML; }
+  function toast(msg){ const t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toast._t); toast._t = setTimeout(() => { t.hidden = true; }, 2800); }
+  $('yr').textContent = new Date().getFullYear();
+  if (CFG.supportText){ $('supportLine').textContent = CFG.supportText; $('supportLine').hidden = false; }
+
+  // ---------------- Auth ----------------
+  let msalApp = null, account = null, roles = [];
+  const DEMO_KEY = 'nukhba.demo.session.v1';
+  function demoSession(){ try { return JSON.parse(sessionStorage.getItem(DEMO_KEY) || 'null'); } catch(_){ return demoSession._m || null; } }
+  function setDemoSession(v){ demoSession._m = v; try { v ? sessionStorage.setItem(DEMO_KEY, JSON.stringify(v)) : sessionStorage.removeItem(DEMO_KEY); } catch(_){} }
+
+  async function initAuth(){
+    if (DEMO){
+      const s = demoSession(); if (s){ account = { username: s.user, name: s.name }; roles = s.roles; }
+      return null;
+    }
+    msalApp = new msal.PublicClientApplication({
+      auth: { clientId: CFG.clientId, authority: 'https://login.microsoftonline.com/' + CFG.tenantId,
+              redirectUri: CFG.redirectUri || (location.origin + location.pathname), navigateToLoginRequestUrl: false },
+      cache: { cacheLocation: 'sessionStorage' }
+    });
+    await msalApp.initialize();
+    const res = await msalApp.handleRedirectPromise();
+    account = (res && res.account) || msalApp.getActiveAccount() || msalApp.getAllAccounts()[0] || null;
+    if (account){ msalApp.setActiveAccount(account); roles = (account.idTokenClaims && account.idTokenClaims.roles) || []; }
+    return res && res.state ? res.state : null;   // where the user was heading before sign-in
+  }
+  const hasRole = r => roles.includes(r === 'it' ? ROLE_IT : ROLE_STAFF);
+  // IT can also open the registration form (testing / entering on someone's behalf)
+  const canEnter = area => area === 'it' ? hasRole('it') : (hasRole('staff') || hasRole('it'));
+  function signIn(target){
+    if (DEMO){
+      const r = target === 'it' ? [ROLE_IT] : [ROLE_STAFF];
+      setDemoSession({ user: target === 'it' ? 'it.demo@kuwaithospital.example' : 'staff.demo@globemed.example', name: target === 'it' ? 'IT (demo)' : 'GlobeMed staff (demo)', roles: r });
+      account = { username: demoSession().user, name: demoSession().name }; roles = r;
+      return go(target === 'it' ? 'it' : 'form');
+    }
+    document.querySelectorAll('.role').forEach(b => b.classList.add('busy'));
+    msalApp.loginRedirect({ scopes: SCOPES, state: target === 'it' ? 'it' : 'form', prompt: 'select_account' })
+      .catch(e => { document.querySelectorAll('.role').forEach(b => b.classList.remove('busy')); authMsg('Sign-in could not start: ' + (e.message || e)); });
+  }
+  function signOut(){
+    if (DEMO){ setDemoSession(null); account = null; roles = []; resetForm(); $('done').hidden = true; $('reg').hidden = false; go('start'); toast('Signed out'); return; }
+    msalApp.logoutRedirect({ account, postLogoutRedirectUri: CFG.redirectUri || (location.origin + location.pathname) });
+  }
+  async function getToken(){
+    try { return (await msalApp.acquireTokenSilent({ scopes: SCOPES, account })).accessToken; }
+    catch(e){
+      if (e instanceof msal.InteractionRequiredAuthError){ await msalApp.acquireTokenRedirect({ scopes: SCOPES, account, state: location.hash.slice(1) }); }
+      throw e;
+    }
+  }
+  function authMsg(t){ const m = $('authMsg'); m.textContent = t; m.hidden = !t; }
+
+  // ---------------- Data: SharePoint list via Microsoft Graph (or demo storage) ----------------
+  const GRAPH = 'https://graph.microsoft.com/v1.0';
+  let siteId = CFG.siteId || '', listId = CFG.listId || '';
+  async function g(path, opts = {}){
+    const t = await getToken();
+    const r = await fetch(path.startsWith('http') ? path : GRAPH + path, { ...opts, headers: { Authorization: 'Bearer ' + t, 'Content-Type': 'application/json', ...(opts.headers || {}) } });
+    if (!r.ok){
+      let body = {}; try { body = await r.json(); } catch(_){}
+      const err = new Error((body.error && body.error.message) || ('Request failed (' + r.status + ')')); err.status = r.status; err.code = body.error && body.error.code; throw err;
+    }
+    return r.status === 204 ? null : r.json();
+  }
+  async function ensureList(){
+    if (!siteId){
+      let host = (CFG.siteHostname || '').trim();
+      try {
+        if (!host) throw Object.assign(new Error('no host'), { status: 400 });
+        siteId = (await g(`/sites/${host}:${CFG.sitePath}`)).id;
+      } catch(e){
+        if (e.status !== 400 && e.status !== 404) throw e;
+        // Ask Microsoft for this tenant's real SharePoint address, then retry
+        const root = await g('/sites/root?$select=siteCollection,webUrl');
+        const realHost = (root.siteCollection && root.siteCollection.hostname) || new URL(root.webUrl).hostname;
+        try { siteId = (await g(`/sites/${realHost}:${CFG.sitePath}`)).id; }
+        catch(e2){ throw new Error(`SharePoint site ${CFG.sitePath} was not found on ${realHost} (settings had "${host}"). ${e2.message}`); }
+      }
+    }
+    if (!listId){
+      const ls = await g(`/sites/${siteId}/lists?$select=id,name,displayName&$top=500`);
+      const hit = (ls.value || []).find(l => l.displayName === CFG.listName || l.name === CFG.listName);
+      if (!hit) throw new Error(`SharePoint list "${CFG.listName}" was not found on the site.`);
+      listId = hit.id;
+    }
+  }
+  // Card photos: SharePoint document library (default "CardPhotos")
+  let photoDriveId = CFG.photoDriveId || '';
+  async function ensurePhotoDrive(){
+    if (photoDriveId) return photoDriveId;
+    await ensureList();
+    const name = CFG.photoLibrary || 'CardPhotos';
+    try { photoDriveId = (await g(`/sites/${siteId}/lists/${encodeURIComponent(name)}/drive?$select=id`)).id; }
+    catch(e){
+      const ds = await g(`/sites/${siteId}/drives?$select=id,name,webUrl`);
+      const hit = (ds.value || []).find(d => d.name === name || d.name === 'Card Photos' || /\/CardPhotos\/?$/i.test(d.webUrl || ''));
+      if (!hit) throw new Error(`SharePoint library "${name}" was not found on the site.`);
+      photoDriveId = hit.id;
+    }
+    return photoDriveId;
+  }
+  async function uploadPhoto(photo, reference){
+    const drive = await ensurePhotoDrive();
+    const file = `${reference}.${photo.ext}`;
+    const res = await g(`/drives/${drive}/root:/${encodeURIComponent(file)}:/content?@microsoft.graph.conflictBehavior=rename`, { method: 'PUT', body: photo.blob, headers: { 'Content-Type': photo.type } });
+    return res.webUrl || '';
+  }
+  const fromItem = it => { const f = it.fields || {}; return {
+    id: it.id, reference: f.Title || '', submittedAt: it.createdDateTime || f.Created || '', status: f.Status || 'New', notes: f.Notes || '',
+    firstName: f.FirstName || '', middleInitial: f.MiddleInitial || '', lastName: f.LastName || '', civilId: f.CivilID || '', cardNumber: f.CardNumber || '',
+    mobile: f.Mobile || '', company: f.Company || '', visited: f.PreviouslyVisited || '', email: f.Email || '', expiry: (f.CardExpiry || '').slice(0,10),
+    cardPhoto: f.CardPhoto || '',
+    submittedBy: f.SubmittedBy || (it.createdBy && it.createdBy.user && (it.createdBy.user.email || it.createdBy.user.displayName)) || '' }; };
+
+  const GraphData = {
+    async add(v, reference){
+      await ensureList();
+      const fields = { Title: reference, CivilID: v.civilId, FirstName: v.firstName, MiddleInitial: v.middleInitial, LastName: v.lastName,
+        CardNumber: v.cardNumber, Mobile: v.mobile, Company: v.company, PreviouslyVisited: v.visited, Email: v.email,
+        CardExpiry: v.expiry + 'T12:00:00Z', Status: 'New', SubmittedBy: account ? account.username : '' };
+      let item;
+      try { item = await g(`/sites/${siteId}/lists/${listId}/items`, { method: 'POST', body: JSON.stringify({ fields }) }); }
+      catch(e){ if (/unique|duplicate|already exist/i.test(e.message || '')) { const d = new Error('duplicate'); d.duplicate = true; throw d; } throw e; }
+      // registration is saved; now the card photo (a failure here does not lose the registration)
+      if (!v.photo) return { photoOk: true };
+      try {
+        const url = await uploadPhoto(v.photo, reference);
+        await g(`/sites/${siteId}/lists/${listId}/items/${item.id}/fields`, { method: 'PATCH', body: JSON.stringify({ CardPhoto: url }) });
+        return { photoOk: true };
+      } catch(e){
+        try { await g(`/sites/${siteId}/lists/${listId}/items/${item.id}/fields`, { method: 'PATCH', body: JSON.stringify({ Notes: 'Card photo upload failed: ' + (e.message || e) }) }); } catch(_){}
+        return { photoOk: false, photoError: e.message || String(e) };
+      }
+    },
+    async list(){
+      await ensureList();
+      let url = `/sites/${siteId}/lists/${listId}/items?$expand=fields&$top=500`, out = [];
+      while (url){ const page = await g(url); out = out.concat((page.value || []).map(fromItem)); url = page['@odata.nextLink'] || null; }
+      return out;
+    },
+    async update(id, patch){
+      await ensureList();
+      await g(`/sites/${siteId}/lists/${listId}/items/${id}/fields`, { method: 'PATCH', body: JSON.stringify({ Status: patch.status, Notes: patch.notes }) });
+    }
+  };
+
+  const STORE_KEY = 'nukhba.demo.registrations.v1';
+  let memStore = null;
+  function readStore(){ try { const raw = localStorage.getItem(STORE_KEY); if (raw) return JSON.parse(raw); } catch(_){} return memStore; }
+  function writeStore(l){ memStore = l; try { localStorage.setItem(STORE_KEY, JSON.stringify(l)); } catch(_){} }
+  function sampleData(){
+    const d = (daysAgo, h) => new Date(Date.now() - (daysAgo * 24 + h) * 3600e3).toISOString();
+    const rows = [
+      ['Ahmad','K','Al-Mutairi','285010100111','80000000000101','55501001','Gulf Trading Co','Yes','ahmad.sample@example.com','2027-06-30','New','',0,2],
+      ['Fatima','A','Hassan','290020200222','80000000000202','66602002','Al Noor Services','No','fatima.sample@example.com','2028-01-31','New','',0,5],
+      ['John','P','Mathew','279030300333','80000000000303','99903003','Coastal Engineering','No','john.sample@example.com','2027-03-15','Missing data','Mobile number not reachable. Call Center to confirm.',1,3],
+      ['Sara','M','Al-Enezi','295040400444','80000000000404','50004004','Desert Logistics','Yes','sara.sample@example.com','2029-09-30','Verified','Checked against GlobeMed list.',2,10],
+      ['Rahul','V','Nair','288050500555','80000000000505','60005005','Harbor Foods','No','rahul.sample@example.com','2027-12-31','Uploaded to Apex','Uploaded in batch 1.',4,13],
+    ];
+    return rows.map((r,i) => ({ id: 'S' + (i+1), firstName:r[0], middleInitial:r[1], lastName:r[2], civilId:r[3], cardNumber:r[4], mobile:r[5], company:r[6], visited:r[7], email:r[8],
+      expiry:r[9], status:r[10], notes:r[11], submittedAt:d(r[12], r[13]), reference:'NK-SMPL0' + (i+1), submittedBy:'staff.demo@globemed.example', sample:true }));
+  }
+  function demoRows(){ let l = readStore(); if (!Array.isArray(l)){ l = sampleData(); writeStore(l); } return l; }
+  const DemoData = {
+    async add(v, reference){
+      const l = demoRows();
+      if (l.some(r => r.civilId === v.civilId || r.cardNumber === v.cardNumber)){ const d = new Error('duplicate'); d.duplicate = true; throw d; }
+      const { photo, ...rest } = v;
+      l.push({ ...rest, cardPhoto: photo ? (photo.preview || '#demo-photo') : '', id: 'D' + Date.now(), reference, submittedAt: new Date().toISOString(), submittedBy: account ? account.username : '', status: 'New', notes: '' });
+      writeStore(l);
+      return { photoOk: true };
+    },
+    async list(){ return demoRows().map(r => ({ ...r })); },
+    async update(id, patch){ const l = demoRows(), r = l.find(x => x.id === id); if (r){ r.status = patch.status; r.notes = patch.notes; writeStore(l); } }
+  };
+  // Public submissions go to a trusted endpoint (Power Automate flow or Azure Function) that saves to SharePoint
+  const toB64 = blob => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result).split(',')[1] || ''); r.onerror = rej; r.readAsDataURL(blob); });
+  const PublicData = {
+    async add(v, reference){
+      const { photo, ...f } = v;
+      const body = { ...f, reference, source: account ? 'Signed in: ' + account.username : 'Public form', submittedAt: new Date().toISOString(),
+        photoName: photo ? `${reference}.${photo.ext}` : '', photoType: photo ? photo.type : '', photoBase64: photo ? await toB64(photo.blob) : '' };
+      let r;
+      try { r = await fetch(CFG.submitUrl, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=UTF-8' }, body: JSON.stringify(body) }); }
+      catch(e){ throw new Error('Could not reach the registration service. Check your internet connection.'); }
+      let out = {}; try { out = await r.json(); } catch(_){}
+      if (r.status === 409 || out.duplicate){ const d = new Error('duplicate'); d.duplicate = true; throw d; }
+      if (!r.ok || out.ok === false) throw new Error(out.message || ('The registration service returned an error (' + r.status + ').'));
+      return { photoOk: out.photoOk !== false };
+    }
+  };
+  const Data = DEMO ? DemoData : GraphData;
+  const FormData_ = (PUBLIC && !DEMO) ? PublicData : Data;
+
+  // ---------------- Views / routing ----------------
+  const VIEWS = ['vStart','vNoAccess','vStaff','vIT'];
+  function show(id){
+    if (id !== 'vStaff') exitSuccessMode();
+    VIEWS.forEach(v => { $(v).hidden = v !== id; });
+    document.body.classList.toggle('is-land', id === 'vStart' || id === 'vNoAccess');
+    if (id !== 'vStaff') { try { setNav(false); } catch(_){} }
+    window.scrollTo(0, 0);
+  }
+  function go(hash){ if (location.hash.slice(1) === hash) route(); else location.hash = hash; }
+  function noAccess(area){
+    $('naText').textContent = `${account ? account.username : 'This account'} is not authorised for ${area === 'it' ? 'the IT dashboard' : 'submitting registrations'}.`;
+    show('vNoAccess');
+  }
+  function route(){
+    closeDrawer();
+    const h = location.hash.slice(1) || (PUBLIC ? 'form' : 'start');
+    if (h === 'form'){
+      if (PUBLIC){ $('staffWho').textContent = account ? account.username : ''; document.body.classList.toggle('signed-in', !!account); show('vStaff'); formOpenedAt = Date.now(); return; }
+      if (!account) return go('start');
+      if (!canEnter('staff')) return noAccess('staff');
+      $('staffWho').textContent = account.username; show('vStaff'); return;
+    }
+    if (h === 'it'){
+      if (!account) return go('start');
+      if (!hasRole('it')) return noAccess('it');
+      $('itWho').textContent = account.username; show('vIT'); loadIT(); return;
+    }
+    $('acctLine').hidden = !account;
+    if (account) $('acctName').textContent = account.username;
+    show('vStart');
+  }
+  document.addEventListener('click', ev => {
+    const e = ev.target.closest('[data-enter]');
+    if (e){
+      const target = e.dataset.enter;
+      if (PUBLIC && target !== 'it') return go('form');
+      if (account && canEnter(target)) return go(target === 'it' ? 'it' : 'form');
+      if (account && !DEMO) return noAccess(target);
+      return signIn(target);
+    }
+    const g2 = ev.target.closest('[data-go]'); if (g2){ go(g2.dataset.go); return; }
+    if (ev.target.closest('[data-signout]')) signOut();
+  });
+
+  // ---------------- Success mode: hide the big header, keep the slim logo bar ----------------
+  function enterSuccessMode(){ document.body.classList.add('success-mode'); window.scrollTo(0, 0); }
+  function exitSuccessMode(){ document.body.classList.remove('success-mode'); }
+  $('againBtn').addEventListener('click', () => { exitSuccessMode(); formOpenedAt = Date.now(); window.scrollTo(0, 0); });
+
+  // ---------------- Registration submit ----------------
+  const mode = $('saveMode');
+  mode.className = 'savemode on';
+  mode.textContent = DEMO ? 'Demo mode: registrations are kept in this browser only.' : 'Registrations are sent securely to Kuwait Hospital.';
+
+  let submitting = false, formOpenedAt = Date.now();
+  const fullName = r => [r.firstName, r.middleInitial ? r.middleInitial + '.' : '', r.lastName].filter(Boolean).join(' ');
+  async function onRegister(ev){
+    if (ev) ev.preventDefault();
+    if (submitting) return;
+    const btn = $('submitBtn');
+    try {
+      document.querySelectorAll('.field').forEach(clearErr);
+      const {v, e} = collect();
+      const keys = Object.keys(e);
+      if (keys.length){
+        keys.forEach(k => setErr(F(k), e[k]));
+        const first = F(keys[0]).querySelector('input'); if (first) first.focus();
+        showStatus('err', `<strong>Please check ${keys.length === 1 ? 'the highlighted field' : 'the '+keys.length+' highlighted fields'}.</strong>`);
+        return;
+      }
+      submitting = true; btn.disabled = true; btn.classList.add('busy'); $('submitTxt').textContent = 'Submitting…';
+      $('status').hidden = true;
+      const reference = 'NK-' + Date.now().toString(36).toUpperCase().slice(-6);
+      if (v.hp) throw new Error('Submission blocked.');
+      if (Date.now() - formOpenedAt < 4000) throw new Error('Please take a moment to check your details, then submit again.');
+      const res = (await FormData_.add(v, reference)) || {};
+      showSuccess(v, reference, new Date().toISOString());
+      if (res.photoOk === false){
+        $('doneLead').textContent = 'Registration received, but the card photo could not be uploaded. Kuwait Hospital IT will follow up for the photo.';
+        $('doneLead').style.color = 'var(--warn)';
+      }
+      enterSuccessMode();
+      if (window.__clearPhoto) window.__clearPhoto();
+    } catch(err){
+      if (err && err.duplicate){
+        showStatus('err', '<strong>This Civil ID or GlobeMed card number is already registered.</strong><span>Please check the details. Contact Kuwait Hospital IT if you think this is a mistake.</span>');
+      } else {
+        showStatus('err', '<strong>The registration could not be saved.</strong><span></span>');
+        $('status').querySelector('span').textContent = (err && err.message ? err.message : String(err)) + ' Please try again.';
+      }
+    } finally {
+      submitting = false; btn.disabled = false; btn.classList.remove('busy'); $('submitTxt').textContent = 'Submit · إرسال';
+    }
+  }
+  $('submitBtn').addEventListener('click', onRegister);
+  $('reg').addEventListener('submit', onRegister);
+
+  // ---------------- IT dashboard ----------------
+  let ROWS = [], loaded = false, filterStatus = '', query = '', openId = null;
+  async function loadIT(){
+    $('resetDemo').hidden = !DEMO;
+    if (!loaded) $('itRows').innerHTML = '<tr class="loadrow"><td colspan="12">Loading registrations…</td></tr>';
+    try { ROWS = await Data.list(); loaded = true; renderIT(); }
+    catch(e){ $('itRows').innerHTML = `<tr class="errrow"><td colspan="12">Could not load registrations: ${esc(e.message || e)}</td></tr>`; $('itCount').textContent = '—'; }
+  }
+  const safeUrl = u => /^https:\/\//i.test(u || '') ? u : '';
+  const photoLink = r => safeUrl(r.cardPhoto) ? `<a class="plink" href="${esc(r.cardPhoto)}" target="_blank" rel="noopener" data-nodrawer>View</a>` : '<span style="color:var(--muted)">—</span>';
+  function checksFor(r){
+    const out = [];
+    if (r.sample) out.push('<span class="flag sample">Sample</span>');
+    else if (!r.cardPhoto) out.push('<span class="flag">No photo</span>');
+    if (ROWS.filter(x => x.civilId === r.civilId).length > 1) out.push('<span class="flag">Duplicate Civil ID</span>');
+    if (ROWS.filter(x => x.cardNumber === r.cardNumber).length > 1) out.push('<span class="flag">Duplicate card</span>');
+    const exp = new Date(r.expiry + 'T00:00:00'), soon = new Date(); soon.setDate(soon.getDate() + 60);
+    if (!isNaN(exp) && exp < new Date()) out.push('<span class="flag">Card expired</span>');
+    else if (!isNaN(exp) && exp < soon) out.push('<span class="flag">Expires soon</span>');
+    return out.join('') || '<span style="color:var(--ok);font-weight:600;font-size:12px">OK</span>';
+  }
+  function visibleRows(){
+    const q = query.trim().toLowerCase();
+    return ROWS.filter(r => (!filterStatus || r.status === filterStatus) &&
+      (!q || [r.reference, r.firstName, r.lastName, r.firstName + ' ' + r.lastName, r.civilId, r.cardNumber, r.email, r.mobile, r.company].join(' ').toLowerCase().includes(q)))
+      .sort((a,b) => (b.submittedAt||'').localeCompare(a.submittedAt||''));
+  }
+  function renderIT(){
+    const counts = { All: ROWS.length }; STATUSES.forEach(s => counts[s] = ROWS.filter(r => r.status === s).length);
+    const colors = { All: 'var(--ink)', 'New': 'var(--info)', 'Missing data': 'var(--err)', 'Verified': 'var(--ok)', 'Uploaded to Apex': 'var(--muted)' };
+    $('stats').innerHTML = ['All', ...STATUSES].map(k =>
+      `<button type="button" class="stat ${(filterStatus || 'All') === k ? 'on' : ''}" data-stat="${esc(k)}" style="--c:${colors[k]}"><span class="k">${k === 'All' ? 'All registrations' : esc(k)}</span><span class="v">${counts[k]}</span></button>`).join('');
+    const rows = visibleRows();
+    $('itRows').innerHTML = rows.map(r => `<tr data-id="${esc(r.id)}" tabindex="0">
+      <td class="m">${esc(r.reference)}</td><td class="m">${esc(fmtDT(r.submittedAt))}</td>
+      <td><span class="pill ${STATUS_CLASS[r.status] || 's-new'}">${esc(r.status || 'New')}</span></td>
+      <td>${esc(fullName(r))}</td>
+      <td class="m">${esc(r.civilId)}</td><td class="m">${esc(r.cardNumber)}</td><td class="m">${esc(r.mobile)}</td>
+      <td>${esc(r.email)}</td><td>${esc(r.company)}</td><td class="m">${esc(fmtD(r.expiry))}</td>
+      <td>${photoLink(r)}</td><td>${checksFor(r)}</td></tr>`).join('');
+    $('itEmpty').hidden = rows.length > 0;
+    $('itEmpty').textContent = ROWS.length ? 'No registrations match this search.' : 'No registrations yet.';
+    $('itCount').textContent = `${rows.length} shown of ${ROWS.length}`;
+    $('fStatus').value = filterStatus;
+  }
+  $('stats').addEventListener('click', ev => { const b = ev.target.closest('[data-stat]'); if (!b) return; filterStatus = b.dataset.stat === 'All' ? '' : b.dataset.stat; renderIT(); });
+  $('fStatus').addEventListener('change', () => { filterStatus = $('fStatus').value; renderIT(); });
+  $('q').addEventListener('input', () => { query = $('q').value; renderIT(); });
+  $('refreshBtn').addEventListener('click', async () => { await loadIT(); toast('Updated'); });
+  $('itRows').addEventListener('click', ev => { if (ev.target.closest('[data-nodrawer]')) return; const tr = ev.target.closest('tr[data-id]'); if (tr) openDrawer(tr.dataset.id); });
+  $('itRows').addEventListener('keydown', ev => { if (ev.key === 'Enter'){ const tr = ev.target.closest('tr[data-id]'); if (tr) openDrawer(tr.dataset.id); } });
+  $('resetDemo').addEventListener('click', async () => { writeStore(sampleData()); await loadIT(); toast('Demo data reset'); });
+
+  function openDrawer(id){
+    const r = ROWS.find(x => x.id === id); if (!r) return;
+    openId = id;
+    $('dName').textContent = fullName(r);
+    $('dRef').textContent = `${r.reference} · submitted ${fmtDT(r.submittedAt)}${r.submittedBy ? ' by ' + r.submittedBy : ''}`;
+    $('dFlow').innerHTML = STATUSES.map(s => `<span class="${s === r.status ? 'on' : ''}">${esc(s)}</span>`).join('<span aria-hidden="true">→</span>');
+    const items = [['Civil ID', r.civilId, 1], ['GlobeMed card', r.cardNumber, 1], ['Card expiry', fmtD(r.expiry), 1], ['Mobile', r.mobile, 1], ['Email', r.email], ['Company', r.company], ['Visited before', r.visited]];
+    $('dList').innerHTML = items.map(([k,v,m]) => `<dt>${esc(k)}</dt><dd class="${m ? 'm' : ''}">${esc(v)}</dd>`).join('')
+      + `<dt>Card photo</dt><dd>${safeUrl(r.cardPhoto) ? `<a class="plink" href="${esc(r.cardPhoto)}" target="_blank" rel="noopener">Open card photo ↗</a>` : 'Not uploaded'}</dd>`;
+    $('dStatus').value = r.status || 'New'; $('dNotes').value = r.notes || '';
+    $('scrim').hidden = false; $('drawer').hidden = false;
+    setTimeout(() => $('dStatus').focus(), 30);
+  }
+  function closeDrawer(){ openId = null; $('scrim').hidden = true; $('drawer').hidden = true; }
+  $('dClose').addEventListener('click', closeDrawer); $('dCancel').addEventListener('click', closeDrawer); $('scrim').addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', ev => { if (ev.key === 'Escape' && !$('drawer').hidden) closeDrawer(); });
+  $('dSave').addEventListener('click', async () => {
+    const r = ROWS.find(x => x.id === openId); if (!r) return closeDrawer();
+    const patch = { status: $('dStatus').value, notes: $('dNotes').value.trim() };
+    const b = $('dSave'); b.disabled = true; b.textContent = 'Saving…';
+    try { await Data.update(r.id, patch); Object.assign(r, patch); closeDrawer(); renderIT(); toast(`Saved · ${r.reference} is now “${r.status}”`); }
+    catch(e){ toast('Could not save: ' + (e.message || e)); }
+    finally { b.disabled = false; b.textContent = 'Save changes'; }
+  });
+
+  // ---------------- Excel export ----------------
+  const HEAD = ['Reference','Submitted On','Status','First Name','Middle Initial','Last Name','Civil ID','GlobeMed Card Number','Mobile Number','Company Name','Previously Visited Kuwait Hospital','Email Address','GlobeMed Card Expiration Date','Notes','Submitted By','Card Photo Link'];
+  function saveFile(name, buf){
+    const url = URL.createObjectURL(new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
+    const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
+  }
+  function exportRows(rows, label){
+    if (typeof XLSX === 'undefined'){ toast('The Excel library did not load. Reload the page and try again.'); return; }
+    if (!rows.length){ toast('Nothing to download.'); return; }
+    const sorted = [...rows].sort((a,b) => (a.submittedAt||'').localeCompare(b.submittedAt||''));
+    const aoa = [HEAD, ...sorted.map(r => [r.reference, fmtDT(r.submittedAt), r.status || 'New', r.firstName, r.middleInitial, r.lastName, r.civilId, r.cardNumber, r.mobile, r.company, r.visited, r.email, fmtD(r.expiry), r.notes || '', r.submittedBy || '', safeUrl(r.cardPhoto)])];
+    const ws = XLSX.utils.aoa_to_sheet(aoa);
+    for (let i = 2; i <= aoa.length; i++){ ['G','H','I'].forEach(c => { const cell = ws[c+i]; if (cell){ cell.t = 's'; cell.z = '@'; } }); }
+    ws['!cols'] = [12,18,16,14,8,16,15,20,13,24,14,28,14,36,26,40].map(w => ({ wch: w }));
+    ws['!autofilter'] = { ref: `A1:P${aoa.length}` };
+    const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Registrations');
+    saveFile(`AlNukhba_Registrations_${label}_${iso(new Date())}.xlsx`, XLSX.write(wb, { bookType: 'xlsx', type: 'array' }));
+    toast(`Downloaded ${rows.length} registration${rows.length === 1 ? '' : 's'}`);
+  }
+  $('xlsAll').addEventListener('click', () => exportRows(ROWS, 'All'));
+  $('xlsFiltered').addEventListener('click', () => exportRows(visibleRows(), filterStatus ? filterStatus.replace(/\s+/g,'') : 'Shown'));
+
+  // ---------------- Start ----------------
+  if (DEMO){ $('demoBar').hidden = false; document.body.classList.add('has-demo'); }
+  addEventListener('hashchange', route);
+  initAuth().then(target => {
+    if (target && account){ go(target); return; }
+    route();
+  }).catch(e => { route(); authMsg('Sign-in problem: ' + (e.message || e)); });
+})();
+</script>
+
+</body>
+</html>
