@@ -35,8 +35,8 @@ window.NUKHBA_CONFIG = {
 
   // --- Public registration form (QR code, no sign-in) ----------------
   // Turn on only after the Power Automate flow is set up (FLOW-SETUP.md).
-  publicForm: false,       // true = anyone can open the form and submit
-  submitUrl: "",           // the flow's "HTTP POST URL"
+  publicForm: true,        // true = anyone can open the form and submit
+  submitUrl: "https://default7571e4919c534562a9b1e1b1091538.7e.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/08/workflows/3c4c8013ac2246378a39fc9e301c1439/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=0jHFQxGImyklIZnuHusFiRsuBfNBBtpSS0WLJ_X0BIY",           // the flow's "HTTP POST URL"
 
   // --- Optional ------------------------------------------------------
   supportText: "",         // e.g. "Need help? Contact Kuwait Hospital IT."
