@@ -10,6 +10,8 @@ Kuwait Hosp. IT ┘   Microsoft sign-in      └─> Power Automate: confirmatio
 
 **Who sees what is enforced by SharePoint permissions, not by the web page.** GlobeMed guests can add registrations and read only their own. Only the IT group can read and update everything.
 
+> **Current setup (October 2026):** patients and GlobeMed staff register through the **public QR form** (no login) — see `FLOW-SETUP.md`. SharePoint and the IT dashboard stay private to Kuwait Hospital accounts. Guest accounts (Step 5) and the GlobeMed Staff role are **not needed** in this setup.
+
 Do the steps in this order. You need **Global Administrator** (or Application Administrator + SharePoint Administrator).
 
 ---
@@ -36,9 +38,9 @@ Publish to GitHub (Step 3) with `tenantId`/`clientId` left empty in `config.js`.
 | Title *(exists)* | Single line of text | Rename display name to "Reference" if you like; keep internal name `Title` |
 | `CivilID` | Single line of text | Required · **Enforce unique values: Yes** |
 | `FirstName` | Single line of text | |
-| `MiddleInitial` | Single line of text | |
+| `MiddleInitial` | Single line of text | Optional |
 | `LastName` | Single line of text | |
-| `CardNumber` | Single line of text | **Enforce unique values: Yes** |
+| `CardNumber` | Single line of text | **Enforce unique values: Yes** · Max 16 characters (stored as G + 14 digits) |
 | `Mobile` | Single line of text | |
 | `Company` | Single line of text | |
 | `PreviouslyVisited` | Single line of text | |
@@ -47,6 +49,7 @@ Publish to GitHub (Step 3) with `tenantId`/`clientId` left empty in `config.js`.
 | `Status` | Choice | Choices: `New`, `Missing data`, `Verified`, `Uploaded to Apex` · Default `New` |
 | `Notes` | Multiple lines of text | Plain text |
 | `SubmittedBy` | Single line of text | |
+| `CardPhoto` | Single line of text | Link to the card photo (filled in by the portal) |
 
    > Create the column with the no-space name first; you can change the *display* name afterwards. "Enforce unique values" makes SharePoint itself reject a second registration with the same Civil ID or card number.
 
@@ -61,11 +64,15 @@ Publish to GitHub (Step 3) with `tenantId`/`clientId` left empty in `config.js`.
    - **GlobeMed guests** (or a group `SG-AlNukhba-GlobeMed`): **Contribute**.
    - Remove other groups you don't need (e.g. site Members/Visitors).
 
+1.6b **Card photos library.** In the site → **+ New → Document library → Blank library** → name **`CardPhotos`** (no space). Then in the list add a column **`CardPhoto`** (Single line of text, not required).
+   Library settings → **Permissions for this document library → Stop inheriting**: IT group **Full Control**; GlobeMed group: permission to add files (test with a guest account before go-live).
+   Each photo is saved as `<reference>.jpg` (for example `NK-BJS9US.jpg`) and linked from the list item and the IT dashboard.
+
 1.7 **Get the IDs** (recommended). Open **Graph Explorer** (https://developer.microsoft.com/graph/graph-explorer), sign in as admin, and run:
-   - `GET https://graph.microsoft.com/v1.0/sites/kuwaithospital.sharepoint.com:/sites/AlNukhba` → copy `id` → this is **siteId**
+   - `GET https://graph.microsoft.com/v1.0/sites/kwh.sharepoint.com:/sites/AlNukhba` → copy `id` → this is **siteId**
    - `GET https://graph.microsoft.com/v1.0/sites/{siteId}/lists?$select=id,displayName` → copy the `id` of "AlNukhba Registrations" → this is **listId**
 
-   (Replace `kuwaithospital.sharepoint.com` with your real SharePoint host name.)
+   (Your SharePoint host name is `kwh.sharepoint.com`.)
 
 ---
 
