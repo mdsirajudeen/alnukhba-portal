@@ -593,6 +593,38 @@ body.public-mode:not(.signed-in) #vStaff .sessbar{display:none}
 body.public-mode:not(.signed-in) #done [data-signout]{display:none}
 body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in needed"}
 
+/* --- dashboard: row selection, card 7+7, export dialog --- */
+.dt th.ck,.dt td.ck{width:34px;padding-right:0!important;text-align:center!important}
+.dt .ck input{width:17px;height:17px;accent-color:var(--navy, #0E2F44);cursor:pointer;margin:0}
+.dt tr.sel td{background:color-mix(in srgb,var(--gold) 12%,transparent)!important}
+.dt td.card{white-space:nowrap}
+.dt td.card .cg{color:var(--muted);margin-right:5px}
+.dt td.card .cgap{display:inline-block;width:12px}
+.selinfo{font-size:13.5px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.selinfo b{color:var(--ink)}
+.xdlg{position:fixed;z-index:70;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,calc(100vw - 24px));max-height:calc(100vh - 32px);overflow:auto;background:var(--surface);border-radius:14px;box-shadow:0 30px 60px -20px rgba(7,26,39,.55);display:grid;grid-template-rows:auto 1fr auto}
+.xdlg[hidden]{display:none}
+#xScrim{z-index:65}
+.xdlg header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+.xdlg h3{margin:0;font-size:18px}
+.xbody{padding:16px 20px;display:grid;gap:16px}
+.xbody fieldset{border:none;margin:0;padding:0;display:grid;gap:8px}
+.xbody legend{font-weight:600;font-size:14px;margin-bottom:8px;display:flex;gap:6px;align-items:center}
+.xbody legend .linkbtn{font-weight:500;font-size:13px}
+.xopt{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer}
+.xopt:has(input:checked){border-color:var(--gold);background:var(--gold-soft)}
+.xopt:has(input:disabled){opacity:.5;cursor:not-allowed}
+.xopt input{accent-color:var(--gold);width:17px;height:17px;margin:0}
+.xopt span{display:grid}.xopt small{color:var(--muted);font-size:12.5px}
+.xcols{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}
+.xcol{display:flex;gap:8px;align-items:center;font-size:13.5px;cursor:pointer}
+.xcol input{accent-color:var(--navy, #0E2F44);width:16px;height:16px;margin:0}
+.xcol em{color:var(--muted);font-style:normal;font-size:12px}
+.xdlg footer{display:flex;justify-content:flex-end;gap:10px;align-items:center;padding:14px 20px;border-top:1px solid var(--line)}
+.xdlg footer .xnote{margin-right:auto;font-size:13px;color:var(--muted)}
+.xdlg footer .primary[disabled]{opacity:.5;cursor:not-allowed}
+@media (max-width:560px){ .xcols{grid-template-columns:1fr} }
+
 @media (max-width:480px){form,.panel,.done{padding-left:16px;padding-right:16px}.mast{padding:22px 18px}.prog{margin:0 -16px;padding-left:16px;padding-right:16px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.tick circle,.tick path{stroke-dashoffset:0}}
 </style>
@@ -879,12 +911,12 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
       <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input type="search" id="q" placeholder="Search name, Civil ID, card, reference or email" aria-label="Search registrations"></div>
       <select id="fStatus" aria-label="Filter by status"><option value="">All statuses</option><option>New</option><option>Missing data</option><option>Verified</option><option>Uploaded to Apex</option></select>
       <button type="button" class="ghost sm" id="refreshBtn">Refresh</button>
-      <button type="button" class="ghost sm" id="xlsFiltered">Download shown (.xlsx)</button>
-      <button type="button" class="primary" id="xlsAll">Download all (.xlsx)</button>
+      <span class="selinfo" id="selInfo" hidden><b id="selCount">0</b> selected · <button type="button" class="linkbtn" id="selClear">Clear</button></span>
+      <button type="button" class="primary" id="xlsOpen">Download Excel…</button>
     </div>
     <div class="datacard">
       <div class="tbl"><table class="dt">
-        <thead><tr><th>Reference</th><th>Submitted</th><th>Status</th><th>Name</th><th>Civil ID</th><th>GlobeMed card</th><th>Mobile</th><th>Email</th><th>Company</th><th>Card expiry</th><th>Photo</th><th>Checks</th></tr></thead>
+        <thead><tr><th class="ck"><input type="checkbox" id="selAll" aria-label="Select all shown rows"></th><th>Reference</th><th>Submitted</th><th>Status</th><th>Name</th><th>Civil ID</th><th>GlobeMed card</th><th>Mobile</th><th>Email</th><th>Company</th><th>Card expiry</th><th>Photo</th><th>Checks</th></tr></thead>
         <tbody id="itRows"></tbody>
       </table></div>
       <p class="empty" id="itEmpty" hidden>No registrations match this search.</p>
@@ -905,6 +937,21 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
   <footer><button type="button" class="ghost" id="dCancel">Cancel</button><button type="button" class="primary" id="dSave">Save changes</button></footer>
 </aside>
 <div class="toast" id="toast" hidden></div>
+<div class="scrim" id="xScrim" hidden></div>
+<div class="xdlg" id="xDlg" hidden role="dialog" aria-modal="true" aria-labelledby="xTitle">
+  <header><h3 id="xTitle">Download Excel</h3><button type="button" class="xbtn" id="xClose" aria-label="Close">×</button></header>
+  <div class="xbody">
+    <fieldset><legend>Which registrations?</legend>
+      <label class="xopt"><input type="radio" name="xRows" value="sel"><span><b>Selected rows</b><small id="xSelN">0 rows</small></span></label>
+      <label class="xopt"><input type="radio" name="xRows" value="shown"><span><b>Rows shown now</b><small id="xShownN">0 rows (current search / filter)</small></span></label>
+      <label class="xopt"><input type="radio" name="xRows" value="all"><span><b>All registrations</b><small id="xAllN">0 rows</small></span></label>
+    </fieldset>
+    <fieldset><legend>Which columns? <button type="button" class="linkbtn" id="xColsAll">All</button> · <button type="button" class="linkbtn" id="xColsNone">None</button></legend>
+      <div class="xcols" id="xCols"></div>
+    </fieldset>
+  </div>
+  <footer><span class="xnote" id="xNote"></span><button type="button" class="ghost" id="xCancel">Cancel</button><button type="button" class="primary" id="xGo">Download</button></footer>
+</div>
 
 <script src="xlsx.full.min.js"></script>
 <script src="msal-browser.min.js"></script>
@@ -1530,10 +1577,14 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
   let ROWS = [], loaded = false, filterStatus = '', query = '', openId = null;
   async function loadIT(){
     $('resetDemo').hidden = !DEMO;
-    if (!loaded) $('itRows').innerHTML = '<tr class="loadrow"><td colspan="12">Loading registrations…</td></tr>';
+    if (!loaded) $('itRows').innerHTML = '<tr class="loadrow"><td colspan="13">Loading registrations…</td></tr>';
     try { ROWS = await Data.list(); loaded = true; renderIT(); }
-    catch(e){ $('itRows').innerHTML = `<tr class="errrow"><td colspan="12">Could not load registrations: ${esc(e.message || e)}</td></tr>`; $('itCount').textContent = '—'; }
+    catch(e){ $('itRows').innerHTML = `<tr class="errrow"><td colspan="13">Could not load registrations: ${esc(e.message || e)}</td></tr>`; $('itCount').textContent = '—'; }
   }
+  // GlobeMed card: G + 7 + 7 digits, shown as two groups
+  const cardParts = n => { const d = String(n || '').replace(/^G/i, '').replace(/\s/g, ''); return /^\d{14}$/.test(d) ? [d.slice(0, 7), d.slice(7)] : [d, '']; };
+  const cardHtml = n => { const [a, b] = cardParts(n); return b ? `<span class="cg">G</span>${esc(a)}<span class="cgap"></span>${esc(b)}` : esc(n); };
+  const SEL = new Set();
   const safeUrl = u => /^https:\/\//i.test(u || '') ? u : '';
   const photoLink = r => safeUrl(r.cardPhoto) ? `<a class="plink" href="${esc(r.cardPhoto)}" target="_blank" rel="noopener" data-nodrawer>View</a>` : '<span style="color:var(--muted)">—</span>';
   function checksFor(r){
@@ -1559,17 +1610,19 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
     $('stats').innerHTML = ['All', ...STATUSES].map(k =>
       `<button type="button" class="stat ${(filterStatus || 'All') === k ? 'on' : ''}" data-stat="${esc(k)}" style="--c:${colors[k]}"><span class="k">${k === 'All' ? 'All registrations' : esc(k)}</span><span class="v">${counts[k]}</span></button>`).join('');
     const rows = visibleRows();
-    $('itRows').innerHTML = rows.map(r => `<tr data-id="${esc(r.id)}" tabindex="0">
+    $('itRows').innerHTML = rows.map(r => `<tr data-id="${esc(r.id)}" tabindex="0" class="${SEL.has(r.id) ? 'sel' : ''}">
+      <td class="ck" data-nodrawer><input type="checkbox" data-sel="${esc(r.id)}" ${SEL.has(r.id) ? 'checked' : ''} aria-label="Select ${esc(r.reference)}"></td>
       <td class="m">${esc(r.reference)}</td><td class="m">${esc(fmtDT(r.submittedAt))}</td>
       <td><span class="pill ${STATUS_CLASS[r.status] || 's-new'}">${esc(r.status || 'New')}</span></td>
       <td>${esc(fullName(r))}</td>
-      <td class="m">${esc(r.civilId)}</td><td class="m">${esc(r.cardNumber)}</td><td class="m">${esc(r.mobile)}</td>
+      <td class="m">${esc(r.civilId)}</td><td class="m card">${cardHtml(r.cardNumber)}</td><td class="m">${esc(r.mobile)}</td>
       <td>${esc(r.email)}</td><td>${esc(r.company)}</td><td class="m">${esc(fmtD(r.expiry))}</td>
       <td>${photoLink(r)}</td><td>${checksFor(r)}</td></tr>`).join('');
     $('itEmpty').hidden = rows.length > 0;
     $('itEmpty').textContent = ROWS.length ? 'No registrations match this search.' : 'No registrations yet.';
     $('itCount').textContent = `${rows.length} shown of ${ROWS.length}`;
     $('fStatus').value = filterStatus;
+    syncSel();
   }
   $('stats').addEventListener('click', ev => { const b = ev.target.closest('[data-stat]'); if (!b) return; filterStatus = b.dataset.stat === 'All' ? '' : b.dataset.stat; renderIT(); });
   $('fStatus').addEventListener('change', () => { filterStatus = $('fStatus').value; renderIT(); });
@@ -1585,7 +1638,7 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
     $('dName').textContent = fullName(r);
     $('dRef').textContent = `${r.reference} · submitted ${fmtDT(r.submittedAt)}${r.submittedBy ? ' by ' + r.submittedBy : ''}`;
     $('dFlow').innerHTML = STATUSES.map(s => `<span class="${s === r.status ? 'on' : ''}">${esc(s)}</span>`).join('<span aria-hidden="true">→</span>');
-    const items = [['Civil ID', r.civilId, 1], ['GlobeMed card', r.cardNumber, 1], ['Card expiry', fmtD(r.expiry), 1], ['Mobile', r.mobile, 1], ['Email', r.email], ['Company', r.company], ['Visited before', r.visited]];
+    const items = [['Civil ID', r.civilId, 1], ['GlobeMed card', cardParts(r.cardNumber).filter(Boolean).join('  '), 1], ['Card expiry', fmtD(r.expiry), 1], ['Mobile', r.mobile, 1], ['Email', r.email], ['Company', r.company], ['Visited before', r.visited]];
     $('dList').innerHTML = items.map(([k,v,m]) => `<dt>${esc(k)}</dt><dd class="${m ? 'm' : ''}">${esc(v)}</dd>`).join('')
       + `<dt>Card photo</dt><dd>${safeUrl(r.cardPhoto) ? `<a class="plink" href="${esc(r.cardPhoto)}" target="_blank" rel="noopener">Open card photo ↗</a>` : 'Not uploaded'}</dd>`;
     $('dStatus').value = r.status || 'New'; $('dNotes').value = r.notes || '';
@@ -1604,28 +1657,91 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
     finally { b.disabled = false; b.textContent = 'Save changes'; }
   });
 
-  // ---------------- Excel export ----------------
-  const HEAD = ['Reference','Submitted On','Status','First Name','Middle Initial','Last Name','Civil ID','GlobeMed Card Number','Mobile Number','Company Name','Previously Visited Kuwait Hospital','Email Address','GlobeMed Card Expiration Date','Notes','Submitted By','Card Photo Link'];
+  // ---------------- Row selection ----------------
+  function syncSel(){
+    [...SEL].forEach(id => { if (!ROWS.some(r => r.id === id)) SEL.delete(id); });
+    const shown = visibleRows(), n = SEL.size, allOn = shown.length > 0 && shown.every(r => SEL.has(r.id));
+    $('selAll').checked = allOn; $('selAll').indeterminate = !allOn && shown.some(r => SEL.has(r.id));
+    $('selCount').textContent = n; $('selInfo').hidden = n === 0;
+  }
+  $('itRows').addEventListener('change', ev => {
+    const c = ev.target.closest('[data-sel]'); if (!c) return;
+    c.checked ? SEL.add(c.dataset.sel) : SEL.delete(c.dataset.sel);
+    c.closest('tr').classList.toggle('sel', c.checked); syncSel();
+  });
+  $('selAll').addEventListener('change', () => { const on = $('selAll').checked; visibleRows().forEach(r => on ? SEL.add(r.id) : SEL.delete(r.id)); renderIT(); });
+  $('selClear').addEventListener('click', () => { SEL.clear(); renderIT(); });
+
+  // ---------------- Excel export (choose rows + columns) ----------------
+  const XCOLS = [
+    { k: 'ref',   h: 'Reference',                          w: 12, v: r => r.reference },
+    { k: 'sub',   h: 'Submitted On',                       w: 18, v: r => fmtDT(r.submittedAt) },
+    { k: 'stat',  h: 'Status',                             w: 16, v: r => r.status || 'New' },
+    { k: 'first', h: 'First Name',                         w: 14, v: r => r.firstName },
+    { k: 'mid',   h: 'Middle Initial',                     w: 8,  v: r => r.middleInitial },
+    { k: 'last',  h: 'Last Name',                          w: 16, v: r => r.lastName },
+    { k: 'civil', h: 'Civil ID',                           w: 15, v: r => r.civilId, text: 1 },
+    { k: 'card',  h: 'GlobeMed Card',                      w: 11, v: r => cardParts(r.cardNumber)[0], text: 1, two: r => cardParts(r.cardNumber)[1] },
+    { k: 'mob',   h: 'Mobile Number',                      w: 13, v: r => r.mobile, text: 1 },
+    { k: 'comp',  h: 'Company Name',                       w: 24, v: r => r.company },
+    { k: 'vis',   h: 'Previously Visited Kuwait Hospital', w: 14, v: r => r.visited },
+    { k: 'mail',  h: 'Email Address',                      w: 28, v: r => r.email },
+    { k: 'exp',   h: 'GlobeMed Card Expiration Date',      w: 14, v: r => fmtD(r.expiry) },
+    { k: 'notes', h: 'Notes',                              w: 36, v: r => r.notes || '' },
+    { k: 'by',    h: 'Submitted By',                       w: 26, v: r => r.submittedBy || '' },
+    { k: 'photo', h: 'Card Photo Link',                    w: 40, v: r => safeUrl(r.cardPhoto) }
+  ];
+  const XKEY = 'nukhba.export.cols.v1';
+  const savedCols = () => { try { const a = JSON.parse(localStorage.getItem(XKEY) || 'null'); if (Array.isArray(a) && a.length) return a; } catch(_){} return XCOLS.map(c => c.k); };
+  $('xCols').innerHTML = XCOLS.map(c => `<label class="xcol"><input type="checkbox" value="${c.k}"><span>${esc(c.h)}${c.two ? ' <em>(2 cells: 7 + 7)</em>' : ''}</span></label>`).join('');
+  const xRowsFor = mode => mode === 'sel' ? ROWS.filter(r => SEL.has(r.id)) : mode === 'shown' ? visibleRows() : ROWS;
+  function xRefresh(){
+    const mode = (document.querySelector('input[name=xRows]:checked') || {}).value;
+    const nRows = mode ? xRowsFor(mode).length : 0, nCols = $('xCols').querySelectorAll('input:checked').length;
+    $('xGo').disabled = !nRows || !nCols;
+    $('xNote').textContent = !nCols ? 'Choose at least one column.' : !nRows ? 'No rows to download.' : `${nRows} row${nRows === 1 ? '' : 's'} · ${nCols} column${nCols === 1 ? '' : 's'}`;
+  }
+  function openExport(){
+    if (typeof XLSX === 'undefined'){ toast('The Excel library did not load. Reload the page and try again.'); return; }
+    const plural = n => `${n} row${n === 1 ? '' : 's'}`;
+    $('xSelN').textContent = plural(SEL.size); $('xShownN').textContent = plural(visibleRows().length) + (query || filterStatus ? ' (current search / filter)' : '');
+    $('xAllN').textContent = plural(ROWS.length);
+    const selR = document.querySelector('input[name=xRows][value=sel]'); selR.disabled = SEL.size === 0;
+    document.querySelector(`input[name=xRows][value=${SEL.size ? 'sel' : (query || filterStatus) ? 'shown' : 'all'}]`).checked = true;
+    const keep = savedCols(); $('xCols').querySelectorAll('input').forEach(i => { i.checked = keep.includes(i.value); });
+    xRefresh(); $('xScrim').hidden = false; $('xDlg').hidden = false; setTimeout(() => $('xGo').focus(), 30);
+  }
+  function closeExport(){ $('xScrim').hidden = true; $('xDlg').hidden = true; }
+  $('xlsOpen').addEventListener('click', openExport);
+  ['xClose','xCancel','xScrim'].forEach(id => $(id).addEventListener('click', closeExport));
+  $('xDlg').addEventListener('change', xRefresh);
+  $('xColsAll').addEventListener('click', () => { $('xCols').querySelectorAll('input').forEach(i => i.checked = true); xRefresh(); });
+  $('xColsNone').addEventListener('click', () => { $('xCols').querySelectorAll('input').forEach(i => i.checked = false); xRefresh(); });
+  document.addEventListener('keydown', ev => { if (ev.key === 'Escape' && !$('xDlg').hidden) closeExport(); });
   function saveFile(name, buf){
     const url = URL.createObjectURL(new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
     const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 3000);
   }
-  function exportRows(rows, label){
-    if (typeof XLSX === 'undefined'){ toast('The Excel library did not load. Reload the page and try again.'); return; }
-    if (!rows.length){ toast('Nothing to download.'); return; }
-    const sorted = [...rows].sort((a,b) => (a.submittedAt||'').localeCompare(b.submittedAt||''));
-    const aoa = [HEAD, ...sorted.map(r => [r.reference, fmtDT(r.submittedAt), r.status || 'New', r.firstName, r.middleInitial, r.lastName, r.civilId, r.cardNumber, r.mobile, r.company, r.visited, r.email, fmtD(r.expiry), r.notes || '', r.submittedBy || '', safeUrl(r.cardPhoto)])];
+  $('xGo').addEventListener('click', () => {
+    const mode = document.querySelector('input[name=xRows]:checked').value;
+    const keys = [...$('xCols').querySelectorAll('input:checked')].map(i => i.value);
+    try { localStorage.setItem(XKEY, JSON.stringify(keys)); } catch(_){}
+    const cols = XCOLS.filter(c => keys.includes(c.k));
+    const rows = [...xRowsFor(mode)].sort((a,b) => (a.submittedAt||'').localeCompare(b.submittedAt||''));
+    const head = [], merges = [], widths = [], textCols = [];
+    cols.forEach(c => { const at = head.length; head.push(c.h); widths.push(c.w); if (c.text) textCols.push(at);
+      if (c.two){ head.push(''); widths.push(c.w); textCols.push(at + 1); merges.push({ s: { r: 0, c: at }, e: { r: 0, c: at + 1 } }); } });
+    const aoa = [head, ...rows.map(r => { const out = []; cols.forEach(c => { out.push(c.v(r) ?? ''); if (c.two) out.push(c.two(r) ?? ''); }); return out; })];
     const ws = XLSX.utils.aoa_to_sheet(aoa);
-    for (let i = 2; i <= aoa.length; i++){ ['G','H','I'].forEach(c => { const cell = ws[c+i]; if (cell){ cell.t = 's'; cell.z = '@'; } }); }
-    ws['!cols'] = [12,18,16,14,8,16,15,20,13,24,14,28,14,36,26,40].map(w => ({ wch: w }));
-    ws['!autofilter'] = { ref: `A1:P${aoa.length}` };
+    for (let ri = 1; ri < aoa.length; ri++) textCols.forEach(ci => { const cell = ws[XLSX.utils.encode_cell({ r: ri, c: ci })]; if (cell){ cell.t = 's'; cell.z = '@'; } });
+    ws['!cols'] = widths.map(w => ({ wch: w })); if (merges.length) ws['!merges'] = merges;
+    ws['!autofilter'] = { ref: XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: Math.max(0, aoa.length - 1), c: head.length - 1 } }) };
     const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Registrations');
+    const label = mode === 'sel' ? 'Selected' : mode === 'shown' ? (filterStatus ? filterStatus.replace(/\s+/g,'') : 'Shown') : 'All';
     saveFile(`AlNukhba_Registrations_${label}_${iso(new Date())}.xlsx`, XLSX.write(wb, { bookType: 'xlsx', type: 'array' }));
-    toast(`Downloaded ${rows.length} registration${rows.length === 1 ? '' : 's'}`);
-  }
-  $('xlsAll').addEventListener('click', () => exportRows(ROWS, 'All'));
-  $('xlsFiltered').addEventListener('click', () => exportRows(visibleRows(), filterStatus ? filterStatus.replace(/\s+/g,'') : 'Shown'));
+    closeExport(); toast(`Downloaded ${rows.length} registration${rows.length === 1 ? '' : 's'}`);
+  });
 
   // ---------------- Start ----------------
   if (DEMO){ $('demoBar').hidden = false; document.body.classList.add('has-demo'); }
