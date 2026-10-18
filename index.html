@@ -628,6 +628,25 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
 .xopt.apex{border-style:dashed}
 .xopt.apex b::before{content:'APEX';font-size:10.5px;letter-spacing:.06em;background:var(--navy, #0E2F44);color:#fff;border-radius:4px;padding:2px 6px;margin-right:8px;vertical-align:1px}
 
+/* --- dashboard: full width, all columns visible, paging --- */
+.it{max-width:none;padding-inline:max(16px,1.2vw)}
+.dt{min-width:0;table-layout:auto}
+.dt th,.dt td{padding:9px 8px;white-space:normal}
+.dt th{font-size:10.5px;letter-spacing:.06em}
+.dt td{font-size:13px}
+.dt td.m{white-space:nowrap;font-size:12px}
+.dt td.m:nth-child(3){white-space:normal;min-width:84px}
+.dt td:nth-child(9){overflow-wrap:anywhere;min-width:150px}
+.dt td:nth-child(5),.dt td:nth-child(10){min-width:90px}
+.pager{display:flex;align-items:center;gap:10px;color:var(--ink);font-weight:600}
+.pgbtn{font:inherit;font-size:13px;font-weight:600;padding:7px 14px;min-height:36px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.pgbtn:hover:not([disabled]){border-color:var(--gold)}
+.pgbtn[disabled]{opacity:.4;cursor:not-allowed}
+
+/* --- dashboard: small gap above the sticky logo bar --- */
+.ithead{padding-top:12px}
+.ithead .itbar{border-radius:14px}
+
 @media (max-width:480px){form,.panel,.done{padding-left:16px;padding-right:16px}.mast{padding:22px 18px}.prog{margin:0 -16px;padding-left:16px;padding-right:16px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.tick circle,.tick path{stroke-dashoffset:0}}
 </style>
@@ -923,7 +942,7 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
         <tbody id="itRows"></tbody>
       </table></div>
       <p class="empty" id="itEmpty" hidden>No registrations match this search.</p>
-      <div class="dash-foot"><span id="itCount">Loading…</span><span>Workflow: New → Missing data (Call Center) → Verified → Uploaded to Apex. Click a row to update it.</span><button type="button" class="back" id="resetDemo" hidden>Reset demo data</button></div>
+      <div class="dash-foot"><span id="itCount">Loading…</span><span class="pager" id="pager" hidden><button type="button" class="pgbtn" id="pgPrev" aria-label="Previous 25">‹ Previous</button><span id="pgInfo">Page 1 of 1</span><button type="button" class="pgbtn" id="pgNext" aria-label="Next 25">Next ›</button></span><span>Workflow: New → Missing data (Call Center) → Verified → Uploaded to Apex. Click a row to update it.</span><button type="button" class="back" id="resetDemo" hidden>Reset demo data</button></div>
     </div>
   </div>
 </div>
@@ -1174,9 +1193,10 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
     nav.classList.toggle('show', show);
     document.documentElement.style.setProperty('--navH', show ? (nav.offsetHeight - (parseFloat(getComputedStyle(nav).paddingTop) - 10)) + 'px' : '0px');
   }
-  if ('IntersectionObserver' in window){
-    new IntersectionObserver(([en]) => setNav(!en.isIntersecting && en.boundingClientRect.top < 0), {threshold:0}).observe($('mast'));
-  }
+  // slim logo bar stays fixed at the top as soon as the form page scrolls
+  const formVisible = () => { const v = document.getElementById('vStaff'); return !v || !v.hidden; };
+  const onScrollNav = () => { const want = formVisible() && window.scrollY > 24; if (want !== nav.classList.contains('show')) setNav(want); };
+  addEventListener('scroll', onScrollNav, { passive: true });
   addEventListener('resize', () => { if (nav.classList.contains('show')) setNav(true); });
 
   // ---- success moment ----
@@ -1578,7 +1598,8 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
   $('reg').addEventListener('submit', onRegister);
 
   // ---------------- IT dashboard ----------------
-  let ROWS = [], loaded = false, filterStatus = '', query = '', openId = null;
+  let ROWS = [], loaded = false, filterStatus = '', query = '', openId = null, PAGE = 0;
+  const PER_PAGE = 25;
   async function loadIT(){
     $('resetDemo').hidden = !DEMO;
     if (!loaded) $('itRows').innerHTML = '<tr class="loadrow"><td colspan="13">Loading registrations…</td></tr>';
@@ -1608,12 +1629,15 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
       (!q || [r.reference, r.firstName, r.lastName, r.firstName + ' ' + r.lastName, r.civilId, r.cardNumber, r.email, r.mobile, r.company].join(' ').toLowerCase().includes(q)))
       .sort((a,b) => (b.submittedAt||'').localeCompare(a.submittedAt||''));
   }
+  const pageRows = () => visibleRows().slice(PAGE * PER_PAGE, (PAGE + 1) * PER_PAGE);
   function renderIT(){
     const counts = { All: ROWS.length }; STATUSES.forEach(s => counts[s] = ROWS.filter(r => r.status === s).length);
     const colors = { All: 'var(--ink)', 'New': 'var(--info)', 'Missing data': 'var(--err)', 'Verified': 'var(--ok)', 'Uploaded to Apex': 'var(--muted)' };
     $('stats').innerHTML = ['All', ...STATUSES].map(k =>
       `<button type="button" class="stat ${(filterStatus || 'All') === k ? 'on' : ''}" data-stat="${esc(k)}" style="--c:${colors[k]}"><span class="k">${k === 'All' ? 'All registrations' : esc(k)}</span><span class="v">${counts[k]}</span></button>`).join('');
-    const rows = visibleRows();
+    const all = visibleRows(), pages = Math.max(1, Math.ceil(all.length / PER_PAGE));
+    if (PAGE >= pages) PAGE = pages - 1;
+    const rows = pageRows();
     $('itRows').innerHTML = rows.map(r => `<tr data-id="${esc(r.id)}" tabindex="0" class="${SEL.has(r.id) ? 'sel' : ''}">
       <td class="ck" data-nodrawer><input type="checkbox" data-sel="${esc(r.id)}" ${SEL.has(r.id) ? 'checked' : ''} aria-label="Select ${esc(r.reference)}"></td>
       <td class="m">${esc(r.reference)}</td><td class="m">${esc(fmtDT(r.submittedAt))}</td>
@@ -1622,15 +1646,20 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
       <td class="m">${esc(r.civilId)}</td><td class="m card">${cardHtml(r.cardNumber)}</td><td class="m">${esc(r.mobile)}</td>
       <td>${esc(r.email)}</td><td>${esc(r.company)}</td><td class="m">${esc(fmtD(r.expiry))}</td>
       <td>${photoLink(r)}</td><td>${checksFor(r)}</td></tr>`).join('');
-    $('itEmpty').hidden = rows.length > 0;
+    $('itEmpty').hidden = all.length > 0;
     $('itEmpty').textContent = ROWS.length ? 'No registrations match this search.' : 'No registrations yet.';
-    $('itCount').textContent = `${rows.length} shown of ${ROWS.length}`;
+    const from = all.length ? PAGE * PER_PAGE + 1 : 0, to = PAGE * PER_PAGE + rows.length;
+    $('itCount').textContent = `${from}–${to} of ${all.length}` + (all.length !== ROWS.length ? ` (filtered from ${ROWS.length})` : '') + ' · newest first';
+    $('pager').hidden = pages <= 1; $('pgInfo').textContent = `Page ${PAGE + 1} of ${pages}`;
+    $('pgPrev').disabled = PAGE === 0; $('pgNext').disabled = PAGE >= pages - 1;
     $('fStatus').value = filterStatus;
     syncSel();
   }
-  $('stats').addEventListener('click', ev => { const b = ev.target.closest('[data-stat]'); if (!b) return; filterStatus = b.dataset.stat === 'All' ? '' : b.dataset.stat; renderIT(); });
-  $('fStatus').addEventListener('change', () => { filterStatus = $('fStatus').value; renderIT(); });
-  $('q').addEventListener('input', () => { query = $('q').value; renderIT(); });
+  $('stats').addEventListener('click', ev => { const b = ev.target.closest('[data-stat]'); if (!b) return; filterStatus = b.dataset.stat === 'All' ? '' : b.dataset.stat; PAGE = 0; renderIT(); });
+  $('fStatus').addEventListener('change', () => { filterStatus = $('fStatus').value; PAGE = 0; renderIT(); });
+  $('pgPrev').addEventListener('click', () => { if (PAGE > 0){ PAGE--; renderIT(); $('itRows').closest('.datacard').scrollIntoView({ block: 'nearest' }); } });
+  $('pgNext').addEventListener('click', () => { PAGE++; renderIT(); $('itRows').closest('.datacard').scrollIntoView({ block: 'nearest' }); });
+  $('q').addEventListener('input', () => { query = $('q').value; PAGE = 0; renderIT(); });
   $('refreshBtn').addEventListener('click', async () => { await loadIT(); toast('Updated'); });
   $('itRows').addEventListener('click', ev => { if (ev.target.closest('[data-nodrawer]')) return; const tr = ev.target.closest('tr[data-id]'); if (tr) openDrawer(tr.dataset.id); });
   $('itRows').addEventListener('keydown', ev => { if (ev.key === 'Enter'){ const tr = ev.target.closest('tr[data-id]'); if (tr) openDrawer(tr.dataset.id); } });
@@ -1664,7 +1693,7 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
   // ---------------- Row selection ----------------
   function syncSel(){
     [...SEL].forEach(id => { if (!ROWS.some(r => r.id === id)) SEL.delete(id); });
-    const shown = visibleRows(), n = SEL.size, allOn = shown.length > 0 && shown.every(r => SEL.has(r.id));
+    const shown = pageRows(), n = SEL.size, allOn = shown.length > 0 && shown.every(r => SEL.has(r.id));
     $('selAll').checked = allOn; $('selAll').indeterminate = !allOn && shown.some(r => SEL.has(r.id));
     $('selCount').textContent = n; $('selInfo').hidden = n === 0;
   }
@@ -1673,7 +1702,7 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
     c.checked ? SEL.add(c.dataset.sel) : SEL.delete(c.dataset.sel);
     c.closest('tr').classList.toggle('sel', c.checked); syncSel();
   });
-  $('selAll').addEventListener('change', () => { const on = $('selAll').checked; visibleRows().forEach(r => on ? SEL.add(r.id) : SEL.delete(r.id)); renderIT(); });
+  $('selAll').addEventListener('change', () => { const on = $('selAll').checked; pageRows().forEach(r => on ? SEL.add(r.id) : SEL.delete(r.id)); renderIT(); });
   $('selClear').addEventListener('click', () => { SEL.clear(); renderIT(); });
 
   // ---------------- Excel export (choose rows + columns) ----------------
@@ -1743,7 +1772,7 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
     const cols = mode === 'apex'
       ? [...APEX_COLS.filter(k => keys.includes(k)), ...keys.filter(k => !APEX_COLS.includes(k))].map(k => XCOLS.find(c => c.k === k))
       : XCOLS.filter(c => keys.includes(c.k));
-    const rows = [...xRowsFor(mode)].sort((a,b) => (a.submittedAt||'').localeCompare(b.submittedAt||''));
+    const rows = [...xRowsFor(mode)].sort((a,b) => (b.submittedAt||'').localeCompare(a.submittedAt||''));
     const head = [], merges = [], widths = [], textCols = [];
     const apex = mode === 'apex';
     cols.forEach(c => { const at = head.length; head.push(c.h); widths.push(c.w); if (c.text) textCols.push(at);
