@@ -66,7 +66,11 @@ form{background:var(--surface);border:1px solid var(--line);border-radius:14px;p
 .hpf{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .hint{font-size:12px;color:var(--muted)}
 .cn-row{gap:8px;flex-wrap:nowrap}
-.cn-row input.cn{width:9.6em;max-width:44%;letter-spacing:.14em;text-align:center}
+.cn-row input.cn{width:8.6em;max-width:42%;letter-spacing:.14em;text-align:center}
+.cn-g{display:flex;align-items:stretch;max-width:46%}
+.cn-g .cn-pre{display:grid;place-items:center;padding:0 12px;font-family:var(--mono);font-weight:700;font-size:16px;color:var(--navy, #0E2F44);background:var(--gold-soft);border:1px solid var(--line);border-right:none;border-radius:8px 0 0 8px}
+.cn-g input.cn{border-radius:0 8px 8px 0;max-width:none;width:8.6em}
+.field.bad .cn-g .cn-pre{border-color:var(--err)}
 .cn-sep{color:var(--muted);font-weight:600}
 .photo{border:1.5px dashed var(--line);border-radius:12px;background:var(--bg);padding:14px 16px;transition:border-color .15s, background .15s}
 .photo.drag{border-color:var(--gold);background:var(--gold-soft)}
@@ -95,6 +99,11 @@ form{background:var(--surface);border:1px solid var(--line);border-radius:14px;p
   .ph-done{grid-template-columns:auto minmax(0,1fr)}
   .ph-done .ph-btns{grid-column:1 / -1;justify-content:flex-start}
   .cn-row input.cn{width:auto;flex:1;min-width:0;max-width:none;letter-spacing:.08em}
+  .cn-g{flex:1.15;min-width:0;max-width:none}
+  .cn-g input.cn{width:100%}
+  .cn-row{gap:6px}
+  .cn-row input.cn{letter-spacing:.02em;padding-left:6px;padding-right:6px}
+  .cn-g .cn-pre{padding:0 9px}
 }
 .camdlg{position:fixed;inset:0;z-index:60;background:rgba(7,26,39,.72);display:grid;place-items:center;padding:16px}
 .camdlg[hidden]{display:none}
@@ -247,7 +256,8 @@ tr:last-child td{border-bottom:none}
 .flip:focus-visible{outline:3px solid var(--focus);outline-offset:6px}
 .flip-in{display:grid;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.2,.75,.2,1)}
 .flip-in > .face{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden}
-.flip-in > .f-back{transform:rotateY(180deg)}
+.flip-in > .f-back{display:none}
+#flipCard .face figcaption{display:none}
 .flip .face figcaption{display:none}
 .flip.is-flipped .flip-in{transform:rotateY(180deg)}
 @media (hover:hover){ .flip:hover .flip-in{transform:rotateY(180deg)} }
@@ -698,8 +708,8 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
     </div>
     <div class="field" data-f="cardNumber">
       <label class="lbl" for="cardNumber"><span><span class="n">05</span>GlobeMed Card Number<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">رقم بطاقة غلوب ميد</span></label>
-      <div class="row cn-row"><input type="tel" id="cardNumber" class="num cn" data-kind="digits" maxlength="8" inputmode="numeric" placeholder="8 _ _ _ _ _ _ _" aria-label="GlobeMed card number, first 8 digits"><span class="cn-sep" aria-hidden="true">–</span><input type="tel" id="cardNumber2" class="num cn" data-kind="digits" maxlength="8" inputmode="numeric" placeholder="_ _ _ _ _ _ _ _" aria-label="GlobeMed card number, last 8 digits"><span class="counter" id="cnCount">0/16</span></div>
-      <div class="hint">First 8 digits, then last 8 digits — the cursor moves to the second box automatically.</div>
+      <div class="row cn-row"><span class="cn-g"><span class="cn-pre" aria-hidden="true">G</span><input type="tel" id="cardNumber" class="num cn" data-kind="digits" maxlength="7" inputmode="numeric" placeholder="_ _ _ _ _ _ _" aria-label="GlobeMed card number after G, first 7 digits"></span><span class="cn-sep" aria-hidden="true">–</span><input type="tel" id="cardNumber2" class="num cn" data-kind="digits" maxlength="7" inputmode="numeric" placeholder="_ _ _ _ _ _ _" aria-label="GlobeMed card number, last 7 digits"><span class="counter" id="cnCount">0/14</span></div>
+      <div class="hint">G is already filled in. Type the first 7 digits, then the last 7 — the cursor moves to the second box automatically.</div>
       <div class="msg"></div>
     </div>
     <div class="field" data-f="cardPhoto">
@@ -777,7 +787,7 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
     <h2 id="doneTitle" tabindex="-1">Welcome to Al-Nukhba</h2>
     <div class="ar-line" dir="rtl" lang="ar">أهلًا بك في النخبة — تم التسجيل بنجاح</div>
     <p class="lead" id="doneLead">Your registration has been received.</p>
-    <div class="cards flip" id="flipCard" tabindex="0" role="button" aria-pressed="false" aria-label="Card preview. Press to turn the card over.">
+    <div class="cards" id="flipCard">
      <div class="flip-in">
       <figure class="face f-front">
         <svg viewBox="0 0 100 158.6" role="img" aria-label="Al-Nukhba Gold card, front">
@@ -841,7 +851,6 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
       </figure>
      </div>
     </div>
-    <p class="flip-hint"><span class="h-hover">Move the mouse over the card to see the back</span><span class="h-tap">Tap the card to see the back</span></p>
     <p class="card-note">Card preview only. Your Al-Nukhba card is issued by Kuwait Hospital.</p>
     <dl class="facts">
       <div><dt>Reference</dt><dd id="fRef">NK-000000</dd></div>
@@ -940,17 +949,17 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
 
   // ---- GlobeMed card number: two boxes of 8 digits ----
   const cnA = $('cardNumber'), cnB = $('cardNumber2');
-  const cnCount = () => { $('cnCount').textContent = (cnA.value.length + cnB.value.length) + '/16'; };
-  cnA.addEventListener('input', () => { cnCount(); if (cnA.value.length === 8 && document.activeElement === cnA) { cnB.focus(); cnB.select(); } });
+  const cnCount = () => { $('cnCount').textContent = (cnA.value.length + cnB.value.length) + '/14'; };
+  cnA.addEventListener('input', () => { cnCount(); if (cnA.value.length === 7 && document.activeElement === cnA) { cnB.focus(); cnB.select(); } });
   cnB.addEventListener('input', cnCount);
   cnB.addEventListener('keydown', ev => { if (ev.key === 'Backspace' && cnB.selectionStart === 0 && cnB.selectionEnd === 0) { ev.preventDefault(); cnA.focus(); const L = cnA.value.length; cnA.setSelectionRange(L, L); } });
   [cnA, cnB].forEach((box, idx) => box.addEventListener('paste', ev => {
     const t = toLatinDigits((ev.clipboardData || window.clipboardData).getData('text') || '').replace(/\D/g, '');
-    if (t.length <= 8 && idx === 1) return;
-    if (t.length <= 8 && cnA.value.length + t.length <= 8) return;
+    if (t.length <= 7 && idx === 1) return;
+    if (t.length <= 7 && cnA.value.length + t.length <= 7) return;
     ev.preventDefault();
-    const all = (idx === 0 ? t : cnA.value + t).slice(0, 16);
-    cnA.value = all.slice(0, 8); cnB.value = all.slice(8, 16);
+    const all = (idx === 0 ? t : cnA.value + t).slice(0, 14);
+    cnA.value = all.slice(0, 7); cnB.value = all.slice(7, 14);
     (cnB.value.length ? cnB : cnA).focus(); cnCount(); clearErr(F('cardNumber')); updateProgress();
   }));
 
@@ -1070,7 +1079,7 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
   function collect(){
     const v = {
       firstName: titleCase($('firstName').value), middleInitial: $('middleInitial').value.trim().toUpperCase(),
-      lastName: titleCase($('lastName').value), civilId: $('civilId').value.trim(), cardNumber: ($('cardNumber').value + $('cardNumber2').value).trim(),
+      lastName: titleCase($('lastName').value), civilId: $('civilId').value.trim(), cardNumber: 'G' + ($('cardNumber').value + $('cardNumber2').value).trim(),
       mobile: $('mobile').value.trim(), company: $('company').value.trim(),
       visited: (document.querySelector('input[name=visited]:checked')||{}).value || '',
       email: $('email').value.trim().toLowerCase(), expiry: parseDMY($('expiry').value.trim()),
@@ -1081,7 +1090,7 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
     if (v.middleInitial && !/^[A-Z]$/.test(v.middleInitial)) e.middleInitial = 'Middle initial must be one English letter.';
     if (!/^[A-Za-z][A-Za-z '\-]*$/.test(v.lastName)) e.lastName = 'Please enter your last name.';
     if (!/^[23]\d{11}$/.test(v.civilId)) e.civilId = 'Civil ID must be 12 digits and begin with 2 or 3.';
-    if (!/^8\d{15}$/.test(v.cardNumber)) e.cardNumber = 'Card number must be exactly 16 digits and start with 8.';
+    if (!/^G\d{14}$/.test(v.cardNumber)) e.cardNumber = 'Card number must be G followed by 14 digits (7 + 7).';
     if (!v.consent) e.consent = 'Please tick the box to confirm and agree.';
     if (!v.photo) e.cardPhoto = 'Please add a photo of the GlobeMed card (take a photo or attach a file).';
     if (!/^\d{8}$/.test(v.mobile)) e.mobile = 'Mobile number must be 8 digits.';
@@ -1102,7 +1111,7 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
   function resetForm(){
     $('reg').reset();
     if (window.__clearPhoto) window.__clearPhoto();
-    $('cnCount').textContent = '0/16';
+    $('cnCount').textContent = '0/14';
     document.querySelectorAll('.field').forEach(clearErr);
     document.querySelectorAll('input[data-kind]').forEach(updateCounter);
     updateProgress();
@@ -1182,17 +1191,6 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
       if (!back){ add(g,'path',{d:'M4 112 L40 104 L96 108 L96 120 L40 116 L4 124 Z'}); add(g,'path',{d:'M30 132 q10 -8 22 0 v14 h-22 Z'}); }
     });
   })();
-
-  // flip card: hover (CSS) on mouse devices, tap / Enter / Space everywhere else
-  const flip = document.getElementById('flipCard');
-  if (flip){
-    const canHover = matchMedia('(hover: hover)').matches;
-    const setFlip = on => { flip.classList.toggle('is-flipped', on); flip.setAttribute('aria-pressed', on ? 'true' : 'false'); };
-    flip.addEventListener('click', () => { if (!canHover) setFlip(!flip.classList.contains('is-flipped')); });
-    flip.addEventListener('keydown', ev => { if (ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); setFlip(!flip.classList.contains('is-flipped')); } });
-    flip.addEventListener('mouseleave', () => setFlip(false));
-    window.__resetFlip = () => setFlip(false);
-  }
 
   function confetti(){
     const c = document.createElement('canvas'); c.id = 'confetti'; document.body.appendChild(c);
