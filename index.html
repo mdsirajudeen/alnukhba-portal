@@ -58,6 +58,61 @@ form{background:var(--surface);border:1px solid var(--line);border-radius:14px;p
 .lbl .n{color:var(--gold);font-family:var(--mono);font-weight:500;margin-right:6px}
 .lbl .ar{font-family:var(--ar);font-weight:500;color:var(--muted)}
 .req{color:var(--err);margin-left:2px}
+.opt{font-weight:400;color:var(--muted);font-size:12.5px}
+.consent{display:flex;gap:12px;align-items:flex-start;font-size:13.5px;line-height:1.5;cursor:pointer}
+.consent input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--gold);flex:none}
+.consent .ar{display:block;font-family:var(--ar);color:var(--muted);margin-top:4px;text-align:right}
+.field.bad .consent input{outline:2px solid var(--err);outline-offset:2px}
+.hpf{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.hint{font-size:12px;color:var(--muted)}
+.cn-row{gap:8px;flex-wrap:nowrap}
+.cn-row input.cn{width:8.6em;max-width:42%;letter-spacing:.14em;text-align:center}
+.cn-g{display:flex;align-items:stretch;max-width:46%}
+.cn-g .cn-pre{display:grid;place-items:center;padding:0 12px;font-family:var(--mono);font-weight:700;font-size:16px;color:var(--navy, #0E2F44);background:var(--gold-soft);border:1px solid var(--line);border-right:none;border-radius:8px 0 0 8px}
+.cn-g input.cn{border-radius:0 8px 8px 0;max-width:none;width:8.6em}
+.field.bad .cn-g .cn-pre{border-color:var(--err)}
+.cn-sep{color:var(--muted);font-weight:600}
+.photo{border:1.5px dashed var(--line);border-radius:12px;background:var(--bg);padding:14px 16px;transition:border-color .15s, background .15s}
+.photo.drag{border-color:var(--gold);background:var(--gold-soft)}
+.field.bad .photo{border-color:var(--err)}
+.field.good .photo{border-style:solid;border-color:color-mix(in srgb,var(--ok) 45%,var(--line))}
+.ph-empty,.ph-done{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center}
+.ph-empty[hidden],.ph-done[hidden]{display:none}
+.ph-ic{width:48px;height:34px;fill:none;stroke:var(--gold);stroke-width:1.6}
+.ph-txt{display:grid;gap:2px}.ph-txt b{font-size:14px}.ph-txt span{font-size:12.5px;color:var(--muted)}
+.ph-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.pbtn{display:inline-flex;align-items:center;gap:7px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 14px;min-height:42px;font-size:14px;font-weight:600}
+.pbtn:hover{border-color:var(--gold)}
+.pbtn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.pbtn.sm{padding:7px 12px;min-height:36px;font-size:13px}
+.pbtn.danger{color:var(--err)}
+.ph-thumb{width:96px;height:62px;border-radius:7px;overflow:hidden;background:#E9EEF2;display:grid;place-items:center;border:1px solid var(--line)}
+.ph-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.ph-thumb .pdf{font-family:var(--mono);font-weight:700;font-size:13px;color:var(--err)}
+.ph-info{display:grid;gap:2px;min-width:0}.ph-info b{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--ok)}
+.ph-info b svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2}
+.ph-info span{font-size:12.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:560px){
+  .ph-empty{grid-template-columns:auto minmax(0,1fr)}
+  .ph-empty .ph-btns{grid-column:1 / -1;justify-content:stretch}
+  .ph-empty .ph-btns .pbtn{flex:1;justify-content:center}
+  .ph-done{grid-template-columns:auto minmax(0,1fr)}
+  .ph-done .ph-btns{grid-column:1 / -1;justify-content:flex-start}
+  .cn-row input.cn{width:auto;flex:1;min-width:0;max-width:none;letter-spacing:.08em}
+  .cn-g{flex:1.15;min-width:0;max-width:none}
+  .cn-g input.cn{width:100%}
+  .cn-row{gap:6px}
+  .cn-row input.cn{letter-spacing:.02em;padding-left:6px;padding-right:6px}
+  .cn-g .cn-pre{padding:0 9px}
+}
+.camdlg{position:fixed;inset:0;z-index:60;background:rgba(7,26,39,.72);display:grid;place-items:center;padding:16px}
+.camdlg[hidden]{display:none}
+.cam-in{background:var(--surface);border-radius:14px;padding:16px;width:min(560px,100%);display:grid;gap:12px}
+.cam-head{display:grid;gap:2px}.cam-head span{font-size:13px;color:var(--muted)}
+.cam-view{position:relative;background:#000;border-radius:10px;overflow:hidden;aspect-ratio:4/3}
+.cam-view video{width:100%;height:100%;object-fit:cover;display:block}
+.cam-frame{position:absolute;inset:16% 10%;border:2px solid rgba(255,255,255,.9);border-radius:12px;box-shadow:0 0 0 999px rgba(0,0,0,.35)}
+.cam-act{display:flex;justify-content:flex-end;gap:10px}
 input[type=text],input[type=email],input[type=tel],input[type=date]{
   width:100%;box-sizing:border-box;font:inherit;color:var(--ink);background:var(--bg);
   border:1px solid var(--line);border-radius:8px;padding:11px 12px;min-height:44px;transition:border-color .15s, box-shadow .15s}
@@ -196,7 +251,21 @@ tr:last-child td{border-bottom:none}
 .face{margin:0;width:240px;max-width:100%;display:grid;gap:8px;justify-items:center}
 .face svg{width:100%;height:auto;display:block;border-radius:12px;box-shadow:0 22px 40px -18px rgba(18,20,60,.65),0 0 0 1px rgba(255,255,255,.06);transform-origin:50% 50%}
 .f-front svg{animation:flipIn .9s .25s cubic-bezier(.2,.9,.25,1.1) both}
-.f-back svg{animation:flipIn .9s .55s cubic-bezier(.2,.9,.25,1.1) both}
+.f-back svg{animation:none}
+.flip{cursor:pointer;border-radius:14px;-webkit-tap-highlight-color:transparent}
+.flip:focus-visible{outline:3px solid var(--focus);outline-offset:6px}
+.flip-in{display:grid;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.2,.75,.2,1)}
+.flip-in > .face{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.flip-in > .f-back{display:none}
+#flipCard .face figcaption{display:none}
+.flip .face figcaption{display:none}
+.flip.is-flipped .flip-in{transform:rotateY(180deg)}
+@media (hover:hover){ .flip:hover .flip-in{transform:rotateY(180deg)} }
+.flip-hint{margin:0;font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:6px;justify-content:center}
+.flip-hint::before{content:"\21BB";font-size:15px;color:var(--gold)}
+.flip-hint .h-tap{display:none}
+@media (hover:none){ .flip-hint .h-hover{display:none} .flip-hint .h-tap{display:inline} }
+@media (prefers-reduced-motion:reduce){ .flip-in{transition:none} }
 @keyframes flipIn{from{opacity:0;transform:rotateY(-100deg) translateY(16px)}to{opacity:1;transform:none}}
 .face figcaption{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
 .card-note{margin:-4px 0 0;font-size:12.5px;color:var(--muted)}
@@ -451,6 +520,79 @@ body.success-mode .topnav{transform:none!important;visibility:visible!important;
 body.success-mode #vStaff{padding-top:76px}
 #done{scroll-margin-top:84px}
 
+/* --- success mode: fit on one screen --- */
+body.success-mode{padding-bottom:10px}
+body.success-mode #vStaff{padding-top:70px}
+body.success-mode #done{padding:22px 26px;gap:12px}
+body.success-mode .tick{width:54px;height:54px}
+body.success-mode #done h2{font-size:clamp(22px,2.6vw,28px)}
+body.success-mode .done .ar-line{margin-top:-6px}
+body.success-mode #done .lead{font-size:14px}
+body.success-mode .card-note{margin:0;font-size:12px}
+body.success-mode .facts dd{font-size:14px}
+body.success-mode .face{width:min(230px, calc((100vh - 70px - 120px) / 1.66))}
+body.success-mode .cards{padding-top:0;gap:16px}
+@media (min-width:900px){
+  body.success-mode .wrap{max-width:1040px}
+  body.success-mode #done{grid-template-columns:minmax(0,1fr) auto;grid-auto-rows:auto;align-items:center;column-gap:36px;row-gap:10px;text-align:left;justify-items:start;padding:26px 32px}
+  body.success-mode #done > *{grid-column:1}
+  body.success-mode #done > .cards{grid-column:2;grid-row:1 / span 8;flex-wrap:nowrap;align-self:center}
+  body.success-mode #done .lead{max-width:40ch}
+  body.success-mode #done .facts{justify-content:flex-start}
+  body.success-mode #done .actions{justify-content:flex-start;padding-top:2px}
+}
+@media (max-width:899px){
+  body.success-mode .cards{flex-wrap:nowrap;gap:10px}
+  body.success-mode .face{width:min(200px, calc((100vh - 400px) / 1.585))}
+  body.success-mode .face svg{border-radius:8px}
+  body.success-mode #done{padding:18px 14px}
+  body.success-mode #done h2{font-size:21px}
+  body.success-mode #done .lead{font-size:13px}
+  body.success-mode .facts{gap:6px 20px}
+}
+body.success-mode .face{width:min(272px, calc((100vh - 70px - 120px) / 1.66))}
+@media (min-width:900px){
+  body.success-mode #vStaff{min-height:calc(100vh - 20px);box-sizing:border-box;align-content:center}
+}
+@media (max-width:899px){
+  body.success-mode .face{width:min(200px, calc((100vh - 400px) / 1.585))}
+  body.success-mode .tick{width:40px;height:40px}
+  body.success-mode #done{gap:8px;padding:14px 12px}
+  body.success-mode #done h2{font-size:19px}
+  body.success-mode .done .ar-line{font-size:12.5px;margin-top:-4px}
+  body.success-mode #done .lead{font-size:12.5px}
+  body.success-mode .card-note{font-size:11px}
+  body.success-mode .face figcaption{font-size:10px}
+  body.success-mode .facts dt{font-size:10px}
+  body.success-mode .facts dd{font-size:13px}
+  body.success-mode #done .actions button{min-height:40px;padding:8px 16px}
+  body.success-mode #vStaff{padding-top:64px}
+}
+
+/* --- single flip card (front shown, back on hover / tap) --- */
+body.success-mode .face{width:min(290px, calc((100vh - 150px) / 1.585))}
+body.success-mode .cards{flex-direction:column;align-items:center;gap:10px}
+body.success-mode .flip-hint{font-size:12px}
+@media (min-width:900px){ body.success-mode #done > .flip-hint{grid-column:2;grid-row:9} body.success-mode #done > .cards{grid-row:1 / span 8} }
+@media (max-width:899px){
+  body.success-mode .face{width:min(190px, 52vw, calc((100vh - 400px) / 1.585))}
+  body.success-mode .flip-hint{font-size:11.5px}
+}
+body.success-mode .flip{width:max-content;max-width:100%}
+@media (max-width:899px){
+  body.success-mode .face{width:min(168px, 46vw, calc((100vh - 420px) / 1.585))}
+}
+
+.plink{color:var(--info, #1F5F8B);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+
+/* --- public form (QR code): no sign-in for registration --- */
+.pub-foot{display:none;text-align:center;font-size:12.5px;color:var(--muted);margin:18px 0 8px}
+.pub-foot a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+body.public-mode .pub-foot{display:block}
+body.public-mode:not(.signed-in) #vStaff .sessbar{display:none}
+body.public-mode:not(.signed-in) #done [data-signout]{display:none}
+body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in needed"}
+
 @media (max-width:480px){form,.panel,.done{padding-left:16px;padding-right:16px}.mast{padding:22px 18px}.prog{margin:0 -16px;padding-left:16px;padding-right:16px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.tick circle,.tick path{stroke-dashoffset:0}}
 </style>
@@ -550,7 +692,7 @@ body.success-mode #vStaff{padding-top:76px}
       <div class="msg"></div>
     </div>
     <div class="field" data-f="middleInitial">
-      <label class="lbl" for="middleInitial"><span><span class="n">02</span>Middle Initial<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">الحرف الأول من الاسم الأوسط</span></label>
+      <label class="lbl" for="middleInitial"><span><span class="n">02</span>Middle Initial <span class="opt">(optional)</span></span><span class="ar" dir="rtl" lang="ar">الحرف الأول من الاسم الأوسط</span></label>
       <input type="text" id="middleInitial" class="short" data-kind="initial" maxlength="1" autocapitalize="characters" spellcheck="false">
       <div class="msg"></div>
     </div>
@@ -566,21 +708,43 @@ body.success-mode #vStaff{padding-top:76px}
     </div>
     <div class="field" data-f="cardNumber">
       <label class="lbl" for="cardNumber"><span><span class="n">05</span>GlobeMed Card Number<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">رقم بطاقة غلوب ميد</span></label>
-      <div class="row"><input type="tel" id="cardNumber" class="num" data-kind="digits" maxlength="16" inputmode="numeric" style="max-width:320px"><span class="counter" data-for="cardNumber">0/16</span></div>
+      <div class="row cn-row"><span class="cn-g"><span class="cn-pre" aria-hidden="true">G</span><input type="tel" id="cardNumber" class="num cn" data-kind="digits" maxlength="7" inputmode="numeric" placeholder="_ _ _ _ _ _ _" aria-label="GlobeMed card number after G, first 7 digits"></span><span class="cn-sep" aria-hidden="true">–</span><input type="tel" id="cardNumber2" class="num cn" data-kind="digits" maxlength="7" inputmode="numeric" placeholder="_ _ _ _ _ _ _" aria-label="GlobeMed card number, last 7 digits"><span class="counter" id="cnCount">0/14</span></div>
+      <div class="hint">G is already filled in. Type the first 7 digits, then the last 7 — the cursor moves to the second box automatically.</div>
+      <div class="msg"></div>
+    </div>
+    <div class="field" data-f="cardPhoto">
+      <span class="lbl" id="photoLbl"><span><span class="n">06</span>GlobeMed Card Photo<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">صورة بطاقة غلوب ميد</span></span>
+      <div class="photo" id="photoBox" aria-labelledby="photoLbl">
+        <div class="ph-empty" id="phEmpty">
+          <svg class="ph-ic" viewBox="0 0 48 34" aria-hidden="true"><rect x="1.5" y="1.5" width="45" height="31" rx="4"/><path d="M1.5 9.5h45"/><rect x="6" y="15" width="10" height="7" rx="1.5"/><path d="M21 17h18M21 22h12"/></svg>
+          <div class="ph-txt"><b>Add a clear photo of the GlobeMed card (front)</b><span>Take it with the camera or attach a file · JPG, PNG or PDF, up to 10 MB</span></div>
+          <div class="ph-btns">
+            <button type="button" class="pbtn" id="camBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg>Take photo</button>
+            <button type="button" class="pbtn" id="fileBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12.5l-7.8 7.8a5 5 0 0 1-7.1-7.1l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7l-8.5 8.5a1.7 1.7 0 0 1-2.4-2.4l7.8-7.8"/></svg>Attach file</button>
+          </div>
+        </div>
+        <div class="ph-done" id="phDone" hidden>
+          <div class="ph-thumb" id="phThumb"></div>
+          <div class="ph-info"><b><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Card photo added</b><span id="phMeta">—</span></div>
+          <div class="ph-btns"><button type="button" class="pbtn sm" id="phChange">Change</button><button type="button" class="pbtn sm danger" id="phRemove">Remove</button></div>
+        </div>
+      </div>
+      <input type="file" id="cardFile" accept="image/*,application/pdf" hidden>
+      <input type="file" id="cardCam" accept="image/*" capture="environment" hidden>
       <div class="msg"></div>
     </div>
     <div class="field" data-f="mobile">
-      <label class="lbl" for="mobile"><span><span class="n">06</span>Mobile Number<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">رقم الهاتف المحمول</span></label>
+      <label class="lbl" for="mobile"><span><span class="n">07</span>Mobile Number<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">رقم الهاتف المحمول</span></label>
       <div class="row"><input type="tel" id="mobile" class="num" data-kind="digits" maxlength="8" inputmode="numeric" style="max-width:220px"><span class="counter" data-for="mobile">0/8</span></div>
       <div class="msg"></div>
     </div>
     <div class="field" data-f="company">
-      <label class="lbl" for="company"><span><span class="n">07</span>Company Name<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">اسم جهة العمل</span></label>
+      <label class="lbl" for="company"><span><span class="n">08</span>Company Name<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">اسم جهة العمل</span></label>
       <input type="text" id="company" data-kind="company" maxlength="80" spellcheck="false">
       <div class="msg"></div>
     </div>
     <div class="field" data-f="visited">
-      <span class="lbl" id="visitedLbl"><span><span class="n">08</span>Have you previously visited Kuwait Hospital for any medical service?<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">هل سبق لك زيارة مستشفى الكويت من قبل لتلقي أي خدمة طبية؟</span></span>
+      <span class="lbl" id="visitedLbl"><span><span class="n">09</span>Have you previously visited Kuwait Hospital for any medical service?<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">هل سبق لك زيارة مستشفى الكويت من قبل لتلقي أي خدمة طبية؟</span></span>
       <div class="seg" role="radiogroup" aria-labelledby="visitedLbl">
         <label><input type="radio" name="visited" id="visitedYes" value="Yes">Yes <span class="ar" lang="ar">نعم</span></label>
         <label><input type="radio" name="visited" id="visitedNo" value="No">No <span class="ar" lang="ar">لا</span></label>
@@ -588,15 +752,20 @@ body.success-mode #vStaff{padding-top:76px}
       <div class="msg"></div>
     </div>
     <div class="field" data-f="email">
-      <label class="lbl" for="email"><span><span class="n">09</span>Email Address<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">البريد الإلكتروني</span></label>
+      <label class="lbl" for="email"><span><span class="n">10</span>Email Address<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">البريد الإلكتروني</span></label>
       <input type="email" id="email" data-kind="email" maxlength="100" spellcheck="false" autocapitalize="off">
       <div class="msg"></div>
     </div>
     <div class="field" data-f="expiry">
-      <label class="lbl" for="expiry"><span><span class="n">10</span>GlobeMed Card Expiration Date<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">تاريخ انتهاء بطاقة غلوب ميد</span></label>
+      <label class="lbl" for="expiry"><span><span class="n">11</span>GlobeMed Card Expiration Date<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">تاريخ انتهاء بطاقة غلوب ميد</span></label>
       <div class="row"><div class="datebox"><input type="text" id="expiry" class="num" inputmode="numeric" placeholder="DD/MM/YYYY" maxlength="10" autocomplete="off"><span class="calbtn" title="Pick from calendar"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><input type="date" id="expiryPick" aria-label="Pick expiration date from calendar" tabindex="0"></span></div><span class="counter">Type or pick</span></div>
       <div class="msg"></div>
     </div>
+    <div class="field" data-f="consent">
+      <label class="consent"><input type="checkbox" id="consent"><span>I confirm these details are correct and agree that Kuwait Hospital may use them to issue and manage my Al-Nukhba Card.<span class="req">*</span><span class="ar" dir="rtl" lang="ar">أؤكد صحة هذه البيانات وأوافق على استخدامها من قبل مستشفى الكويت لإصدار وإدارة بطاقة النخبة.</span></span></label>
+      <div class="msg"></div>
+    </div>
+    <div class="hpf" aria-hidden="true"><label>Leave this empty<input type="text" id="website" tabindex="-1" autocomplete="off"></label></div>
 
     <div class="actions">
       <button type="button" class="primary" id="submitBtn"><span class="spin" aria-hidden="true"></span><span id="submitTxt">Submit · إرسال</span></button>
@@ -605,13 +774,21 @@ body.success-mode #vStaff{padding-top:76px}
     <p class="savemode" id="saveMode" aria-live="polite">Connecting to storage…</p>
     <p class="privacy" style="padding-top:6px">All information is handled with the highest level of confidentiality and is used only to support your healthcare experience.</p>
   </form>
+  <div class="camdlg" id="camDlg" hidden role="dialog" aria-modal="true" aria-label="Take a photo of the GlobeMed card">
+    <div class="cam-in">
+      <div class="cam-head"><b>Photo of the GlobeMed card</b><span>Place the card inside the frame</span></div>
+      <div class="cam-view"><video id="camVideo" autoplay playsinline muted></video><div class="cam-frame" aria-hidden="true"></div></div>
+      <div class="cam-act"><button type="button" class="ghost" id="camCancel">Cancel</button><button type="button" class="primary" id="camShot">Capture</button></div>
+    </div>
+  </div>
 
   <section class="done" id="done" hidden aria-live="polite">
     <svg class="tick" viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="34"/><path d="M22 37l10 10 19-21"/></svg>
     <h2 id="doneTitle" tabindex="-1">Welcome to Al-Nukhba</h2>
     <div class="ar-line" dir="rtl" lang="ar">أهلًا بك في النخبة — تم التسجيل بنجاح</div>
     <p class="lead" id="doneLead">Your registration has been received.</p>
-    <div class="cards">
+    <div class="cards" id="flipCard">
+     <div class="flip-in">
       <figure class="face f-front">
         <svg viewBox="0 0 100 158.6" role="img" aria-label="Al-Nukhba Gold card, front">
           <defs>
@@ -672,6 +849,7 @@ body.success-mode #vStaff{padding-top:76px}
         </svg>
         <figcaption>Back</figcaption>
       </figure>
+     </div>
     </div>
     <p class="card-note">Card preview only. Your Al-Nukhba card is issued by Kuwait Hospital.</p>
     <dl class="facts">
@@ -681,6 +859,7 @@ body.success-mode #vStaff{padding-top:76px}
     <div class="actions"><button type="button" class="primary" id="againBtn">Register another</button><button type="button" class="ghost" data-signout>Sign out</button></div>
   </section>
 
+  <p class="pub-foot">Kuwait Hospital IT? <a href="#start">Sign in to the dashboard</a></p>
 </div>
 
 <!-- IT DASHBOARD -->
@@ -705,7 +884,7 @@ body.success-mode #vStaff{padding-top:76px}
     </div>
     <div class="datacard">
       <div class="tbl"><table class="dt">
-        <thead><tr><th>Reference</th><th>Submitted</th><th>Status</th><th>Name</th><th>Civil ID</th><th>GlobeMed card</th><th>Mobile</th><th>Email</th><th>Company</th><th>Card expiry</th><th>Checks</th></tr></thead>
+        <thead><tr><th>Reference</th><th>Submitted</th><th>Status</th><th>Name</th><th>Civil ID</th><th>GlobeMed card</th><th>Mobile</th><th>Email</th><th>Company</th><th>Card expiry</th><th>Photo</th><th>Checks</th></tr></thead>
         <tbody id="itRows"></tbody>
       </table></div>
       <p class="empty" id="itEmpty" hidden>No registrations match this search.</p>
@@ -768,21 +947,107 @@ body.success-mode #vStaff{padding-top:76px}
     clearErr(el.closest('.field'));
   });
 
+  // ---- GlobeMed card number: two boxes of 8 digits ----
+  const cnA = $('cardNumber'), cnB = $('cardNumber2');
+  const cnCount = () => { $('cnCount').textContent = (cnA.value.length + cnB.value.length) + '/14'; };
+  cnA.addEventListener('input', () => { cnCount(); if (cnA.value.length === 7 && document.activeElement === cnA) { cnB.focus(); cnB.select(); } });
+  cnB.addEventListener('input', cnCount);
+  cnB.addEventListener('keydown', ev => { if (ev.key === 'Backspace' && cnB.selectionStart === 0 && cnB.selectionEnd === 0) { ev.preventDefault(); cnA.focus(); const L = cnA.value.length; cnA.setSelectionRange(L, L); } });
+  [cnA, cnB].forEach((box, idx) => box.addEventListener('paste', ev => {
+    const t = toLatinDigits((ev.clipboardData || window.clipboardData).getData('text') || '').replace(/\D/g, '');
+    if (t.length <= 7 && idx === 1) return;
+    if (t.length <= 7 && cnA.value.length + t.length <= 7) return;
+    ev.preventDefault();
+    const all = (idx === 0 ? t : cnA.value + t).slice(0, 14);
+    cnA.value = all.slice(0, 7); cnB.value = all.slice(7, 14);
+    (cnB.value.length ? cnB : cnA).focus(); cnCount(); clearErr(F('cardNumber')); updateProgress();
+  }));
+
+  // ---- GlobeMed card photo: camera or file ----
+  let cardPhoto = null;
+  const MAXB = 10 * 1024 * 1024;
+  const fmtSize = b => b > 1048576 ? (b / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB';
+  function shrink(blob){
+    return new Promise(resolve => {
+      const url = URL.createObjectURL(blob), img = new Image();
+      img.onload = () => {
+        const k = Math.min(1, 1600 / Math.max(img.naturalWidth, img.naturalHeight));
+        const c = document.createElement('canvas'); c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url);
+        c.toBlob(b => resolve(b || blob), 'image/jpeg', 0.85);
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
+      img.src = url;
+    });
+  }
+  async function setPhoto(file, source){
+    const fld = F('cardPhoto');
+    if (!file) return;
+    const isPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name || '');
+    if (!isPdf && !/^image\//.test(file.type)) { setErr(fld, 'Please use a photo (JPG or PNG) or a PDF.'); return; }
+    if (file.size > MAXB) { setErr(fld, 'This file is larger than 10 MB. Please use a smaller photo.'); return; }
+    let blob = file, ext = isPdf ? 'pdf' : 'jpg';
+    if (!isPdf) { blob = await shrink(file); if (!blob) { setErr(fld, 'This image could not be read. Please try another photo.'); return; } }
+    if (cardPhoto && cardPhoto.preview) URL.revokeObjectURL(cardPhoto.preview);
+    cardPhoto = { blob, ext, type: isPdf ? 'application/pdf' : 'image/jpeg', name: file.name || ('card-photo.' + ext), source, preview: isPdf ? '' : URL.createObjectURL(blob) };
+    $('phThumb').innerHTML = isPdf ? '<span class="pdf">PDF</span>' : `<img src="${cardPhoto.preview}" alt="GlobeMed card photo">`;
+    $('phMeta').textContent = (source === 'camera' ? 'Taken with camera' : cardPhoto.name) + ' · ' + fmtSize(blob.size);
+    $('phEmpty').hidden = true; $('phDone').hidden = false;
+    clearErr(fld); updateProgress();
+  }
+  window.__clearPhoto = () => {
+    if (cardPhoto && cardPhoto.preview) URL.revokeObjectURL(cardPhoto.preview);
+    cardPhoto = null; $('phThumb').innerHTML = ''; $('phEmpty').hidden = false; $('phDone').hidden = true;
+    $('cardFile').value = ''; $('cardCam').value = '';
+  };
+  window.__setPhoto = setPhoto;
+  $('fileBtn').addEventListener('click', () => $('cardFile').click());
+  $('phChange').addEventListener('click', () => $('cardFile').click());
+  $('phRemove').addEventListener('click', () => { window.__clearPhoto(); updateProgress(); $('fileBtn').focus(); });
+  $('cardFile').addEventListener('change', ev => setPhoto(ev.target.files[0], 'file'));
+  $('cardCam').addEventListener('change', ev => setPhoto(ev.target.files[0], 'camera'));
+  const box = $('photoBox');
+  ['dragenter','dragover'].forEach(t => box.addEventListener(t, ev => { ev.preventDefault(); box.classList.add('drag'); }));
+  ['dragleave','drop'].forEach(t => box.addEventListener(t, ev => { ev.preventDefault(); box.classList.remove('drag'); }));
+  box.addEventListener('drop', ev => { const f = ev.dataTransfer && ev.dataTransfer.files[0]; if (f) setPhoto(f, 'file'); });
+
+  // camera: phones open the camera app; computers use the webcam in a small window
+  let camStream = null;
+  const coarse = matchMedia('(pointer: coarse)').matches;
+  function closeCam(){ if (camStream) camStream.getTracks().forEach(t => t.stop()); camStream = null; $('camDlg').hidden = true; }
+  $('camBtn').addEventListener('click', async () => {
+    if (coarse || !(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) { $('cardCam').click(); return; }
+    try {
+      camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1920 } }, audio: false });
+      $('camVideo').srcObject = camStream; $('camDlg').hidden = false; $('camShot').focus();
+    } catch (_) { $('cardCam').click(); }
+  });
+  $('camCancel').addEventListener('click', closeCam);
+  $('camDlg').addEventListener('keydown', ev => { if (ev.key === 'Escape') closeCam(); });
+  $('camShot').addEventListener('click', () => {
+    const vd = $('camVideo'), c = document.createElement('canvas');
+    c.width = vd.videoWidth || 1280; c.height = vd.videoHeight || 960;
+    c.getContext('2d').drawImage(vd, 0, 0, c.width, c.height);
+    c.toBlob(b => { closeCam(); if (b) setPhoto(new File([b], 'card-photo.jpg', { type: 'image/jpeg' }), 'camera'); }, 'image/jpeg', 0.9);
+  });
+
   const today = new Date(); today.setHours(0,0,0,0);
   const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 
   // live progress: a field counts once it passes its rule
-  const FIELD_KEYS = ['firstName','middleInitial','lastName','civilId','cardNumber','mobile','company','visited','email','expiry'];
+  const FIELD_KEYS = ['firstName','lastName','civilId','cardNumber','cardPhoto','mobile','company','visited','email','expiry'];
   function updateProgress(){
     const {e} = collect();
     let n = 0;
     FIELD_KEYS.forEach(k => { const ok = !e[k]; F(k).classList.toggle('good', ok); if (ok) n++; });
+    F('middleInitial').classList.toggle('good', !!$('middleInitial').value && !e.middleInitial);
     $('progBar').style.width = (n*10) + '%';
     $('progTxt').textContent = n === 10 ? 'All 10 complete — ready to submit' : `${n} of 10 complete`;
     $('prog').classList.toggle('full', n === 10);
   }
   $('reg').addEventListener('input', updateProgress);
   $('reg').addEventListener('change', updateProgress);
+  $('consent').addEventListener('change', () => clearErr(F('consent')));
 
   function setErr(fieldEl, text){
     fieldEl.classList.add('bad'); fieldEl.querySelector('.msg').textContent = text;
@@ -814,17 +1079,20 @@ body.success-mode #vStaff{padding-top:76px}
   function collect(){
     const v = {
       firstName: titleCase($('firstName').value), middleInitial: $('middleInitial').value.trim().toUpperCase(),
-      lastName: titleCase($('lastName').value), civilId: $('civilId').value.trim(), cardNumber: $('cardNumber').value.trim(),
+      lastName: titleCase($('lastName').value), civilId: $('civilId').value.trim(), cardNumber: 'G' + ($('cardNumber').value + $('cardNumber2').value).trim(),
       mobile: $('mobile').value.trim(), company: $('company').value.trim(),
       visited: (document.querySelector('input[name=visited]:checked')||{}).value || '',
-      email: $('email').value.trim().toLowerCase(), expiry: parseDMY($('expiry').value.trim())
+      email: $('email').value.trim().toLowerCase(), expiry: parseDMY($('expiry').value.trim()),
+      photo: cardPhoto, consent: $('consent').checked, hp: $('website').value
     };
     const e = {};
     if (!/^[A-Za-z][A-Za-z '\-]*$/.test(v.firstName)) e.firstName = 'Please enter your first name.';
-    if (!/^[A-Z]$/.test(v.middleInitial)) e.middleInitial = 'Please enter your middle initial.';
+    if (v.middleInitial && !/^[A-Z]$/.test(v.middleInitial)) e.middleInitial = 'Middle initial must be one English letter.';
     if (!/^[A-Za-z][A-Za-z '\-]*$/.test(v.lastName)) e.lastName = 'Please enter your last name.';
     if (!/^[23]\d{11}$/.test(v.civilId)) e.civilId = 'Civil ID must be 12 digits and begin with 2 or 3.';
-    if (!/^8\d{15}$/.test(v.cardNumber)) e.cardNumber = 'Card number must be exactly 16 digits and start with 8.';
+    if (!/^G\d{14}$/.test(v.cardNumber)) e.cardNumber = 'Card number must be G followed by 14 digits (7 + 7).';
+    if (!v.consent) e.consent = 'Please tick the box to confirm and agree.';
+    if (!v.photo) e.cardPhoto = 'Please add a photo of the GlobeMed card (take a photo or attach a file).';
     if (!/^\d{8}$/.test(v.mobile)) e.mobile = 'Mobile number must be 8 digits.';
     if (!/[A-Za-z]/.test(v.company)) e.company = 'Please enter your company name.';
     if (!v.visited) e.visited = 'Please choose Yes or No.';
@@ -842,6 +1110,8 @@ body.success-mode #vStaff{padding-top:76px}
 
   function resetForm(){
     $('reg').reset();
+    if (window.__clearPhoto) window.__clearPhoto();
+    $('cnCount').textContent = '0/14';
     document.querySelectorAll('.field').forEach(clearErr);
     document.querySelectorAll('input[data-kind]').forEach(updateCounter);
     updateProgress();
@@ -866,8 +1136,9 @@ body.success-mode #vStaff{padding-top:76px}
     $('doneLead').textContent = 'Registration received. The digital Al-Nukhba card will be emailed within 2–3 business days after the details are verified.';
     $('doneLead').style.color = '';
     document.querySelector('.ar-line').textContent = 'تم استلام التسجيل بنجاح — سيتم إرسال البطاقة الرقمية عبر البريد الإلكتروني';
-    $('cName').textContent = `${v.firstName} ${v.middleInitial} ${v.lastName}`.toUpperCase();
+    $('cName').textContent = [v.firstName, v.middleInitial, v.lastName].filter(Boolean).join(' ').toUpperCase();
     $('cCivil').textContent = 'Civil ID : ' + v.civilId;
+    if (window.__resetFlip) window.__resetFlip();
     // GlobeMed card number in groups of 4 (16 digits: 4 + 4 + 4 + 4), with the gold lines
     const NS = 'http://www.w3.org/2000/svg';
     const rows = v.cardNumber.match(/.{1,4}/g) || [];
@@ -921,17 +1192,6 @@ body.success-mode #vStaff{padding-top:76px}
     });
   })();
 
-  // gentle card tilt on pointer
-  const card = document.querySelector('.cards');
-  if (card && !reduce && matchMedia('(hover: hover)').matches){
-    card.addEventListener('pointermove', ev => {
-      const r = card.getBoundingClientRect();
-      const x = (ev.clientX - r.left)/r.width - .5, y = (ev.clientY - r.top)/r.height - .5;
-      card.style.transform = `rotateY(${x*14}deg) rotateX(${-y*12}deg)`;
-    });
-    card.addEventListener('pointerleave', () => { card.style.transform = ''; });
-  }
-
   function confetti(){
     const c = document.createElement('canvas'); c.id = 'confetti'; document.body.appendChild(c);
     const ctx = c.getContext('2d'), dpr = Math.min(2, window.devicePixelRatio||1);
@@ -961,6 +1221,9 @@ body.success-mode #vStaff{padding-top:76px}
   // ================= AL-NUKHBA PORTAL: sign-in (Microsoft Entra ID) + data (SharePoint via Microsoft Graph) =================
   const CFG = window.NUKHBA_CONFIG || {};
   const DEMO = !CFG.clientId || !CFG.tenantId || CFG.demoMode === true;
+  // Public form: anyone can submit (QR code) when publicForm is on and a submit endpoint is set (or in demo)
+  const PUBLIC = CFG.publicForm === true && (!!(CFG.submitUrl || '').trim() || DEMO);
+  document.body.classList.toggle('public-mode', PUBLIC);
   const ROLE_STAFF = (CFG.roles && CFG.roles.staff) || 'Portal.GlobeMed';
   const ROLE_IT = (CFG.roles && CFG.roles.it) || 'Portal.IT';
   const SCOPES = ['User.Read', 'Sites.ReadWrite.All'];
@@ -1057,10 +1320,32 @@ body.success-mode #vStaff{padding-top:76px}
       listId = hit.id;
     }
   }
+  // Card photos: SharePoint document library (default "CardPhotos")
+  let photoDriveId = CFG.photoDriveId || '';
+  async function ensurePhotoDrive(){
+    if (photoDriveId) return photoDriveId;
+    await ensureList();
+    const name = CFG.photoLibrary || 'CardPhotos';
+    try { photoDriveId = (await g(`/sites/${siteId}/lists/${encodeURIComponent(name)}/drive?$select=id`)).id; }
+    catch(e){
+      const ds = await g(`/sites/${siteId}/drives?$select=id,name,webUrl`);
+      const hit = (ds.value || []).find(d => d.name === name || d.name === 'Card Photos' || /\/CardPhotos\/?$/i.test(d.webUrl || ''));
+      if (!hit) throw new Error(`SharePoint library "${name}" was not found on the site.`);
+      photoDriveId = hit.id;
+    }
+    return photoDriveId;
+  }
+  async function uploadPhoto(photo, reference){
+    const drive = await ensurePhotoDrive();
+    const file = `${reference}.${photo.ext}`;
+    const res = await g(`/drives/${drive}/root:/${encodeURIComponent(file)}:/content?@microsoft.graph.conflictBehavior=rename`, { method: 'PUT', body: photo.blob, headers: { 'Content-Type': photo.type } });
+    return res.webUrl || '';
+  }
   const fromItem = it => { const f = it.fields || {}; return {
     id: it.id, reference: f.Title || '', submittedAt: it.createdDateTime || f.Created || '', status: f.Status || 'New', notes: f.Notes || '',
     firstName: f.FirstName || '', middleInitial: f.MiddleInitial || '', lastName: f.LastName || '', civilId: f.CivilID || '', cardNumber: f.CardNumber || '',
     mobile: f.Mobile || '', company: f.Company || '', visited: f.PreviouslyVisited || '', email: f.Email || '', expiry: (f.CardExpiry || '').slice(0,10),
+    cardPhoto: f.CardPhoto || '',
     submittedBy: f.SubmittedBy || (it.createdBy && it.createdBy.user && (it.createdBy.user.email || it.createdBy.user.displayName)) || '' }; };
 
   const GraphData = {
@@ -1069,8 +1354,19 @@ body.success-mode #vStaff{padding-top:76px}
       const fields = { Title: reference, CivilID: v.civilId, FirstName: v.firstName, MiddleInitial: v.middleInitial, LastName: v.lastName,
         CardNumber: v.cardNumber, Mobile: v.mobile, Company: v.company, PreviouslyVisited: v.visited, Email: v.email,
         CardExpiry: v.expiry + 'T12:00:00Z', Status: 'New', SubmittedBy: account ? account.username : '' };
-      try { await g(`/sites/${siteId}/lists/${listId}/items`, { method: 'POST', body: JSON.stringify({ fields }) }); }
+      let item;
+      try { item = await g(`/sites/${siteId}/lists/${listId}/items`, { method: 'POST', body: JSON.stringify({ fields }) }); }
       catch(e){ if (/unique|duplicate|already exist/i.test(e.message || '')) { const d = new Error('duplicate'); d.duplicate = true; throw d; } throw e; }
+      // registration is saved; now the card photo (a failure here does not lose the registration)
+      if (!v.photo) return { photoOk: true };
+      try {
+        const url = await uploadPhoto(v.photo, reference);
+        await g(`/sites/${siteId}/lists/${listId}/items/${item.id}/fields`, { method: 'PATCH', body: JSON.stringify({ CardPhoto: url }) });
+        return { photoOk: true };
+      } catch(e){
+        try { await g(`/sites/${siteId}/lists/${listId}/items/${item.id}/fields`, { method: 'PATCH', body: JSON.stringify({ Notes: 'Card photo upload failed: ' + (e.message || e) }) }); } catch(_){}
+        return { photoOk: false, photoError: e.message || String(e) };
+      }
     },
     async list(){
       await ensureList();
@@ -1105,13 +1401,32 @@ body.success-mode #vStaff{padding-top:76px}
     async add(v, reference){
       const l = demoRows();
       if (l.some(r => r.civilId === v.civilId || r.cardNumber === v.cardNumber)){ const d = new Error('duplicate'); d.duplicate = true; throw d; }
-      l.push({ ...v, id: 'D' + Date.now(), reference, submittedAt: new Date().toISOString(), submittedBy: account ? account.username : '', status: 'New', notes: '' });
+      const { photo, ...rest } = v;
+      l.push({ ...rest, cardPhoto: photo ? (photo.preview || '#demo-photo') : '', id: 'D' + Date.now(), reference, submittedAt: new Date().toISOString(), submittedBy: account ? account.username : '', status: 'New', notes: '' });
       writeStore(l);
+      return { photoOk: true };
     },
     async list(){ return demoRows().map(r => ({ ...r })); },
     async update(id, patch){ const l = demoRows(), r = l.find(x => x.id === id); if (r){ r.status = patch.status; r.notes = patch.notes; writeStore(l); } }
   };
+  // Public submissions go to a trusted endpoint (Power Automate flow or Azure Function) that saves to SharePoint
+  const toB64 = blob => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result).split(',')[1] || ''); r.onerror = rej; r.readAsDataURL(blob); });
+  const PublicData = {
+    async add(v, reference){
+      const { photo, ...f } = v;
+      const body = { ...f, reference, source: account ? 'Signed in: ' + account.username : 'Public form', submittedAt: new Date().toISOString(),
+        photoName: photo ? `${reference}.${photo.ext}` : '', photoType: photo ? photo.type : '', photoBase64: photo ? await toB64(photo.blob) : '' };
+      let r;
+      try { r = await fetch(CFG.submitUrl, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=UTF-8' }, body: JSON.stringify(body) }); }
+      catch(e){ throw new Error('Could not reach the registration service. Check your internet connection.'); }
+      let out = {}; try { out = await r.json(); } catch(_){}
+      if (r.status === 409 || out.duplicate){ const d = new Error('duplicate'); d.duplicate = true; throw d; }
+      if (!r.ok || out.ok === false) throw new Error(out.message || ('The registration service returned an error (' + r.status + ').'));
+      return { photoOk: out.photoOk !== false };
+    }
+  };
   const Data = DEMO ? DemoData : GraphData;
+  const FormData_ = (PUBLIC && !DEMO) ? PublicData : Data;
 
   // ---------------- Views / routing ----------------
   const VIEWS = ['vStart','vNoAccess','vStaff','vIT'];
@@ -1129,8 +1444,9 @@ body.success-mode #vStaff{padding-top:76px}
   }
   function route(){
     closeDrawer();
-    const h = location.hash.slice(1) || 'start';
+    const h = location.hash.slice(1) || (PUBLIC ? 'form' : 'start');
     if (h === 'form'){
+      if (PUBLIC){ $('staffWho').textContent = account ? account.username : ''; document.body.classList.toggle('signed-in', !!account); show('vStaff'); formOpenedAt = Date.now(); return; }
       if (!account) return go('start');
       if (!canEnter('staff')) return noAccess('staff');
       $('staffWho').textContent = account.username; show('vStaff'); return;
@@ -1148,6 +1464,7 @@ body.success-mode #vStaff{padding-top:76px}
     const e = ev.target.closest('[data-enter]');
     if (e){
       const target = e.dataset.enter;
+      if (PUBLIC && target !== 'it') return go('form');
       if (account && canEnter(target)) return go(target === 'it' ? 'it' : 'form');
       if (account && !DEMO) return noAccess(target);
       return signIn(target);
@@ -1159,14 +1476,15 @@ body.success-mode #vStaff{padding-top:76px}
   // ---------------- Success mode: hide the big header, keep the slim logo bar ----------------
   function enterSuccessMode(){ document.body.classList.add('success-mode'); window.scrollTo(0, 0); }
   function exitSuccessMode(){ document.body.classList.remove('success-mode'); }
-  $('againBtn').addEventListener('click', () => { exitSuccessMode(); window.scrollTo(0, 0); });
+  $('againBtn').addEventListener('click', () => { exitSuccessMode(); formOpenedAt = Date.now(); window.scrollTo(0, 0); });
 
   // ---------------- Registration submit ----------------
   const mode = $('saveMode');
   mode.className = 'savemode on';
-  mode.textContent = DEMO ? 'Demo mode: registrations are kept in this browser only.' : 'Registrations are saved securely to Kuwait Hospital SharePoint.';
+  mode.textContent = DEMO ? 'Demo mode: registrations are kept in this browser only.' : 'Registrations are sent securely to Kuwait Hospital.';
 
-  let submitting = false;
+  let submitting = false, formOpenedAt = Date.now();
+  const fullName = r => [r.firstName, r.middleInitial ? r.middleInitial + '.' : '', r.lastName].filter(Boolean).join(' ');
   async function onRegister(ev){
     if (ev) ev.preventDefault();
     if (submitting) return;
@@ -1184,9 +1502,16 @@ body.success-mode #vStaff{padding-top:76px}
       submitting = true; btn.disabled = true; btn.classList.add('busy'); $('submitTxt').textContent = 'Submitting…';
       $('status').hidden = true;
       const reference = 'NK-' + Date.now().toString(36).toUpperCase().slice(-6);
-      await Data.add(v, reference);
+      if (v.hp) throw new Error('Submission blocked.');
+      if (Date.now() - formOpenedAt < 4000) throw new Error('Please take a moment to check your details, then submit again.');
+      const res = (await FormData_.add(v, reference)) || {};
       showSuccess(v, reference, new Date().toISOString());
+      if (res.photoOk === false){
+        $('doneLead').textContent = 'Registration received, but the card photo could not be uploaded. Kuwait Hospital IT will follow up for the photo.';
+        $('doneLead').style.color = 'var(--warn)';
+      }
       enterSuccessMode();
+      if (window.__clearPhoto) window.__clearPhoto();
     } catch(err){
       if (err && err.duplicate){
         showStatus('err', '<strong>This Civil ID or GlobeMed card number is already registered.</strong><span>Please check the details. Contact Kuwait Hospital IT if you think this is a mistake.</span>');
@@ -1205,13 +1530,16 @@ body.success-mode #vStaff{padding-top:76px}
   let ROWS = [], loaded = false, filterStatus = '', query = '', openId = null;
   async function loadIT(){
     $('resetDemo').hidden = !DEMO;
-    if (!loaded) $('itRows').innerHTML = '<tr class="loadrow"><td colspan="11">Loading registrations…</td></tr>';
+    if (!loaded) $('itRows').innerHTML = '<tr class="loadrow"><td colspan="12">Loading registrations…</td></tr>';
     try { ROWS = await Data.list(); loaded = true; renderIT(); }
-    catch(e){ $('itRows').innerHTML = `<tr class="errrow"><td colspan="11">Could not load registrations: ${esc(e.message || e)}</td></tr>`; $('itCount').textContent = '—'; }
+    catch(e){ $('itRows').innerHTML = `<tr class="errrow"><td colspan="12">Could not load registrations: ${esc(e.message || e)}</td></tr>`; $('itCount').textContent = '—'; }
   }
+  const safeUrl = u => /^https:\/\//i.test(u || '') ? u : '';
+  const photoLink = r => safeUrl(r.cardPhoto) ? `<a class="plink" href="${esc(r.cardPhoto)}" target="_blank" rel="noopener" data-nodrawer>View</a>` : '<span style="color:var(--muted)">—</span>';
   function checksFor(r){
     const out = [];
     if (r.sample) out.push('<span class="flag sample">Sample</span>');
+    else if (!r.cardPhoto) out.push('<span class="flag">No photo</span>');
     if (ROWS.filter(x => x.civilId === r.civilId).length > 1) out.push('<span class="flag">Duplicate Civil ID</span>');
     if (ROWS.filter(x => x.cardNumber === r.cardNumber).length > 1) out.push('<span class="flag">Duplicate card</span>');
     const exp = new Date(r.expiry + 'T00:00:00'), soon = new Date(); soon.setDate(soon.getDate() + 60);
@@ -1234,9 +1562,10 @@ body.success-mode #vStaff{padding-top:76px}
     $('itRows').innerHTML = rows.map(r => `<tr data-id="${esc(r.id)}" tabindex="0">
       <td class="m">${esc(r.reference)}</td><td class="m">${esc(fmtDT(r.submittedAt))}</td>
       <td><span class="pill ${STATUS_CLASS[r.status] || 's-new'}">${esc(r.status || 'New')}</span></td>
-      <td>${esc(r.firstName + ' ' + r.middleInitial + '. ' + r.lastName)}</td>
+      <td>${esc(fullName(r))}</td>
       <td class="m">${esc(r.civilId)}</td><td class="m">${esc(r.cardNumber)}</td><td class="m">${esc(r.mobile)}</td>
-      <td>${esc(r.email)}</td><td>${esc(r.company)}</td><td class="m">${esc(fmtD(r.expiry))}</td><td>${checksFor(r)}</td></tr>`).join('');
+      <td>${esc(r.email)}</td><td>${esc(r.company)}</td><td class="m">${esc(fmtD(r.expiry))}</td>
+      <td>${photoLink(r)}</td><td>${checksFor(r)}</td></tr>`).join('');
     $('itEmpty').hidden = rows.length > 0;
     $('itEmpty').textContent = ROWS.length ? 'No registrations match this search.' : 'No registrations yet.';
     $('itCount').textContent = `${rows.length} shown of ${ROWS.length}`;
@@ -1246,18 +1575,19 @@ body.success-mode #vStaff{padding-top:76px}
   $('fStatus').addEventListener('change', () => { filterStatus = $('fStatus').value; renderIT(); });
   $('q').addEventListener('input', () => { query = $('q').value; renderIT(); });
   $('refreshBtn').addEventListener('click', async () => { await loadIT(); toast('Updated'); });
-  $('itRows').addEventListener('click', ev => { const tr = ev.target.closest('tr[data-id]'); if (tr) openDrawer(tr.dataset.id); });
+  $('itRows').addEventListener('click', ev => { if (ev.target.closest('[data-nodrawer]')) return; const tr = ev.target.closest('tr[data-id]'); if (tr) openDrawer(tr.dataset.id); });
   $('itRows').addEventListener('keydown', ev => { if (ev.key === 'Enter'){ const tr = ev.target.closest('tr[data-id]'); if (tr) openDrawer(tr.dataset.id); } });
   $('resetDemo').addEventListener('click', async () => { writeStore(sampleData()); await loadIT(); toast('Demo data reset'); });
 
   function openDrawer(id){
     const r = ROWS.find(x => x.id === id); if (!r) return;
     openId = id;
-    $('dName').textContent = `${r.firstName} ${r.middleInitial}. ${r.lastName}`;
+    $('dName').textContent = fullName(r);
     $('dRef').textContent = `${r.reference} · submitted ${fmtDT(r.submittedAt)}${r.submittedBy ? ' by ' + r.submittedBy : ''}`;
     $('dFlow').innerHTML = STATUSES.map(s => `<span class="${s === r.status ? 'on' : ''}">${esc(s)}</span>`).join('<span aria-hidden="true">→</span>');
     const items = [['Civil ID', r.civilId, 1], ['GlobeMed card', r.cardNumber, 1], ['Card expiry', fmtD(r.expiry), 1], ['Mobile', r.mobile, 1], ['Email', r.email], ['Company', r.company], ['Visited before', r.visited]];
-    $('dList').innerHTML = items.map(([k,v,m]) => `<dt>${esc(k)}</dt><dd class="${m ? 'm' : ''}">${esc(v)}</dd>`).join('');
+    $('dList').innerHTML = items.map(([k,v,m]) => `<dt>${esc(k)}</dt><dd class="${m ? 'm' : ''}">${esc(v)}</dd>`).join('')
+      + `<dt>Card photo</dt><dd>${safeUrl(r.cardPhoto) ? `<a class="plink" href="${esc(r.cardPhoto)}" target="_blank" rel="noopener">Open card photo ↗</a>` : 'Not uploaded'}</dd>`;
     $('dStatus').value = r.status || 'New'; $('dNotes').value = r.notes || '';
     $('scrim').hidden = false; $('drawer').hidden = false;
     setTimeout(() => $('dStatus').focus(), 30);
@@ -1275,7 +1605,7 @@ body.success-mode #vStaff{padding-top:76px}
   });
 
   // ---------------- Excel export ----------------
-  const HEAD = ['Reference','Submitted On','Status','First Name','Middle Initial','Last Name','Civil ID','GlobeMed Card Number','Mobile Number','Company Name','Previously Visited Kuwait Hospital','Email Address','GlobeMed Card Expiration Date','Notes','Submitted By'];
+  const HEAD = ['Reference','Submitted On','Status','First Name','Middle Initial','Last Name','Civil ID','GlobeMed Card Number','Mobile Number','Company Name','Previously Visited Kuwait Hospital','Email Address','GlobeMed Card Expiration Date','Notes','Submitted By','Card Photo Link'];
   function saveFile(name, buf){
     const url = URL.createObjectURL(new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
     const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
@@ -1285,11 +1615,11 @@ body.success-mode #vStaff{padding-top:76px}
     if (typeof XLSX === 'undefined'){ toast('The Excel library did not load. Reload the page and try again.'); return; }
     if (!rows.length){ toast('Nothing to download.'); return; }
     const sorted = [...rows].sort((a,b) => (a.submittedAt||'').localeCompare(b.submittedAt||''));
-    const aoa = [HEAD, ...sorted.map(r => [r.reference, fmtDT(r.submittedAt), r.status || 'New', r.firstName, r.middleInitial, r.lastName, r.civilId, r.cardNumber, r.mobile, r.company, r.visited, r.email, fmtD(r.expiry), r.notes || '', r.submittedBy || ''])];
+    const aoa = [HEAD, ...sorted.map(r => [r.reference, fmtDT(r.submittedAt), r.status || 'New', r.firstName, r.middleInitial, r.lastName, r.civilId, r.cardNumber, r.mobile, r.company, r.visited, r.email, fmtD(r.expiry), r.notes || '', r.submittedBy || '', safeUrl(r.cardPhoto)])];
     const ws = XLSX.utils.aoa_to_sheet(aoa);
     for (let i = 2; i <= aoa.length; i++){ ['G','H','I'].forEach(c => { const cell = ws[c+i]; if (cell){ cell.t = 's'; cell.z = '@'; } }); }
-    ws['!cols'] = [12,18,16,14,8,16,15,20,13,24,14,28,14,36,26].map(w => ({ wch: w }));
-    ws['!autofilter'] = { ref: `A1:O${aoa.length}` };
+    ws['!cols'] = [12,18,16,14,8,16,15,20,13,24,14,28,14,36,26,40].map(w => ({ wch: w }));
+    ws['!autofilter'] = { ref: `A1:P${aoa.length}` };
     const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Registrations');
     saveFile(`AlNukhba_Registrations_${label}_${iso(new Date())}.xlsx`, XLSX.write(wb, { bookType: 'xlsx', type: 'array' }));
     toast(`Downloaded ${rows.length} registration${rows.length === 1 ? '' : 's'}`);
