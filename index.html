@@ -59,6 +59,26 @@ form{background:var(--surface);border:1px solid var(--line);border-radius:14px;p
 .lbl .ar{font-family:var(--ar);font-weight:500;color:var(--muted)}
 .req{color:var(--err);margin-left:2px}
 .opt{font-weight:400;color:var(--muted);font-size:12.5px}
+
+/* --- scan card (OCR autofill) --- */
+.scan{margin:14px 0 4px;border:1.5px solid color-mix(in srgb,var(--gold) 55%,var(--line));background:linear-gradient(135deg,var(--gold-soft),var(--surface));border-radius:14px;padding:14px 16px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px 14px;align-items:center}
+.scan-ic svg{width:52px;height:38px;fill:none;stroke:var(--gold);stroke-width:1.8;stroke-linecap:round}
+.scan-ic .scan-corner{stroke:var(--navy, #0E2F44);stroke-width:2.2}
+.scan-txt{display:grid;gap:2px}.scan-txt b{font-size:15.5px}.scan-txt span{font-size:12.8px;color:var(--muted)}
+.scan-txt .ar{font-family:var(--ar)}
+.scan-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.scan-go{display:inline-flex;align-items:center;gap:8px;padding:10px 18px}
+.scan-go svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8}
+.scan-prog,.scan-res{grid-column:1 / -1}
+.scan-prog{display:grid;gap:6px;font-size:13px;color:var(--muted)}
+.scan-prog[hidden],.scan-res[hidden]{display:none}
+.scan-bar{height:6px;border-radius:99px;background:var(--line);overflow:hidden}.scan-bar i{display:block;height:100%;width:0;background:var(--gold);transition:width .3s}
+.scan-res{font-size:13.5px;border-radius:10px;padding:10px 12px;background:var(--ok-bg);color:var(--ok)}
+.scan-err{display:block;margin-top:6px;font-size:11.5px;opacity:.75;word-break:break-word}
+.scan-res.warn{background:var(--warn-bg, #FDF3DC);color:var(--warn, #9A6B00)}
+.field.auto input{background:color-mix(in srgb,var(--gold) 14%,var(--bg))!important;border-color:color-mix(in srgb,var(--gold) 60%,var(--line))!important}
+.field.auto .lbl > span:first-child::after{content:"from card";margin-left:8px;font-size:10.5px;font-weight:600;letter-spacing:.04em;color:var(--gold);border:1px solid var(--gold);border-radius:99px;padding:1px 7px;vertical-align:2px}
+@media (max-width:560px){ .scan{grid-template-columns:auto minmax(0,1fr)} .scan-btns{grid-column:1 / -1;justify-content:stretch} .scan-btns>*{flex:1;justify-content:center} }
 /* --- thank-you card (success screen) --- */
 .done.ty-on > :not(.ty):not(.actions){display:none!important}
 .done.ty-on{background:none!important;border:none!important;box-shadow:none!important;padding:0!important;display:grid;justify-items:center;gap:16px}
@@ -90,7 +110,7 @@ form{background:var(--surface);border:1px solid var(--line);border-radius:14px;p
 .ty-ref{margin:clamp(12px,2.2vh,18px) 0 0;font-size:12.5px;color:rgba(255,255,255,.72);letter-spacing:.02em}
 .ty-ref b{font-family:var(--mono);color:#fff;font-weight:600;margin-left:4px}
 .ty-jci{display:inline-flex;align-items:center;gap:10px;margin-top:clamp(12px,2.4vh,20px);font-size:11.5px;font-weight:700;line-height:1.3;text-align:left}
-.ty-jci img{width:34px;height:34px}
+.ty-jci img{width:40px;height:40px}
 .done.ty-on .actions{justify-content:center;padding-top:0}
 .consent{display:flex;gap:12px;align-items:flex-start;font-size:13.5px;line-height:1.5;cursor:pointer}
 .consent input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--gold);flex:none}
@@ -108,6 +128,11 @@ form{background:var(--surface);border:1px solid var(--line);border-radius:14px;p
 .photo{border:1.5px dashed var(--line);border-radius:12px;background:var(--bg);padding:14px 16px;transition:border-color .15s, background .15s}
 .photo.drag{border-color:var(--gold);background:var(--gold-soft)}
 .field.bad .photo{border-color:var(--err)}
+.photo.expired{border-color:var(--err)!important;border-style:solid;background:var(--err-bg)}
+.ph-exp{display:inline-block;margin-top:4px;max-width:100%;white-space:normal;line-height:1.35;font-size:12px;font-weight:700;color:var(--err);border:1px solid var(--err);border-radius:99px;padding:2px 9px}
+.field.bad.auto input{border-color:var(--err)!important;background:var(--err-bg)!important}
+.ph-info span.ph-exp{justify-self:start;align-self:start;width:fit-content;white-space:normal;overflow:visible;text-overflow:clip;color:var(--err)}
+.scan-res.bad{background:var(--err-bg);color:var(--err)}
 .field.good .photo{border-style:solid;border-color:color-mix(in srgb,var(--ok) 45%,var(--line))}
 .ph-empty,.ph-done{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center}
 .ph-empty[hidden],.ph-done[hidden]{display:none}
@@ -686,6 +711,16 @@ body.success-mode #done.ty-on > *{grid-column:1!important}
 body.success-mode #done.ty-on .actions{justify-content:center!important}
 body.success-mode #vStaff{padding-top:76px}
 
+/* auto-refresh */
+.autoinfo{font-size:12.5px;color:var(--muted);display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.autoinfo .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 60%,transparent);animation:autopulse 2.4s ease-out infinite}
+.autoinfo.warn{color:var(--err)}
+@keyframes autopulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 55%,transparent)}70%,100%{box-shadow:0 0 0 7px transparent}}
+table.dt tr.fresh td{animation:freshrow 6s ease-out 1}
+table.dt tr.fresh td:first-child{box-shadow:inset 3px 0 0 var(--gold)}
+@keyframes freshrow{0%,40%{background:color-mix(in srgb,var(--gold) 22%,transparent)}100%{background:transparent}}
+@media (prefers-reduced-motion:reduce){.autoinfo .dot,table.dt tr.fresh td{animation:none}}
+
 @media (max-width:480px){form,.panel,.done{padding-left:16px;padding-right:16px}.mast{padding:22px 18px}.prog{margin:0 -16px;padding-left:16px;padding-right:16px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.tick circle,.tick path{stroke-dashoffset:0}}
 </style>
@@ -779,6 +814,18 @@ body.success-mode #vStaff{padding-top:76px}
       <div class="prog-top"><span>Registration progress</span><b id="progTxt">0 of 10 complete</b></div>
       <div class="bar"><i id="progBar"></i></div>
     </div>
+    <div class="scan" id="scanBox">
+      <div class="scan-ic" aria-hidden="true"><svg viewBox="0 0 48 34"><rect x="1.5" y="1.5" width="45" height="31" rx="4"/><path d="M7 12h16M7 18h22M7 24h12"/><path d="M33 9h6v6M39 19v6h-6" class="scan-corner"/></svg></div>
+      <div class="scan-txt"><b>Scan your GlobeMed card</b><span>Take a photo of the card — we fill in your name, company, card number, Civil ID and expiry for you.</span><span class="ar" dir="rtl" lang="ar">صوّر بطاقة غلوب ميد وسنملأ البيانات تلقائيًا</span></div>
+      <div class="scan-btns">
+        <button type="button" class="primary scan-go" id="scanCam"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg>Scan card</button>
+        <button type="button" class="pbtn" id="scanFile">Upload photo</button>
+      </div>
+      <div class="scan-prog" id="scanProg" hidden><div class="scan-bar"><i id="scanBar"></i></div><span id="scanMsg">Reading your card…</span></div>
+      <div class="scan-res" id="scanRes" hidden></div>
+    </div>
+    <input type="file" id="scanCamIn" accept="image/*" capture="environment" hidden>
+    <input type="file" id="scanFileIn" accept="image/*" hidden>
     <div class="field" data-f="firstName">
       <label class="lbl" for="firstName"><span><span class="n">01</span>First Name<span class="req">*</span></span><span class="ar" dir="rtl" lang="ar">الاسم الأول</span></label>
       <input type="text" id="firstName" data-kind="name" maxlength="40" autocapitalize="words" spellcheck="false">
@@ -818,7 +865,7 @@ body.success-mode #vStaff{padding-top:76px}
         </div>
         <div class="ph-done" id="phDone" hidden>
           <div class="ph-thumb" id="phThumb"></div>
-          <div class="ph-info"><b><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Card photo added</b><span id="phMeta">—</span></div>
+          <div class="ph-info"><b><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Card photo added</b><span id="phMeta">—</span><span class="ph-exp" id="phExp" hidden></span></div>
           <div class="ph-btns"><button type="button" class="pbtn sm" id="phChange">Change</button><button type="button" class="pbtn sm danger" id="phRemove">Remove</button></div>
         </div>
       </div>
@@ -983,6 +1030,7 @@ body.success-mode #vStaff{padding-top:76px}
       <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input type="search" id="q" placeholder="Search name, Civil ID, card, reference or email" aria-label="Search registrations"></div>
       <select id="fStatus" aria-label="Filter by status"><option value="">All statuses</option><option>New</option><option>Missing data</option><option>Verified</option><option>Uploaded to Apex</option></select>
       <button type="button" class="ghost sm" id="refreshBtn">Refresh</button>
+      <span class="autoinfo" id="autoInfo" aria-live="polite"></span>
       <span class="selinfo" id="selInfo" hidden><b id="selCount">0</b> selected · <button type="button" class="linkbtn" id="selClear">Clear</button></span>
       <button type="button" class="primary" id="xlsOpen">Download Excel…</button>
     </div>
@@ -1065,6 +1113,7 @@ body.success-mode #vStaff{padding-top:76px}
     let out = d.slice(0,2); if (d.length > 2) out += '/' + d.slice(2,4); if (d.length > 4) out += '/' + d.slice(4);
     if (el.value !== out) el.value = out;
     clearErr(el.closest('.field'));
+    if (out.length === 10) markExpired(); else { $('photoBox').classList.remove('expired'); $('phExp').hidden = true; }
   });
 
   // ---- GlobeMed card number: two boxes of 8 digits ----
@@ -1113,11 +1162,13 @@ body.success-mode #vStaff{padding-top:76px}
     $('phThumb').innerHTML = isPdf ? '<span class="pdf">PDF</span>' : `<img src="${cardPhoto.preview}" alt="GlobeMed card photo">`;
     $('phMeta').textContent = (source === 'camera' ? 'Taken with camera' : cardPhoto.name) + ' · ' + fmtSize(blob.size);
     $('phEmpty').hidden = true; $('phDone').hidden = false;
+    if (expiredOn()) markExpired();
     clearErr(fld); updateProgress();
   }
   window.__clearPhoto = () => {
     if (cardPhoto && cardPhoto.preview) URL.revokeObjectURL(cardPhoto.preview);
     cardPhoto = null; $('phThumb').innerHTML = ''; $('phEmpty').hidden = false; $('phDone').hidden = true;
+    $('photoBox').classList.remove('expired'); $('phExp').hidden = true;
     $('cardFile').value = ''; $('cardCam').value = '';
   };
   window.__setPhoto = setPhoto;
@@ -1150,6 +1201,293 @@ body.success-mode #vStaff{padding-top:76px}
     c.getContext('2d').drawImage(vd, 0, 0, c.width, c.height);
     c.toBlob(b => { closeCam(); if (b) setPhoto(new File([b], 'card-photo.jpg', { type: 'image/jpeg' }), 'camera'); }, 'image/jpeg', 0.9);
   });
+
+
+  // ---- Scan GlobeMed card: read the photo on the device (Tesseract OCR) and fill the fields ----
+  // ---- GlobeMed card text parser ----
+  // Kuwait Civil ID check: birth date in digits 2–7 and a check digit at the end
+  const CIV_W = [2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2];
+  const civilOk = id => {
+    if (!/^[23]\d{11}$/.test(id)) return false;
+    const mm = +id.slice(3, 5), dd = +id.slice(5, 7); if (mm < 1 || mm > 12 || dd < 1 || dd > 31) return false;
+    const s = CIV_W.reduce((a, w, i) => a + w * +id[i], 0), c = 11 - (s % 11);
+    return c < 10 && c === +id[11];
+  };
+  function parseCard(texts, weights){
+    const fixDigits = s => s.replace(/[Oo]/g,'0').replace(/[Il|\]\[]/g,'1').replace(/S/g,'5').replace(/B/g,'8').replace(/Z/g,'2');
+    const votes = {}; let TW = 1;                                      // TW = trust in the current text (OCR confidence)
+    const vote = (k, v, w = 1) => { if (!v) return; votes[k] = votes[k] || {}; votes[k][v] = (votes[k][v] || 0) + w * TW; };
+    const letters = s => (s.match(/[A-Za-z]/g) || []).length;
+    const cardRe = /(?:^|[^A-Za-z])(?:[G6C]\s*[:.,;]?\s*)?((?:[0-9OoIl|\]\[SBZ]\s*){14})(?![0-9])/;
+    // longest run of capital-letter words in a line (drops photo noise around the printed text)
+    const capsRun = l => {
+      const ws = l.split(/\s+/).map(x => x === '\u2011' ? x : x.replace(/^[^A-Za-z&(]+|[^A-Za-z.)]+$/g, '')); let best = [], cur = [];
+      ws.forEach(x => { if (x === '\u2011' && cur.length){ cur.push('\u2011'); return; } if (/^[A-Z][A-Z.'&()\-]*$/.test(x) && x.replace(/[^A-Z]/g, '').length >= (cur.length ? 1 : 2)) cur.push(x); else { if (cur.length > best.length) best = cur; cur = []; } });
+      if (cur.length > best.length) best = cur;
+      return best.some(x => x.replace(/[^A-Z]/g, '').length >= 3) ? best.join(' ') : '';
+    };
+    // same, but a lone dash between capital words is kept (e.g. "ISCO - KOC")
+    const capsRunD = l => capsRun(l.replace(/\s-\s/g, ' \u2011 ')).replace(/\u2011/g, '-');
+    // a line that reads like words (not photo noise)
+    const textLike = l => {
+    const ws = l.split(/\s+/).filter(x => /[A-Za-z]/.test(x)); if (!ws.length || ws.length > 8 || letters(l) < 4) return false;
+    const caps = ws.filter(x => /^[^A-Za-z]*[A-Z][A-Z.'&:\-]*[^A-Za-z]*$/.test(x));          // card text is printed in capitals
+    return caps.length >= Math.ceil(ws.length * 0.75) && caps.some(x => x.replace(/[^A-Z]/g, '').length >= 3);
+  };
+    function nameFrom(l, w){
+      const run = capsRun(l); if (run && run.split(' ').length >= 2) l = run;
+      let t = l.split(/\s+/).filter(x => !/[a-z]/.test(x)).join(' ').replace(/[^A-Z' ]/g, ' ').split(/\s+/).filter(Boolean);
+      while (t.length && t[t.length - 1].length < 3) t.pop();          // stray marks after the name (e.g. "R")
+      while (t.length && t[0].length < 2) t.shift();
+      if (t.length < 2) return;
+      vote('first', t[0], w); vote('last', t[t.length - 1], w);
+      if (t.length >= 3) vote('mi', t[1][0], w); else vote('mi', '-', w);
+    }
+    function companyFrom(l, w){
+      l = l.replace(/CONTR?ACT.*$/i, '').replace(/\s[—–]\s/g, ' - ');
+      const run = capsRunD(l); if (run) l = run;
+      const c = l.replace(/CONTR?ACT.*$/i, '').replace(/#.*$/, '').replace(/[—–_~]/g, '-').replace(/\d+/g, ' ')
+                 .replace(/[^A-Za-z&.,()\/' \-]/g, ' ').replace(/\s+/g, ' ').replace(/^[\s\-.,\/]+|[\s\-.,\/]+$/g, '').trim();
+      const words = c.split(/\s+/).filter(x => /[A-Za-z]/.test(x)), longw = words.filter(x => x.replace(/[^A-Za-z]/g, '').length >= 3);
+      if (letters(c) < 2 || words.length > 7 || longw.length < Math.ceil(words.length / 2)) return;   // looks like noise
+      vote('company', c.toUpperCase().replace(/\s*-\s*/g, ' - '), w);
+    }
+    texts.forEach((raw, ti) => {
+      TW = weights ? Math.max(0.3, (weights[ti] || 50) / 100) : 1;
+      const lines = raw.split(/\n/).map(l => l.replace(/[“”"`=|\\«»+]/g, ' ').replace(/\s+/g, ' ').trim()).filter(Boolean);
+      lines.forEach((l, i) => {
+        // card number line: G + 14 digits; the name is the text line just above it, the company the one above that
+        const left = l.split(/st[a-z]{0,2}[fl]{1,2}\b/i)[0];
+        const g = cardRe.exec(left);
+        if (g){
+          const d = fixDigits(g[1].replace(/\s/g, ''));
+          if (/^\d{14}$/.test(d)){
+            vote('card', d, 1);
+            const ok = j => textLike(lines[j]) || capsRun(lines[j]).split(' ').length >= 2;
+            const clean = j => textLike(lines[j]) ? lines[j] : capsRun(lines[j]);
+            let n = -1; for (let j = i - 1; j >= Math.max(0, i - 2); j--) if (ok(j)){ n = j; break; }
+            if (n >= 0){
+              nameFrom(clean(n), 2);
+              for (let j = n - 1; j >= Math.max(0, n - 2); j--) if (ok(j)){ companyFrom(clean(j), 2); break; }
+            }
+          }
+        }
+        // fallback for company: text before CONTRACT
+        if (/CONTR?ACT/i.test(l)) companyFrom(l, 1);
+        // Civil ID: 12 digits starting with 2 or 3 (label line preferred)
+        const lab = /C\.?\s*[I1L]\.?\s*D\.?\s*N\.?\s*[O0]\.?\s*[:.;]*/i.exec(l);
+        const zone = lab ? l.slice(lab.index + lab[0].length) : l;
+        const digits = fixDigits(zone).replace(/[^\d\s]/g, ' ');
+        const m = digits.match(/\b[23]\d{11}\b/) || digits.replace(/(\d)\s(?=\d)/g, '$1').match(/\b[23]\d{11}\b/);
+        if (m) vote('civil', m[0], lab ? 2 : 1);
+        // expiry: date after "Exp. Date", "Expiry", "Valid until"
+        const ex = /(EXP|VALID|UNTIL)/i.exec(l);
+        if (ex){
+          const e = /(\d{1,2})\s*[\/\-.]\s*(\d{1,2})\s*[\/\-.]\s*((?:19|20)\d{2})/.exec(fixDigits(l.slice(ex.index).replace(/^[A-Za-z. ]+/, ' ')));
+          if (e && +e[1] >= 1 && +e[1] <= 31 && +e[2] >= 1 && +e[2] <= 12) vote('expiry', `${e[1].padStart(2, '0')}/${e[2].padStart(2, '0')}/${e[3]}`, 1);
+        }
+      });
+    });
+    // the same company read with and without a space ("ZAINKUWAIT" / "ZAIN KUWAIT"): count together, keep the spaced one
+    if (votes.company){
+      const g = {}; Object.entries(votes.company).forEach(([v, w]) => { const key = v.replace(/[^A-Z]/g, ''); g[key] = g[key] || { v, w: 0 }; g[key].w += w; if (v.split(' ').length > g[key].v.split(' ').length) g[key].v = v; });
+      votes.company = {}; Object.values(g).forEach(x => votes.company[x.v] = x.w);
+    }
+    const out = {};
+    for (const k in votes) out[k] = Object.entries(votes[k]).sort((a, b) => b[1] - a[1] || b[0].length - a[0].length)[0][0];
+    // numbers: vote digit by digit across all readings, so one misread digit in one reading is outvoted
+    const byDigit = (k, len) => {
+      if (!votes[k]) return null; const c = Object.entries(votes[k]).filter(([v]) => v.length === len); if (c.length < 2) return null;
+      let r = ''; for (let i = 0; i < len; i++){ const t = {}; c.forEach(([v, w]) => t[v[i]] = (t[v[i]] || 0) + w); r += Object.entries(t).sort((a, b) => b[1] - a[1])[0][0]; }
+      return r;
+    };
+    const cd = byDigit('card', 14); if (cd) out.card = cd;
+    const cv = byDigit('civil', 12); if (cv && votes.civil){ votes.civil[cv] = (votes.civil[cv] || 0) + 0.01; out.civil = cv; }
+    // Civil ID: prefer a candidate that passes the check digit; if none does, flag it for the patient to check
+    if (votes.civil){
+      const ok = (out.civil && civilOk(out.civil)) ? out.civil : Object.entries(votes.civil).sort((a, b) => b[1] - a[1]).map(x => x[0]).find(civilOk);
+      if (ok) out.civil = ok; else out.civilCheck = false;
+    }
+    if (out.mi === '-') delete out.mi;
+    return out;
+  }
+
+
+  
+  // Card reader files: first from this website (same folder as index.html), then from the jsDelivr CDN as a fallback.
+  const ABS = p => new URL(p, location.href).href;
+  const CDN = 'https://cdn.jsdelivr.net/npm/';
+  const OCR_SOURCES = window.NUKHBA_OCR ? [window.NUKHBA_OCR] : [
+    { name: 'site', lib: ABS('tesseract.min.js'), workerPath: ABS('worker.min.js'), corePath: ABS('.').replace(/\/$/, ''), langPath: ABS('.').replace(/\/$/, '') },
+    { name: 'cdn', lib: CDN + 'tesseract.js@5.1.1/dist/tesseract.min.js', workerPath: CDN + 'tesseract.js@5.1.1/dist/worker.min.js',
+      corePath: CDN + 'tesseract.js-core@5.1.1', langPath: CDN + '@tesseract.js-data/eng@1.0.0/4.0.0_best_int' } ];
+  let ocrWorker = null;
+  const loadScript = src => new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = () => rej(new Error('script not reachable: ' + src)); document.head.appendChild(s); });
+  const withTimeout = (pr, ms, what) => Promise.race([pr, new Promise((_, rej) => setTimeout(() => rej(new Error(what + ' timed out')), ms))]);
+  async function getOcr(progress){
+    if (ocrWorker) return ocrWorker;
+    const errors = [];
+    for (const src of OCR_SOURCES){
+      try {
+        if (!window.Tesseract) await withTimeout(loadScript(src.lib), 30000, 'reader script');
+        ocrWorker = await withTimeout(Tesseract.createWorker('eng', 1, { workerPath: src.workerPath, corePath: src.corePath, langPath: src.langPath,
+          logger: m => { if (m.status && /load|init/i.test(m.status)) progress(Math.round((m.progress || 0) * 20), 'Preparing the card reader…'); },
+          errorHandler: () => {} }), 90000, 'reader start');
+        return ocrWorker;
+      } catch (e){ errors.push(src.name + ': ' + (e && e.message ? e.message : String(e))); }
+    }
+    throw new Error(errors.join(' | '));
+  }
+  const loadImg = file => new Promise((res, rej) => { const u = URL.createObjectURL(file), im = new Image(); im.onload = () => { URL.revokeObjectURL(u); res(im); }; im.onerror = () => { URL.revokeObjectURL(u); rej(new Error('This photo could not be opened')); }; im.src = u; });
+  // three cleaned-up versions of the photo: grey (brightest channel), grey (average), adaptive black & white
+  // turn the photo by 0 / 90 / 180 / 270 degrees (card photographed sideways or upside down)
+  function rotated(img, deg){
+    const w = img.naturalWidth || img.width, h = img.naturalHeight || img.height, side = deg % 180 !== 0;
+    const c = document.createElement('canvas'); c.width = side ? h : w; c.height = side ? w : h;
+    const x = c.getContext('2d'); x.translate(c.width / 2, c.height / 2); x.rotate(deg * Math.PI / 180); x.drawImage(img, -w / 2, -h / 2);
+    return c;
+  }
+  const score = p => ['card', 'civil', 'expiry', 'first', 'company'].reduce((n, k) => n + (p[k] ? (k === 'card' || k === 'civil' ? 3 : 1) : 0), 0);
+  async function bestTurn(worker, img, progress){
+    const w = img.naturalWidth, h = img.naturalHeight;
+    const order = w >= h ? [0, 180, 90, 270] : [90, 270, 0, 180];      // cards are wider than tall
+    let best = { deg: 0, s: -1, text: '' };
+    for (let i = 0; i < order.length; i++){
+      progress(22 + i * 4, 'Finding the right way up…');
+      const src = rotated(img, order[i]), r = await worker.recognize(variants(src, 1400)[1]);
+      const s = score(parseCard([r.data.text])) * 100 + (r.data.confidence || 0);
+      if (s > best.s) best = { deg: order[i], s, text: r.data.text, conf: r.data.confidence, src };
+      if (best.s >= 800) break;                                         // card number + Civil ID + more found
+      if (i === 1 && best.s >= 300) break;                              // good enough in the likely pair
+    }
+    return best;
+  }
+  function variants(img, target = 2400){
+    const iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height;
+    const long = Math.max(iw, ih), k = Math.min(3, Math.max(target < 2400 ? 0.3 : 1, target / long));
+    const W = Math.round(iw * k), H = Math.round(ih * k);
+    const c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext('2d'); x.drawImage(img, 0, 0, W, H);
+    const d = x.getImageData(0, 0, W, H).data, N = W * H, mx = new Float32Array(N), lu = new Float32Array(N);
+    for (let i = 0, j = 0; j < N; i += 4, j++){ const r = d[i], g = d[i+1], b = d[i+2]; mx[j] = Math.max(r, g, b); lu[j] = (r + g + b) / 3; }
+    const stretch = arr => { const h = new Uint32Array(256); arr.forEach(v => h[v|0]++); let acc = 0, lo = 0, hi = 255; for (let v = 0; v < 256; v++){ acc += h[v]; if (acc < N * .02) lo = v; if (acc < N * .6) hi = v; } const out = new Uint8ClampedArray(N); const sc = 255 / Math.max(1, hi - lo); for (let j = 0; j < N; j++) out[j] = (arr[j] - lo) * sc; return out; };
+    const toCanvas = g => { const cc = document.createElement('canvas'); cc.width = W; cc.height = H; const xx = cc.getContext('2d'), id = xx.createImageData(W, H); for (let j = 0, i = 0; j < N; j++, i += 4){ id.data[i] = id.data[i+1] = id.data[i+2] = g[j]; id.data[i+3] = 255; } xx.putImageData(id, 0, 0); return cc; };
+    const a = stretch(mx), b = stretch(lu);
+    // adaptive threshold on the brightest-channel image (integral image box mean)
+    const R = Math.max(12, Math.round(Math.min(W, H) / 40)), I = new Float64Array((W + 1) * (H + 1));
+    for (let y = 0; y < H; y++){ let row = 0; for (let x2 = 0; x2 < W; x2++){ row += mx[y * W + x2]; I[(y + 1) * (W + 1) + x2 + 1] = I[y * (W + 1) + x2 + 1] + row; } }
+    const t = new Uint8ClampedArray(N);
+    for (let y = 0; y < H; y++){ const y0 = Math.max(0, y - R), y1 = Math.min(H, y + R + 1); for (let x2 = 0; x2 < W; x2++){ const x0 = Math.max(0, x2 - R), x1 = Math.min(W, x2 + R + 1);
+      const s2 = I[y1 * (W + 1) + x1] - I[y0 * (W + 1) + x1] - I[y1 * (W + 1) + x0] + I[y0 * (W + 1) + x0]; t[y * W + x2] = mx[y * W + x2] < s2 / ((y1 - y0) * (x1 - x0)) - 18 ? 0 : 255; } }
+    const sm = new Float32Array(N), r2 = Math.max(1, Math.round(Math.min(W, H) / 500));
+    for (let y = 0; y < H; y++){ const y0 = Math.max(0, y - r2), y1 = Math.min(H, y + r2 + 1); for (let x2 = 0; x2 < W; x2++){ const x0 = Math.max(0, x2 - r2), x1 = Math.min(W, x2 + r2 + 1);
+      sm[y * W + x2] = (I[y1 * (W + 1) + x1] - I[y0 * (W + 1) + x1] - I[y1 * (W + 1) + x0] + I[y0 * (W + 1) + x0]) / ((y1 - y0) * (x1 - x0)); } }
+    return [toCanvas(b), toCanvas(a), toCanvas(t), toCanvas(stretch(sm))];
+  }
+  // second look: re-read only the card-number, Civil ID and expiry lines, allowing digits only
+  async function rereadNumbers(worker, vs, found){
+    const fx = t => t.replace(/[Oo]/g,'0').replace(/[Il|\]\[]/g,'1').replace(/S/g,'5').replace(/B/g,'8');
+    const KINDS = [
+      { k: 'card', test: t => /(?:^|\D)\d{7}\s?\d{7}(?!\d)/.test(fx(t).replace(/[^\d\s]/g, ' ').replace(/\s+/g, ' ')) && !/C\.?\s*[I1L]\.?\s*D/i.test(t), wl: 'G0123456789 ' },
+      { k: 'civil', test: t => /C\.?\s*[I1L]\.?\s*D\.?\s*N/i.test(t) && /\d{10,}/.test(fx(t).replace(/\D/g, '')), wl: '0123456789 ' },
+      { k: 'exp', test: t => /(EXP|VALID|UNTIL)/i.test(t) && /\d{1,2}\s*\/\s*\d{1,2}\s*\/\s*\d{2,4}/.test(t), wl: '/0123456789 ' } ];
+    const boxes = {};
+    found.forEach(d => (d.blocks || []).forEach(b => (b.paragraphs || []).forEach(p => (p.lines || []).forEach(l => {
+      KINDS.forEach(K => {
+        if (!K.test(l.text || '')) return;
+        // keep only the words that carry the number (drops photo noise on the same line)
+        const ws = (l.words || []).filter(w => (fx(w.text).match(/\d/g) || []).length >= (K.k === 'exp' ? 4 : 5));
+        if (!ws.length) return;
+        const bb = { x0: Math.min(...ws.map(w => w.bbox.x0)), y0: Math.min(...ws.map(w => w.bbox.y0)), x1: Math.max(...ws.map(w => w.bbox.x1)), y1: Math.max(...ws.map(w => w.bbox.y1)) };
+        if (K.k === 'card') bb.x0 = Math.max(0, bb.x0 - Math.round((bb.y1 - bb.y0) * 1.2));   // room for the "G"
+        (boxes[K.k] = boxes[K.k] || []).push(bb); }); }))));
+    const med = a => a.slice().sort((x, y) => x - y)[a.length >> 1];
+    const crop = (v, b) => {                                   // cut the line out, enlarge it, add a white margin
+      const h = b.y1 - b.y0, pad = Math.round(h * 0.35), x0 = Math.max(0, b.x0 - pad), y0 = Math.max(0, b.y0 - pad);
+      const w = Math.min(v.width, b.x1 + pad) - x0, hh = Math.min(v.height, b.y1 + pad) - y0, k = Math.max(1, Math.min(3, 70 / h));
+      const c = document.createElement('canvas'); c.width = Math.round(w * k) + 40; c.height = Math.round(hh * k) + 40;
+      const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(v, x0, y0, w, hh, 20, 20, w * k, hh * k); return c;
+    };
+    const out = [];
+    try {
+      for (const K of KINDS){
+        const bs = boxes[K.k]; if (!bs) continue;
+        const b = { x0: med(bs.map(q => q.x0)), y0: med(bs.map(q => q.y0)), x1: med(bs.map(q => q.x1)), y1: med(bs.map(q => q.y1)) };
+        await worker.setParameters({ tessedit_pageseg_mode: '7', tessedit_char_whitelist: K.wl });
+        for (const v of [vs[0], vs[1], vs[3]]){
+          const r = await worker.recognize(crop(v, b));
+          const t = (r.data.text || '').trim(), conf = r.data.confidence || 0;
+          if (!t || conf < 45) continue;                                  // unsure second look: ignore it
+          // keep only a clean reading, labelled so the parser knows what it is
+          let txt = '';
+          if (K.k === 'card'){ const m = /(?:^|[^\d])(\d{7})\s+(\d{7})(?!\d)/.exec(t.replace(/G/g, ' ')); if (m) txt = `G ${m[1]} ${m[2]}`; }
+          else if (K.k === 'civil'){ const m = /(?:^|[^\d])([23]\d{11})(?!\d)/.exec(t); if (m) txt = 'C.I.D.No. ' + m[1]; }
+          else { const d = t.match(/\d{2}\/\d{2}\/\d{4}/g); if (d) txt = 'Exp.Date ' + d.pop(); }
+          if (txt) out.push({ text: txt, conf: conf * 1.2 });
+        }
+      }
+    } finally { await worker.setParameters({ tessedit_pageseg_mode: '3', tessedit_char_whitelist: '' }); }
+    return out;
+  }
+  const FQ = name => document.querySelector(`.field[data-f="${name}"]`);
+  const AUTO = ['company','firstName','middleInitial','lastName','cardNumber','civilId','expiry'];
+  function markAuto(name, on){ const f = FQ(name); if (f) f.classList.toggle('auto', on); }
+  AUTO.forEach(n => { const f = FQ(n); if (f) f.addEventListener('input', () => f.classList.remove('auto')); });
+  function fillFromCard(p){
+    const filled = [];
+    const set = (id, v) => { const el = $(id); if (!el || !v) return false; el.value = v; el.dispatchEvent(new Event('input', { bubbles: true })); return true; };
+    if (p.company && set('company', p.company)){ markAuto('company', true); filled.push('Company'); }
+    if (p.first && set('firstName', p.first)){ markAuto('firstName', true); filled.push('First name'); }
+    if (p.mi && set('middleInitial', p.mi)) markAuto('middleInitial', true);
+    if (p.last && set('lastName', p.last)){ markAuto('lastName', true); filled.push('Last name'); }
+    if (p.card){ $('cardNumber').value = p.card.slice(0, 7); $('cardNumber2').value = p.card.slice(7, 14); $('cardNumber2').dispatchEvent(new Event('input', { bubbles: true })); markAuto('cardNumber', true); filled.push('GlobeMed card number'); }
+    if (p.civil && set('civilId', p.civil)){ markAuto('civilId', true); filled.push('Civil ID'); }
+    if (p.civil && p.civilCheck === false) setErr(FQ('civilId'), 'We could not read this number for certain. Please check it against your Civil ID card.');
+    if (p.expiry){ const el = $('expiry'); el.value = p.expiry; el.dispatchEvent(new Event('input', { bubbles: true })); markAuto('expiry', true); filled.push('Card expiry'); }
+    updateProgress();
+    return filled;
+  }
+  async function scanCard(file){
+    if (!file) return;
+    const prog = $('scanProg'), res = $('scanRes'), bar = $('scanBar'), msg = $('scanMsg');
+    const progress = (pct, text) => { bar.style.width = pct + '%'; if (text) msg.textContent = text; };
+    res.hidden = true; prog.hidden = false; progress(3, 'Opening the photo…');
+    $('scanCam').disabled = $('scanFile').disabled = true;
+    try {
+      setPhoto(file, 'camera');                       // same photo becomes the required card photo
+      const img = await loadImg(file);
+      const worker = await getOcr(progress);
+      const turn = await bestTurn(worker, img, progress);
+      const vs = variants(turn.src), texts = [turn.text], confs = [turn.conf], found = [];
+      for (let i = 0; i < vs.length; i++){
+        progress(35 + i * 13, `Reading your card… (${i + 1} of ${vs.length})`);
+        const r = await worker.recognize(vs[i]); texts.push(r.data.text); confs.push(r.data.confidence); found.push(r.data);
+      }
+      progress(90, 'Checking the numbers…');
+      try { const extra = await rereadNumbers(worker, vs, found); extra.forEach(x => { texts.push(x.text); confs.push(x.conf); }); } catch (_){}
+      progress(100, 'Done');
+      const filled = fillFromCard(parseCard(texts, confs));
+      const expired = markExpired();
+      res.className = 'scan-res' + (expired ? ' bad' : filled.length < 6 ? ' warn' : '');
+      res.innerHTML = expired
+        ? `<b>This card has expired (${expired}).</b> The Al-Nukhba Card needs a valid GlobeMed card. Please scan your current card, or update the expiry date if it was read wrongly.`
+        : filled.length
+        ? `<b>We filled ${filled.length} detail${filled.length === 1 ? '' : 's'} from your card</b> (${filled.join(', ')}). Please check them carefully${filled.length < 6 ? ' and type in anything we could not read' : ''}, then complete the remaining fields.`
+        : '<b>We could not read the card clearly.</b> Please try again in good light, holding the card flat and filling the frame — or type your details below.';
+      res.hidden = false;
+      const firstAuto = document.querySelector('.field.auto'); (firstAuto || FQ('firstName')).scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch (e){
+      res.className = 'scan-res warn'; res.innerHTML = '<b>The card reader is not available right now.</b> Please type your details below.<small class="scan-err"></small>'; res.hidden = false;
+      res.querySelector('.scan-err').textContent = 'Details for IT: ' + (e && e.message ? e.message : String(e));
+    } finally {
+      prog.hidden = true; $('scanCam').disabled = $('scanFile').disabled = false;
+      $('scanCamIn').value = ''; $('scanFileIn').value = '';
+    }
+  }
+  $('scanCam').addEventListener('click', () => $('scanCamIn').click());
+  $('scanFile').addEventListener('click', () => $('scanFileIn').click());
+  $('scanCamIn').addEventListener('change', ev => scanCard(ev.target.files[0]));
+  $('scanFileIn').addEventListener('change', ev => scanCard(ev.target.files[0]));
+  window.__scanCard = scanCard;
 
   const today = new Date(); today.setHours(0,0,0,0);
   const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
@@ -1190,6 +1528,19 @@ body.success-mode #vStaff{padding-top:76px}
     const iv = parseDMY($('expiry').value.trim()); pick.value = (iv && iv !== 'bad') ? iv : '';
   });
 
+  // expired card check: expiry date before today
+  function expiredOn(){
+    const t = $('expiry').value.trim(), iv = parseDMY(t);
+    return (iv && iv !== 'bad' && new Date(iv + 'T00:00:00') < today) ? t : '';
+  }
+  function markExpired(){
+    const when = expiredOn(), box = $('photoBox'), tag = $('phExp');
+    box.classList.toggle('expired', !!(when && cardPhoto));
+    tag.hidden = !(when && cardPhoto); tag.textContent = when ? 'Expired ' + when : '';
+    if (when) setErr(F('expiry'), `This card expired on ${when}. Please use your current, valid GlobeMed card.`);
+    return when;
+  }
+  window.__expiredOn = expiredOn; window.__markExpired = markExpired;
   function parseDMY(s){
     const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(s); if (!m) return '';
     const d = +m[1], mo = +m[2], y = +m[3], dt = new Date(y, mo-1, d);
@@ -1210,6 +1561,7 @@ body.success-mode #vStaff{padding-top:76px}
     if (v.middleInitial && !/^[A-Z]$/.test(v.middleInitial)) e.middleInitial = 'Middle initial must be one English letter.';
     if (!/^[A-Za-z][A-Za-z '\-]*$/.test(v.lastName)) e.lastName = 'Please enter your last name.';
     if (!/^[23]\d{11}$/.test(v.civilId)) e.civilId = 'Civil ID must be 12 digits and begin with 2 or 3.';
+    else if (!civilOk(v.civilId)) e.civilId = 'This Civil ID number is not valid. Please check it against your Civil ID card.';
     if (!/^G\d{14}$/.test(v.cardNumber)) e.cardNumber = 'Card number must be G followed by 14 digits (7 + 7).';
     if (!v.consent) e.consent = 'Please tick the box to confirm and agree.';
     if (!v.photo) e.cardPhoto = 'Please add a photo of the GlobeMed card (take a photo or attach a file).';
@@ -1231,6 +1583,7 @@ body.success-mode #vStaff{padding-top:76px}
   function resetForm(){
     $('reg').reset();
     if (window.__clearPhoto) window.__clearPhoto();
+    document.querySelectorAll('.field.auto').forEach(f => f.classList.remove('auto')); const sr = document.getElementById('scanRes'); if (sr) sr.hidden = true;
     $('cnCount').textContent = '0/14';
     document.querySelectorAll('.field').forEach(clearErr);
     document.querySelectorAll('input[data-kind]').forEach(updateCounter);
@@ -1399,10 +1752,11 @@ body.success-mode #vStaff{padding-top:76px}
     if (DEMO){ setDemoSession(null); account = null; roles = []; resetForm(); $('done').hidden = true; $('reg').hidden = false; go('start'); toast('Signed out'); return; }
     msalApp.logoutRedirect({ account, postLogoutRedirectUri: CFG.redirectUri || (location.origin + location.pathname) });
   }
+  let QUIET_AUTH = false;   // auto-refresh must never jump to the sign-in page
   async function getToken(){
     try { return (await msalApp.acquireTokenSilent({ scopes: SCOPES, account })).accessToken; }
     catch(e){
-      if (e instanceof msal.InteractionRequiredAuthError){ await msalApp.acquireTokenRedirect({ scopes: SCOPES, account, state: location.hash.slice(1) }); }
+      if (e instanceof msal.InteractionRequiredAuthError && !QUIET_AUTH){ await msalApp.acquireTokenRedirect({ scopes: SCOPES, account, state: location.hash.slice(1) }); }
       throw e;
     }
   }
@@ -1618,6 +1972,14 @@ body.success-mode #vStaff{padding-top:76px}
       if (keys.length){
         keys.forEach(k => setErr(F(k), e[k]));
         const first = F(keys[0]).querySelector('input'); if (first) first.focus();
+        const exp = window.__expiredOn && window.__expiredOn();
+        if (exp){
+          window.__markExpired();
+          const others = keys.filter(k => k !== 'expiry').length;
+          showStatus('err', `<strong>The attached GlobeMed card expired on ${exp}.</strong><span>The Al-Nukhba Card needs a valid card. Please attach a photo of your current GlobeMed card and update the expiry date.${others ? ` Also check the other ${others === 1 ? 'highlighted field' : others + ' highlighted fields'}.` : ''}</span>`);
+          F('cardPhoto').scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
         showStatus('err', `<strong>Please check ${keys.length === 1 ? 'the highlighted field' : 'the '+keys.length+' highlighted fields'}.</strong>`);
         return;
       }
@@ -1652,12 +2014,32 @@ body.success-mode #vStaff{padding-top:76px}
   // ---------------- IT dashboard ----------------
   let ROWS = [], loaded = false, filterStatus = '', query = '', openId = null, PAGE = 0;
   const PER_PAGE = 25;
-  async function loadIT(){
+  // ---- auto-refresh every 60 s (only while the dashboard is open, visible and not being edited) ----
+  const AUTO_MS = 60000; let lastLoad = 0, loading = false, FRESH = new Set();
+  const hhmm = d => d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  function autoInfo(t, warn){ const el = $('autoInfo'); if (!el) return; el.innerHTML = t; el.classList.toggle('warn', !!warn); }
+  async function loadIT(auto){
+    if (loading) return; loading = true;
     $('resetDemo').hidden = !DEMO;
     if (!loaded) $('itRows').innerHTML = '<tr class="loadrow"><td colspan="13">Loading registrations…</td></tr>';
-    try { ROWS = await Data.list(); loaded = true; renderIT(); }
-    catch(e){ $('itRows').innerHTML = `<tr class="errrow"><td colspan="13">Could not load registrations: ${esc(e.message || e)}</td></tr>`; $('itCount').textContent = '—'; }
+    const before = new Set(ROWS.map(r => r.id));
+    try {
+      QUIET_AUTH = !!auto;
+      const rows = await Data.list();
+      FRESH = loaded ? new Set(rows.filter(r => !before.has(r.id)).map(r => r.id)) : new Set();
+      ROWS = rows; loaded = true; lastLoad = Date.now(); renderIT();
+      autoInfo(`<i class="dot"></i>Auto-refresh every 60 s · updated ${hhmm(new Date())}`);
+      if (FRESH.size) toast(FRESH.size === 1 ? '1 new registration' : `${FRESH.size} new registrations`);
+    }
+    catch(e){
+      if (auto && loaded) autoInfo((window.msal && e instanceof msal.InteractionRequiredAuthError) ? 'Sign-in expired — click Refresh' : `Could not refresh at ${hhmm(new Date())} — will retry`, true);
+      else { $('itRows').innerHTML = `<tr class="errrow"><td colspan="13">Could not load registrations: ${esc(e.message || e)}</td></tr>`; $('itCount').textContent = '—'; }
+    }
+    finally { QUIET_AUTH = false; loading = false; }
   }
+  const dashBusy = () => $('vIT').hidden || document.hidden || !$('drawer').hidden || !$('xDlg').hidden;
+  setInterval(() => { if (loaded && !dashBusy() && Date.now() - lastLoad >= AUTO_MS - 1000) loadIT(true); }, 5000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && loaded && !$('vIT').hidden && Date.now() - lastLoad >= AUTO_MS) loadIT(true); });
   // GlobeMed card: G + 7 + 7 digits, shown as two groups
   const cardParts = n => { const d = String(n || '').replace(/^G/i, '').replace(/\s/g, ''); return /^\d{14}$/.test(d) ? [d.slice(0, 7), d.slice(7)] : [d, '']; };
   const cardHtml = n => { const [a, b] = cardParts(n); return b ? `<span class="cg">G</span>${esc(a)}<span class="cgap"></span>${esc(b)}` : esc(n); };
@@ -1690,7 +2072,7 @@ body.success-mode #vStaff{padding-top:76px}
     const all = visibleRows(), pages = Math.max(1, Math.ceil(all.length / PER_PAGE));
     if (PAGE >= pages) PAGE = pages - 1;
     const rows = pageRows();
-    $('itRows').innerHTML = rows.map(r => `<tr data-id="${esc(r.id)}" tabindex="0" class="${SEL.has(r.id) ? 'sel' : ''}">
+    $('itRows').innerHTML = rows.map(r => `<tr data-id="${esc(r.id)}" tabindex="0" class="${SEL.has(r.id) ? 'sel' : ''}${FRESH.has(r.id) ? ' fresh' : ''}">
       <td class="ck" data-nodrawer><input type="checkbox" data-sel="${esc(r.id)}" ${SEL.has(r.id) ? 'checked' : ''} aria-label="Select ${esc(r.reference)}"></td>
       <td class="m">${esc(r.reference)}</td><td class="m">${esc(fmtDT(r.submittedAt))}</td>
       <td><span class="pill ${STATUS_CLASS[r.status] || 's-new'}">${esc(r.status || 'New')}</span></td>
