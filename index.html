@@ -59,6 +59,39 @@ form{background:var(--surface);border:1px solid var(--line);border-radius:14px;p
 .lbl .ar{font-family:var(--ar);font-weight:500;color:var(--muted)}
 .req{color:var(--err);margin-left:2px}
 .opt{font-weight:400;color:var(--muted);font-size:12.5px}
+/* --- thank-you card (success screen) --- */
+.done.ty-on > :not(.ty):not(.actions){display:none!important}
+.done.ty-on{background:none!important;border:none!important;box-shadow:none!important;padding:0!important;display:grid;justify-items:center;gap:16px}
+.ty{position:relative;overflow:hidden;width:min(720px,100%);box-sizing:border-box;color:#fff;text-align:center;
+  padding:clamp(26px,5vh,46px) clamp(18px,5vw,56px) clamp(20px,3.5vh,30px);border-radius:clamp(60px,14vw,120px) 0 clamp(60px,14vw,120px) 0;
+  background:
+    linear-gradient(180deg,rgba(24,34,92,.42) 0%,rgba(22,30,80,.12) 50%,rgba(18,26,70,.22) 100%),
+    url(ty-building.jpg) center bottom/cover no-repeat,
+    #1A2463;
+  box-shadow:0 30px 60px -28px rgba(10,16,50,.65);animation:tyIn .7s cubic-bezier(.2,.8,.2,1) both}
+.ty::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;
+  background:repeating-linear-gradient(90deg,#fff 0 1px,transparent 1px 46px),repeating-linear-gradient(0deg,#fff 0 1px,transparent 1px 46px);
+  -webkit-mask-image:linear-gradient(to bottom,transparent 15%,#000 45%,#000 80%,transparent);mask-image:linear-gradient(to bottom,transparent 15%,#000 45%,#000 80%,transparent)}
+.ty > *{position:relative}
+@keyframes tyIn{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
+.ty-logos{display:flex;align-items:center;justify-content:center;gap:clamp(14px,3vw,24px)}
+.ty-logos img{height:clamp(44px,8vh,64px);width:auto;display:block}
+.ty-sep{width:1.5px;align-self:stretch;background:rgba(120,190,255,.8)}
+.ty-tier{display:flex;align-items:center;justify-content:center;gap:clamp(8px,1.8vw,14px);margin-top:clamp(18px,4vh,34px)}
+.ty-tier img{height:clamp(56px,10vh,84px);width:auto;display:block}
+.ty-en{font-weight:800;font-size:clamp(20px,3.2vw,26px)}
+.ty-ar{font-family:var(--ar);font-weight:800;font-size:clamp(20px,3.2vw,26px)}
+.ty-bar{font-weight:300;font-size:clamp(20px,3.2vw,26px);opacity:.9}
+.ty-dear{margin:clamp(14px,3vh,26px) 0 0;font-size:clamp(18px,2.6vw,22px)}
+.ty-name{margin:4px 0 0;font-size:clamp(28px,5.4vw,40px);font-weight:800;letter-spacing:.02em;color:#4FB6EA;overflow-wrap:anywhere}
+.ty-msg{margin:clamp(12px,2.4vh,20px) auto 0;max-width:500px;font-size:clamp(14.5px,2.2vw,17.5px);line-height:1.5;color:#F2F5FF}
+.ty-msg b{font-weight:800;color:#fff}
+.ty-warn{margin:14px auto 0;max-width:480px;font-size:13.5px;background:rgba(255,200,80,.15);border:1px solid rgba(255,200,80,.5);border-radius:10px;padding:8px 12px;color:#FFE3A3}
+.ty-ref{margin:clamp(12px,2.2vh,18px) 0 0;font-size:12.5px;color:rgba(255,255,255,.72);letter-spacing:.02em}
+.ty-ref b{font-family:var(--mono);color:#fff;font-weight:600;margin-left:4px}
+.ty-jci{display:inline-flex;align-items:center;gap:10px;margin-top:clamp(12px,2.4vh,20px);font-size:11.5px;font-weight:700;line-height:1.3;text-align:left}
+.ty-jci img{width:34px;height:34px}
+.done.ty-on .actions{justify-content:center;padding-top:0}
 .consent{display:flex;gap:12px;align-items:flex-start;font-size:13.5px;line-height:1.5;cursor:pointer}
 .consent input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--gold);flex:none}
 .consent .ar{display:block;font-family:var(--ar);color:var(--muted);margin-top:4px;text-align:right}
@@ -647,6 +680,12 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
 .ithead{padding-top:12px}
 .ithead .itbar{border-radius:14px}
 
+/* --- thank-you card overrides success-mode layout --- */
+body.success-mode #done.ty-on{display:grid!important;grid-template-columns:1fr!important;justify-items:center!important;text-align:center!important;padding:0!important;gap:14px!important;background:none!important;border:none!important;box-shadow:none!important}
+body.success-mode #done.ty-on > *{grid-column:1!important}
+body.success-mode #done.ty-on .actions{justify-content:center!important}
+body.success-mode #vStaff{padding-top:76px}
+
 @media (max-width:480px){form,.panel,.done{padding-left:16px;padding-right:16px}.mast{padding:22px 18px}.prog{margin:0 -16px;padding-left:16px;padding-right:16px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.tick circle,.tick path{stroke-dashoffset:0}}
 </style>
@@ -836,7 +875,18 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
     </div>
   </div>
 
-  <section class="done" id="done" hidden aria-live="polite">
+  <section class="done ty-on" id="done" hidden aria-live="polite">
+    <div class="ty" id="tyCard">
+      <div class="ty-logos"><img src="kuwait-hospital-white.png" alt="Kuwait Hospital"><span class="ty-sep" aria-hidden="true"></span><img src="globemed-white.png" alt="GlobeMed"></div>
+      <div class="ty-tier"><span class="ty-en">Gold</span><span class="ty-bar" aria-hidden="true">|</span><img src="nukhba-gold.png" alt="Al-Nukhba"><span class="ty-bar" aria-hidden="true">|</span><span class="ty-ar" lang="ar">ذهبي</span></div>
+      <p class="ty-dear">Dear</p>
+      <p class="ty-name" id="tyName">GUEST</p>
+      <p class="ty-msg">Thank you for registering for the <b>Kuwait Hospital Al&#8209;Nukhba Card</b> Program. Your digital card will be ready <b>within 2-3 business days,</b> and we will email you as soon as it is available.</p>
+      <p class="ty-msg">We look forward to serving you and your family with the <b>highest standards of care.</b></p>
+      <p class="ty-warn" id="tyWarn" hidden></p>
+      <p class="ty-ref">Reference <b id="tyRef">NK-000000</b></p>
+      <div class="ty-jci"><img src="jci-badge.png" alt=""><span>Accredited by the Joint<br>Commission International (JCI)</span></div>
+    </div>
     <svg class="tick" viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="34"/><path d="M22 37l10 10 19-21"/></svg>
     <h2 id="doneTitle" tabindex="-1">Welcome to Al-Nukhba</h2>
     <div class="ar-line" dir="rtl" lang="ar">أهلًا بك في النخبة — تم التسجيل بنجاح</div>
@@ -1204,6 +1254,7 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
   function showSuccess(v, ref, at){
     $('reg').hidden = true; $('status').hidden = true;
     $('doneTitle').textContent = `Welcome to Al‑Nukhba, ${v.firstName}`;
+    $('tyName').textContent = (v.firstName || '').toUpperCase(); $('tyRef').textContent = ref; $('tyWarn').hidden = true;
     $('doneLead').textContent = 'Registration received. The digital Al-Nukhba card will be emailed within 2–3 business days after the details are verified.';
     $('doneLead').style.color = '';
     document.querySelector('.ar-line').textContent = 'تم استلام التسجيل بنجاح — سيتم إرسال البطاقة الرقمية عبر البريد الإلكتروني';
@@ -1580,6 +1631,7 @@ body.public-mode .role[data-enter="staff"] small::after{content:" · no sign-in 
       if (res.photoOk === false){
         $('doneLead').textContent = 'Registration received, but the card photo could not be uploaded. Kuwait Hospital IT will follow up for the photo.';
         $('doneLead').style.color = 'var(--warn)';
+        $('tyWarn').textContent = 'Your registration was received, but the card photo could not be uploaded. Kuwait Hospital will contact you for the photo.'; $('tyWarn').hidden = false;
       }
       enterSuccessMode();
       if (window.__clearPhoto) window.__clearPhoto();
